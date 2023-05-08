@@ -4,7 +4,7 @@
 /front/node_modules
 /front/.pnp
 /front/.pnp.js
-
+/backend/data
 # testing
 /front/coverage
 
