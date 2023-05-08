@@ -37,7 +37,7 @@ add new folder and file in `components` folder
 
 
 #### `add new data interfaces`
-add new function in `api.js` file under `apis` folder
+add new function in `api.ts` file under `apis` folder
 
 
 ## backend project —— backend
