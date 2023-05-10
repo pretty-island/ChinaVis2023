@@ -6,9 +6,8 @@ import { getFlow } from '../../apis/api';
 const TrafficFlow: React.FC = () => {
     const chartRef = useRef<HTMLDivElement>(null);
     interface ChartData {
-        time: string;
-        all_count: string;
-        stop_count: number;
+        fid : string;
+        flow: number;
     }
     const [chartData, setChartData] = useState<ChartData[]>([]);
     // 获取数据
@@ -28,14 +27,17 @@ const TrafficFlow: React.FC = () => {
             }
 
             const dateList = chartData.map(function (item) {
-                return item.time;
+                return "车道"+item.fid;
             });
             const allList = chartData.map(function (item) {
-                return item.all_count;
+                return item.flow;
             });
             const option: EChartOption = {
+                tooltip: {
+                    // trigger: 'axis'
+                },
                 xAxis: {
-                    name:"时间",
+                    name:"车道",
                     type: 'category',
                     // data: ['路口1', '路口2', '路口3', '路口4', '路口5', '路口6', '路口7']
                     data:dateList

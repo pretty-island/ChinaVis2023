@@ -8,7 +8,7 @@ const QueCar: React.FC = () => {
 
     interface ChartData {
         time: string;
-        all_count:string;
+        all_count: string;
         stop_count: number;
     }
     const [chartData, setChartData] = useState<ChartData[]>([]);
@@ -57,8 +57,8 @@ const QueCar: React.FC = () => {
                 tooltip: {
                     trigger: 'axis'
                 },
-                legend:{
-                    data:['总车流量','排队车辆']
+                legend: {
+                    data: ['总车流量', '排队车辆']
                 },
                 // axisPointer: {
                 //     link: [
@@ -76,17 +76,22 @@ const QueCar: React.FC = () => {
                 //         xAxisIndex: [0, 1]
                 //     },
                 // ],
+                // grid: {
+                //     containLabel: true,
+                // },
                 xAxis: [
                     {
+                        // type:"category",
                         name: "时间",
-                        data: dateList
+                        data: dateList,
+                        // boundaryGap:true
                     },
 
                 ],
                 yAxis: [
                     {
                         name: '车辆数量（辆）',
-                        min:90
+                        min: 90
                     },
 
                 ],
@@ -95,14 +100,14 @@ const QueCar: React.FC = () => {
                         name: '排队车辆',
                         type: 'line',
                         showSymbol: false,
-                        stack:'Total',
+                        stack: 'Total',
                         data: stopList
                     },
                     {
                         name: '总车流量',
                         type: 'line',
                         showSymbol: false,
-                        stack:'Total',
+                        stack: 'Total',
                         data: allList
                     }
                 ]

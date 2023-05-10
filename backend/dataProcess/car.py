@@ -3,9 +3,9 @@
 import json 
 
 # 读取JSON数据
-directory = "../../data/situation/time/"  # json文件所在目录路径
+directory = "D:/VIScode/chinavis-2023/backend/data/situation/time/"  # json文件所在目录路径
 #筛选所有的机动车车辆后的JSON文件保存目录路径
-output_directory = "../../data/situation/time/car/"
+output_directory = "D:/VIScode/chinavis-2023/backend/data/situation/time/car/"
 
 for i in range(7,16):
     data = []

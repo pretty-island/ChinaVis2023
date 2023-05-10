@@ -77,6 +77,7 @@ f.close()
 #     writer.writerow(['id', 'time_meas', 'seq', 'is_moving', 'position', 'shape', 'orientation', 'velocity', 'type', 'heading', 'ms_no'])
 #     writer.writerows(vehicle_data)
 # f.close()
+# 结论：道路车辆数据每秒采集两次，该车辆id=191252746在这五分钟一直没有移动。
 
 
 

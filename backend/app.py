@@ -25,7 +25,7 @@ def hello_world_2():
 # 获取排队车辆统计数据
 @app.route("/getQueCar")
 def getQueCar():
-    directory = "D:/VIScode/chinavis-2023/backend/data/situation/time/car/car_9.00-9.05/9.05count.json"  # json文件所在路径
+    directory = "./dataProcess/carProcess/data/9.05count.json"  # json文件所在路径
 
     with open(directory, "r", encoding="utf-8") as f:
         data = json.load(f)  # 读取到的数据
@@ -36,8 +36,7 @@ def getQueCar():
 # 获取断面车辆统计数据：每隔一小时统计车辆数量
 @app.route("/getFlow")
 def getflow():
-    # 暂时先用排队车辆统计中的总车流量代替
-    directory = "D:/VIScode/chinavis-2023/backend/data/situation/time/car/car_9.00-9.05/9.05count.json"  # json文件所在路径   
+    directory = "./dataProcess/carProcess/data/9.05flow.json"  # json文件所在路径   
 
     with open(directory, "r", encoding="utf-8") as f:
         data = json.load(f)  # 读取到的数据
