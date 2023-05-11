@@ -1,6 +1,5 @@
 import './App.css'
-// import MainVisualizationView from "./components/MainVisualizationView.tsx";
-import { Route, Routes, BrowserRouter } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Layout from "./components/layout/layout";
 
 function App() {

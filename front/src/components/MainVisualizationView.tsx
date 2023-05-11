@@ -31,7 +31,7 @@ const onRender = (_: Scene) => {
 
 const MainVisualizationView: React.FC = () => {
     return (
-        <div className={"MainView"} style={{width: "100%", height: "100%"}}>
+        <div className={"MainView"} style={{width: "94%", height: "94%"}}>
             <SceneComponent observeCanvasResize antialias onSceneReady={onSceneReady} onRender={onRender} id='my-canvas' />
         </div>
     )

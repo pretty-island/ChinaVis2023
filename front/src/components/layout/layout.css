@@ -1,67 +1,151 @@
-/* 通用属性 */
-.marginc {
-    /* background-color: rgb(189, 95, 95); */
-    background-color: rgb(255, 255, 255);
-    margin: 0.1vh;
+#layout {
+    width: 100%;
+    height: 100%;
+    /* background-color: #030409; */
+    color: #fff;
 }
 
-#layout {
-    height: 99vh;
-    width: 99vw;
-    margin: 0 auto;
-    padding: 0;
-    background-color: rgb(0, 0, 0);
+#dv-full-screen-container {
+    /* background-image: url('./img/bg.png'); */
+    background-size: 100% 100%;
+    /* box-shadow: 0 0 3px blue; */
+    display: flex;
+    flex-direction: column;
 }
 
 /* 头部标题栏 */
-.title {
-    height: 3vh;
-    color: black;
-    text-shadow: 0 0 20px white;
-    font-size: 1.8vh;
+/* .head {
+    width: 100%;
+    height: 90px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+} */
+.head {
+    height: 80px;
+    display: flex;
+    justify-content: space-between;
+    /* align-items: flex-end; */
+}
+
+.head-left {
+    flex-basis: auto;
+    display: flex;
+    align-items: center;
+    margin-left: 60px;
+}
+
+.head-right {
+    flex-basis: auto;
+    display: flex;
+    align-items: center;
+    margin-right: 60px;
+}
+
+.head-center {
+    flex-basis: 50%;
+    /* width: 600px; */
+    /* height: 90px; */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.head-title {
+    width: 500px;
+    height: 90px;
+    position: relative;
+}
+
+.head-title span {
+    position: absolute;
+    top: 15px;
+    width: 100%;
     text-align: center;
+    font-size: 34px;
+    font-weight: 400;
+    color: #fff;
+}
+
+.dv-decoration-6 {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 .container {
-    height: 96vh;
-    width: 99vw;
+    height: calc(100% - 80px);
     display: flex;
+    /* height: 100vh; */
+
 }
 
-/* 左部：控制台、排队车辆统计*/
+/* .container .border-box-content {
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex;
+} */
 .left {
-    display: flex;
+    width: 22%;
     flex-direction: column;
-    flex: 1;
-    /* margin-bottom: 5px; */
+    display: flex;
+    padding: 10px;
+    box-sizing: border-box;
+}
+.console .border-box-content {
+    padding: 20px;
 }
 
-#mainview {
-    flex: 4
+.queue{
+    padding-top: 10px;
+}
+.queue .border-box-content {
+    padding: 20px;
 }
 
-#console {
-    flex: 1;
-}
+/* .left .border-box-content { */
+/* flex-direction: column; */
+/* } */
 
-#queue {
-    flex: 1
-}
-
-
-
-/* 右部：断面车流统计、车辆热力图 */
 .right {
+    width: 78%;
+    padding: 10px;
+    padding-left: 5px;
+    box-sizing: border-box;
+    /* display: flex; */
+}
+
+.r-top {
+    height: 65%;
     display: flex;
-    flex-direction: column;
-    flex: 1;
-    /* margin-bottom: 5px; */
 }
 
-#traffic {
-    flex: 1;
+.rt-left {
+    width: 65%;
 }
 
-#heat {
-    flex: 1
+.rt-left .border-box-content {
+    /* width: 65%; */
+    justify-content: center;
+    display: flex;
+    align-items: center;
+}
+
+/* .rt-right .border-box-content{
+    width: 35%;
+} */
+.rt-right {
+    width: 35%;
+    padding-left: 15px;
+}
+.rt-right .border-box-content {
+    padding: 20px;
+}
+.r-bottom {
+    height: 35%;
+}
+
+.r-bottom .border-box-content {
+    padding: 20px;
 }
