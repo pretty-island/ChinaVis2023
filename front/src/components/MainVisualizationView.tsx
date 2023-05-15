@@ -6,7 +6,7 @@ import {
     ArcRotateCamera, DirectionalLight
 } from '@babylonjs/core';
 import SceneComponent from 'babylonjs-hook';
-import {creatGround, creatRoad, creatSkyBox} from "../utils/roadVisualizeHelp.ts";
+import {creatCar, creatGround, creatRoad, creatSkyBox} from "../utils/roadVisualizeHelp.ts";
 
 const onSceneReady = (scene: Scene) => {
     const camera = new ArcRotateCamera("camera", 0, 0, 10, Vector3.Zero());
@@ -18,12 +18,20 @@ const onSceneReady = (scene: Scene) => {
     const canvas = scene.getEngine().getRenderingCanvas();
     camera.attachControl(canvas, true);
 
-    const light = new DirectionalLight("light", new Vector3(0.1, -1, 0), scene);
+    const light = new DirectionalLight("light", new Vector3(0.3, -1, 0), scene);
     light.intensity = 0.7;
 
     creatGround(scene);
     creatRoad(scene, new Vector2(0, 0), new Vector2(10, 8));
     creatSkyBox(scene);
+
+    const car1 = creatCar(scene, new Vector2(0, 0));
+    const car2 = creatCar(scene, new Vector2(0, 0));
+    const points = [new Vector2(0, 0), new Vector2(10, 0), new Vector2(10, 8),
+        new Vector2(0, 8), new Vector2(0, 0)];
+
+    car1.moveFollowPoints(scene, points, 2);
+    car2.moveFollowPoints(scene, points, 4);
 }
 
 const onRender = (_: Scene) => {

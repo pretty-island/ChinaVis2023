@@ -46,3 +46,11 @@ export function creatSkyboxMaterial(scene: Scene) {
 
     return skyboxMaterial;
 }
+
+// 创建白色材质
+export function creatCarMaterial(scene: Scene) {
+    const carMaterial = new StandardMaterial("carMaterial", scene);
+    carMaterial.diffuseColor = new Color3(1, 1, 1);
+
+    return carMaterial;
+}
