@@ -32,13 +32,14 @@ const Layout = () => {
         onClick={() => {
           setNowPageIndex(id)
         }}
-        style={{ cursor: 'pointer' }}>
+        style={{ cursor: 'pointer', width: '35%', height: '76%' }}>
+        {/* style={{ cursor: 'pointer', width: '150px', height: '60px' }}> */}
         <Decoration11
           id={id}
           className="changePage"
           color={[color]}
           style={{
-            width: '150px', height: '60px'
+            // width: '150px', height: '60px'
           }}
         >{text}</Decoration11>
       </div>
@@ -49,20 +50,20 @@ const Layout = () => {
       <FullScreenContainer>
         <div className="head">
           <div className="head-left" id="changeButton">
-            <ChangePage id="firstButton" text="概览"></ChangePage>
+            <ChangePage id="firstButton" text="概览" ></ChangePage>
             <ChangePage id="secondButton" text="拥堵分析"></ChangePage>
           </div>
           <div className="head-center">
-            <Decoration8 style={{ width: '300px', height: '60px' }} />
+            <Decoration8 style={{ width: '27.7%', height: '70%' }} />
             <div className="head-title">
               <span>交通态势感知</span>
-              <Decoration6 style={{ width: '250px', height: '10px' }}></Decoration6>
+              <Decoration6 style={{ width: '42%', height: '13%' }}></Decoration6>
             </div>
-            <Decoration8 reverse={true} style={{ width: '300px', height: '60px' }} />
+            <Decoration8 reverse={true} style={{ width: '27.7%', height: '70%' }} />
           </div>
           <div className="head-right">
-            <div style={{ width: '150px', height: '60px' }}></div>
-            <div style={{ width: '150px', height: '60px' }}></div>
+            <div style={{ width: '35%', height: '76%' }}></div>
+            <div style={{ width: '35%', height: '76%' }}></div>
           </div>
         </div>
 

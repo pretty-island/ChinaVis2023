@@ -42,7 +42,7 @@ def getflow():
 
 # 获取车辆热力图数据：每隔一小时统计一次各个道路经过+停留的所有车辆数量：断面车流+还没出去的所有车辆
 @app.route("/getHeat")
-def getflow():
+def getHeat():
     directory = "./dataProcess/carProcess/data/heat.json"  # json文件所在路径   
     with open(directory, "r", encoding="utf-8") as f:
         data = json.load(f)  # 读取到的数据
