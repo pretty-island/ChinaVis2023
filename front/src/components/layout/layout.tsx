@@ -32,14 +32,15 @@ const Layout = () => {
         onClick={() => {
           setNowPageIndex(id)
         }}
-        style={{ cursor: 'pointer', width: '35%', height: '76%' }}>
+        style={{ cursor: 'pointer' }}>
+        {/* style={{ cursor: 'pointer', width: '35%', height: '76%' }}> */}
         {/* style={{ cursor: 'pointer', width: '150px', height: '60px' }}> */}
         <Decoration11
           id={id}
           className="changePage"
           color={[color]}
           style={{
-            // width: '150px', height: '60px'
+            width: '150px', height: '60px'
           }}
         >{text}</Decoration11>
       </div>
