@@ -45,7 +45,7 @@ const FirstConsole: React.FC<FirstConsoleProps> = ({ setSelectedIntersection, se
     }
     return (
         <div style={{ height: "32.2vh", width: "100%" }}>
-            <div className="multipleCheck" style={{ height: "15%", width: "100%" }}>
+            <div className="multipleCheck" style={{ height: "20%", width: "100%" }}>
                 <span>选择路口：</span>
                 <Select value={selectedIntersection} style={{ width: 120 }} onChange={handleIntersectionChange}>
                     {IntersectionOptions.map((option) => {
