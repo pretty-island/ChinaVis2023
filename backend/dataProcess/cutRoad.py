@@ -10,7 +10,7 @@ output_directory="D:/VIScode/chinavis-2023/backend/data/situation/time/road/"
 
 # 创建小时文件夹（如果不存在）
 def create_hour_folder(hour):
-    folder_name=f"{hour}hour"
+    folder_name=f"D:/VIScode/chinavis-2023/backend/data/situation/time/road/{hour}hour"
     if not os.path.exists(folder_name):
         os.makedirs(folder_name)
 
