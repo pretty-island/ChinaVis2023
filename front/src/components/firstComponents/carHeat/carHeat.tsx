@@ -5,6 +5,7 @@ import React, { useEffect, useRef, useState } from "react";
 
 const CarHeat: React.FC = () => {
     const chartRef = useRef<HTMLDivElement>(null);
+    // 
     // interface HeatData {
     //     time: string;
     //     fid: string;
