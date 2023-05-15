@@ -55,12 +55,12 @@ const Layout = () => {
             <ChangePage id="secondButton" text="拥堵分析"></ChangePage>
           </div>
           <div className="head-center">
-            <Decoration8 style={{ width: '27.7%', height: '70%' }} />
+            <Decoration8 style={{ width: '50%', height: '70%' }} />
             <div className="head-title">
               <span>交通态势感知</span>
-              <Decoration6 style={{ width: '45%', height: '13%' }}></Decoration6>
+              <Decoration6 style={{ width: '60%', height: '13%' }}></Decoration6>
             </div>
-            <Decoration8 reverse={true} style={{ width: '27.7%', height: '70%' }} />
+            <Decoration8 reverse={true} style={{ width: '50%', height: '70%' }} />
           </div>
           <div className="head-right">
             <div style={{ width: '35%', height: '76%' }}></div>
