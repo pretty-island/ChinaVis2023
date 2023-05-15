@@ -42,7 +42,7 @@ road_data = gpd.read_file(road_directory)
 #         f.write(json.dumps(vehicle) + "\n")
 
 # 读取所有的车辆数据并且一个一个处理
-for i in range(7, 16):
+for i in range(8, 16):
     vehicle_data = []
     with open(vehicle_directory + f"hour_{i}.json", "r") as f:
         for line in f:
@@ -50,16 +50,15 @@ for i in range(7, 16):
             vehicle_data.append(vehicle)
 
     # Loop through each vehicle and match it to the nearest road
-    for vehicle in vehicle_data:
-        vehicle_position = Point(
-            json.loads(vehicle["position"])["x"], json.loads(vehicle["position"])["y"]
-        )
-        nearest_road = road_data.distance(vehicle_position).idxmin()
-        vehicle["road_sec_id"] = int(road_data.loc[nearest_road]["road_sec_id"])
-        vehicle["fid"] = int(road_data.loc[nearest_road]["fid"])
-        vehicle["turn_type"] = int(road_data.loc[nearest_road]["turn_type"])
-        vehicle["category"] = int(road_data.loc[nearest_road]["category"])
-    # Write out the updated vehicle data to a new file
     with open(output_directory + f"{i}hour_with_roads.json", "a") as f:
         for vehicle in vehicle_data:
+            vehicle_position = Point(
+                json.loads(vehicle["position"])["x"], json.loads(vehicle["position"])["y"]
+            )
+            nearest_road = road_data.distance(vehicle_position).idxmin()
+            vehicle["road_sec_id"] = int(road_data.loc[nearest_road]["road_sec_id"])
+            vehicle["fid"] = int(road_data.loc[nearest_road]["fid"])
+            vehicle["turn_type"] = int(road_data.loc[nearest_road]["turn_type"])
+            vehicle["category"] = int(road_data.loc[nearest_road]["category"])
             f.write(json.dumps(vehicle) + "\n")
+                
