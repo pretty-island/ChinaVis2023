@@ -1,21 +1,20 @@
 import * as echarts from 'echarts';
 import { EChartOption } from 'echarts';
 import React, { useEffect, useRef, useState } from "react";
-import { getFlow } from '../../apis/api';
+import { getFlow } from '../../../apis/api';
 
 const TrafficFlow: React.FC = () => {
     const chartRef = useRef<HTMLDivElement>(null);
-    interface ChartData {
+    interface FlowData {
         fid : string;
         flow: number;
     }
-    const [chartData, setChartData] = useState<ChartData[]>([]);
+    const [flowData, setFlowData] = useState<FlowData[]>([]);
     // 获取数据
     useEffect(() => {
         getFlow("/getFlow").then((res) => {
             const data = res.data;
-            setChartData(data);
-
+            setFlowData(data);
         });
     }, []);
 
@@ -26,10 +25,10 @@ const TrafficFlow: React.FC = () => {
                 mychart = echarts.init(chartRef.current, undefined);
             }
 
-            const dateList = chartData.map(function (item) {
+            const dateList = flowData.map(function (item) {
                 return "车道"+item.fid;
             });
-            const allList = chartData.map(function (item) {
+            const allList = flowData.map(function (item) {
                 return item.flow;
             });
             const option: EChartOption = {

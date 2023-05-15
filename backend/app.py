@@ -26,7 +26,6 @@ def hello_world_2():
 @app.route("/getQueCar")
 def getQueCar():
     directory = "./dataProcess/carProcess/data/9.05count.json"  # json文件所在路径
-
     with open(directory, "r", encoding="utf-8") as f:
         data = json.load(f)  # 读取到的数据
     f.close()
@@ -37,7 +36,14 @@ def getQueCar():
 @app.route("/getFlow")
 def getflow():
     directory = "./dataProcess/carProcess/data/9.05flow.json"  # json文件所在路径   
+    with open(directory, "r", encoding="utf-8") as f:
+        data = json.load(f)  # 读取到的数据
+    return json.dumps(data)  # 将结果转换为JSON格式并返回
 
+# 获取车辆热力图数据：每隔一小时统计一次各个道路经过+停留的所有车辆数量：断面车流+还没出去的所有车辆
+@app.route("/getHeat")
+def getflow():
+    directory = "./dataProcess/carProcess/data/heat.json"  # json文件所在路径   
     with open(directory, "r", encoding="utf-8") as f:
         data = json.load(f)  # 读取到的数据
     return json.dumps(data)  # 将结果转换为JSON格式并返回

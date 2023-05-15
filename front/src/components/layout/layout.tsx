@@ -1,34 +1,56 @@
 import "./layout.css";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 // 引入数据获取的接口
-import { testUrl, postParams } from "../../apis/api";
+// import { testUrl, postParams } from "../../apis/api";
 import ChartHeader from "../chartHeader/chartHeader";
-import QueCar from "../queCar/queCar";
-import TrafficFlow from "../trafficFlow/trafficFlow";
+import FirstConsole from "../firstComponents/firstConsole/firstConsole";
+import QueCar from "../firstComponents/queCar/queCar";
+import TrafficFlow from "../firstComponents/trafficFlow/trafficFlow";
+import CarHeat from "../firstComponents/carHeat/carHeat";
 import MainVisualizationView from "../MainVisualizationView";
-import { BorderBox1, Decoration6, Decoration8, Decoration11, FullScreenContainer } from '@jiaminghi/data-view-react'
+
+import { BorderBox1, BorderBox13, Decoration6, Decoration8, Decoration11, FullScreenContainer } from '@jiaminghi/data-view-react'
 const Layout = () => {
-  useEffect(() => {
-    testUrl("/").then((res) => {
-      // 后端返回的数据
-      const data = res.data;
-      console.log(data);
-    });
-
-    postParams("/passParam", { id: "testid", name: 'testname' }).then((res) => {
-      console.log(res.data);
-    });
+  // 当前用户在第几屏，默认第一屏
+  const [nowPageIndex, setNowPageIndex] = useState<string>("firstButton");
+  // 第一屏：用户选择的路口
+  const [selectedIntersection, setSelectedIntersection] = useState<string>("all")
+  // 第一屏：用户选择的时间
+  const [selectedTime, setSelectedTime] = useState<string>("all")
 
 
-  }, []);
+  interface ChangePageProps {
+    id: string;
+    text: string;
+  }
+  // 切换页面的组件
+  const ChangePage: React.FC<ChangePageProps> = ({ id, text }) => {
+    const color = id === nowPageIndex ? "rgb(26, 152, 252)" : "rgb(0, 69, 124)";
+    return (
+      <div
+        onClick={() => {
+          setNowPageIndex(id)
+        }}
+        style={{ cursor: 'pointer' }}>
+        <Decoration11
+          id={id}
+          className="changePage"
+          color={[color]}
+          style={{
+            width: '150px', height: '60px'
+          }}
+        >{text}</Decoration11>
+      </div>
+    )
+  }
   return (
     <div id="layout">
       <FullScreenContainer>
         <div className="head">
-          <div className="head-left">
-            <Decoration11 style={{ width: '150px', height: '60px' }} >概览</Decoration11>
-            <Decoration11 style={{ width: '150px', height: '60px' }} >拥堵分析</Decoration11>
+          <div className="head-left" id="changeButton">
+            <ChangePage id="firstButton" text="概览"></ChangePage>
+            <ChangePage id="secondButton" text="拥堵分析"></ChangePage>
           </div>
           <div className="head-center">
             <Decoration8 style={{ width: '300px', height: '60px' }} />
@@ -43,39 +65,77 @@ const Layout = () => {
             <div style={{ width: '150px', height: '60px' }}></div>
           </div>
         </div>
-        <div className="container">
-          <div className="left">
-            <BorderBox1 className="console">
-              <ChartHeader chartName={"控制台"} />
-            </BorderBox1>
-            <BorderBox1 className="queue">
-              <ChartHeader chartName={"排队车辆统计"} />
-              <QueCar />
-            </BorderBox1>
-          </div>
-          <div className="right">
-            <div className="r-top">
-              <BorderBox1 className="rt-left" style={{ width: "65%" }}>
-                <MainVisualizationView />
+
+        {
+          nowPageIndex === "firstButton" &&
+          <div className="container">
+            <div className="f-left" style={{ width: "22%" }}>
+              <BorderBox13 className="f-console" style={{ height: "22%" }}>
+                <ChartHeader chartName={"控制台"} />
+                <FirstConsole setSelectedIntersection={setSelectedIntersection}
+                  selectedIntersection={selectedIntersection}
+                  setSelectedTime={setSelectedTime}
+                  selectedTime={selectedTime}
+                />
+              </BorderBox13>
+              <BorderBox1 className="f-queue">
+                <ChartHeader chartName={"排队车辆统计"} />
+                <div className="t" style={{ height: "50%" }}>
+                  <QueCar />
+                </div>
+                <div className="b">
+                </div>
+                {/* <QueCar /> */}
               </BorderBox1>
-              <BorderBox1 className="rt-right" style={{ width: "35%" }}>
+            </div>
+
+            <div className="f-right" style={{ width: "78%" }}>
+              <div className="f-r-top" style={{ height: "65%" }}>
+                <BorderBox1 className="f-rt-left" style={{ width: "65%" }}>
+                  <MainVisualizationView />
+                </BorderBox1>
+                <BorderBox1 className="f-rt-right" style={{ width: "35%" }}>
+                  <ChartHeader chartName={"车流热力图"} />
+                  <CarHeat />
+                </BorderBox1>
+              </div>
+              <BorderBox1 className="f-r-bottom" style={{ height: "35%" }}>
                 <ChartHeader chartName={"断面车流统计"} />
                 <TrafficFlow />
               </BorderBox1>
             </div>
-            <BorderBox1 className="r-bottom" style={{ height: "35%" }}>
-              <ChartHeader chartName={"断面车流统计"} />
-              <TrafficFlow />
-            </BorderBox1>
-
-            {/* <div id="heat" className="marginc"> */}
-            {/* <ChartHeader chartName={"车辆热力图"} /> */}
-            {/* <BorderBox1></BorderBox1> */}
-            {/* </div> */}
-
-
           </div>
-        </div>
+
+        }
+        {
+          nowPageIndex === "secondButton" &&
+          <div className="container">
+            <div className="left">
+              <BorderBox13 className="console">
+                <ChartHeader chartName={"控制台"} />
+              </BorderBox13>
+              <BorderBox1 className="queue">
+                {/* <ChartHeader chartName={"排队车辆统计"} />
+                <QueCar /> */}
+              </BorderBox1>
+            </div>
+            <div className="right">
+              <div className="r-top">
+                <BorderBox1 className="rt-left" style={{ width: "65%" }}>
+                  <MainVisualizationView />
+                </BorderBox1>
+                <BorderBox1 className="rt-right" style={{ width: "35%" }}>
+                  {/* <ChartHeader chartName={"车流热力图"} />
+                  <CarHeat /> */}
+                </BorderBox1>
+              </div>
+              <BorderBox1 className="r-bottom" style={{ height: "35%" }}>
+                {/* <ChartHeader chartName={"断面车流统计"} />
+                <TrafficFlow /> */}
+              </BorderBox1>
+            </div>
+          </div>
+        }
       </FullScreenContainer >
     </div >
 

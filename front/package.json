@@ -12,6 +12,7 @@
   "dependencies": {
     "@babylonjs/core": "^6.2.0",
     "@jiaminghi/data-view-react": "^1.2.5",
+    "antd": "^5.4.7",
     "axios": "^1.4.0",
     "babylonjs-hook": "^0.1.1",
     "echarts": "^5.4.2",

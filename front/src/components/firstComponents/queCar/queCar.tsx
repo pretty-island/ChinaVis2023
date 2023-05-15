@@ -1,22 +1,22 @@
 import * as echarts from 'echarts';
 import { EChartOption } from 'echarts';
 import React, { useEffect, useRef, useState } from "react";
-import { getQueCar } from '../../apis/api';
+import { getQueCar } from '../../../apis/api';
 
 const QueCar: React.FC = () => {
     const chartRef = useRef<HTMLDivElement>(null);
 
-    interface ChartData {
+    interface QueData {
         time: string;
-        all_count: string;
+        all_count: number;
         stop_count: number;
     }
-    const [chartData, setChartData] = useState<ChartData[]>([]);
+    const [queData, setQueData] = useState<QueData[]>([]);
     // 获取数据
     useEffect(() => {
         getQueCar("/getQueCar").then((res) => {
             const data = res.data;
-            setChartData(data);
+            setQueData(data);
 
         });
     }, []);
@@ -27,13 +27,13 @@ const QueCar: React.FC = () => {
             if (mychart == null) {
                 mychart = echarts.init(chartRef.current);
             }
-            const dateList = chartData.map(function (item) {
+            const dateList = queData.map(function (item) {
                 return item.time;
             });
-            const stopList = chartData.map(function (item) {
+            const stopList = queData.map(function (item) {
                 return item.stop_count;
             });
-            const allList = chartData.map(function (item) {
+            const allList = queData.map(function (item) {
                 return item.all_count;
             });
             const option: EChartOption = {
@@ -119,7 +119,7 @@ const QueCar: React.FC = () => {
         }
     })
     return (
-        <div ref={chartRef} style={{ width: "95%", height: "95%" }}></div>
+        <div ref={chartRef} style={{ width: "90%", height: "95%" }}></div>
     )
 }
 export default QueCar;

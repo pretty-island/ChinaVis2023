@@ -25,3 +25,8 @@ export const getQueCar = (path: string) => {
 export const getFlow = (path: string) => {
   return api.get(path)
 }
+
+// 车辆热力图数据接口
+export const getHeat = (path: string) => {
+  return api.get(path)
+}
