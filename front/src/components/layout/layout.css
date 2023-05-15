@@ -57,10 +57,10 @@
 
 .head-title span {
     position: absolute;
-    top: 18%;
+    /* top: 0%; */
     width: 100%;
     text-align: center;
-    font-size: 225%;
+    font-size: 28px;
     font-weight: 400;
     color: #fff;
 }
@@ -70,7 +70,7 @@
     bottom: 12%;
     left: 50%;
     transform: translateX(-50%);
-    padding-top: 12%;
+    padding-top: 10px;
 }
 
 .container {
