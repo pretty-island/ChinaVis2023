@@ -14,31 +14,31 @@ def create_hour_folder(hour):
     if not os.path.exists(folder_name):
         os.makedirs(folder_name)
 
-# 读取少量数据作为测试
-vehicle_data=[]
-with open(input_directory+f"test_with_roads.json","r") as f:
-    for line in f:
-        vehicle=json.loads(line)
-        vehicle_data.append(vehicle)
-create_hour_folder("test")
-for vehicle in vehicle_data:
-    road_sec_id=vehicle['road_sec_id']
-    file_name=f"testhour/road_{road_sec_id}.json"
-    with open(output_directory+file_name,"a") as f:
-        json.dump(vehicle,f)
-        f.write('\n')
+# # 读取少量数据作为测试
+# vehicle_data=[]
+# with open(input_directory+f"test_with_roads.json","r") as f:
+#     for line in f:
+#         vehicle=json.loads(line)
+#         vehicle_data.append(vehicle)
+# create_hour_folder("test")
+# for vehicle in vehicle_data:
+#     road_sec_id=vehicle['road_sec_id']
+#     file_name=f"testhour/road_{road_sec_id}.json"
+#     with open(output_directory+file_name,"a") as f:
+#         json.dump(vehicle,f)
+#         f.write('\n')
 
-# # 按小时读取交通参与者数据并处理
-# for i in range(7, 16):
-#     vehicle_data=[]
-#     with open(input_directory+f"{i}hour_with_roads.json","r") as f:
-#         for line in f:
-#             vehicle=json.loads(line)
-#             vehicle_data.append(vehicle)
-#     create_hour_folder(i)
-#     for vehicle in vehicle_data:
-#         road_sec_id=vehicle['road_sec_id']
-#         file_name=f"{i}hour/road_{road_sec_id}.json"
-#         with open(output_directory+file_name,"a") as f:
-#             json.dump(vehicle,f)
-#             f.write('\n')
+# 按小时读取交通参与者数据并处理:7-9小时
+for i in range(7, 10):
+    vehicle_data=[]
+    with open(input_directory+f"{i}hour_with_roads.json","r") as f:
+        for line in f:
+            vehicle=json.loads(line)
+            vehicle_data.append(vehicle)
+    create_hour_folder(i)
+    for vehicle in vehicle_data:
+        road_sec_id=vehicle['road_sec_id']
+        file_name=f"{i}hour/road_{road_sec_id}.json"
+        with open(output_directory+file_name,"a") as f:
+            json.dump(vehicle,f)
+            f.write('\n')
