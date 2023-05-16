@@ -14,7 +14,7 @@ import RoadMap from "../secondComponents/roadMap/roadMap";
 import { BorderBox1, BorderBox13, Decoration6, Decoration8, Decoration11, FullScreenContainer } from '@jiaminghi/data-view-react'
 const Layout = () => {
   // 当前用户在第几屏，默认第一屏
-  const [nowPageIndex, setNowPageIndex] = useState<string>("firstButton");
+  const [nowPageIndex, setNowPageIndex] = useState<string>("secondButton");
   // 第一屏：用户选择的路口
   const [selectedIntersection, setSelectedIntersection] = useState<string>("all")
   // 第一屏：用户选择的时间
@@ -113,13 +113,14 @@ const Layout = () => {
         {
           nowPageIndex === "secondButton" &&
           <div className="container">
+          {/* <RoadMap /> */}
             <div className="left">
               <BorderBox13 className="console">
                 <ChartHeader chartName={"控制台"} />
               </BorderBox13>
               <BorderBox1 className="queue">
-                {/* <ChartHeader chartName={"排队车辆统计"} />
-                <QueCar /> */}
+                <ChartHeader chartName={"排队车辆统计"} />
+                <QueCar />
               </BorderBox1>
             </div>
             <div className="right">
@@ -133,8 +134,8 @@ const Layout = () => {
                 </BorderBox1>
               </div>
               <BorderBox1 className="r-bottom" style={{ height: "35%" }}>
-                {/* <ChartHeader chartName={"断面车流统计"} />
-                <TrafficFlow /> */}
+                <ChartHeader chartName={"断面车流统计"} />
+                <TrafficFlow />
               </BorderBox1>
             </div>
           </div>
