@@ -3,14 +3,23 @@ import {
     Vector3,
     Scene,
     Vector2,
-    ArcRotateCamera, DirectionalLight
+    ArcRotateCamera, DirectionalLight, FollowCamera
 } from '@babylonjs/core';
 import SceneComponent from 'babylonjs-hook';
-import {creatCar, creatGround, creatRoad, creatSkyBox} from "../utils/roadVisualizeHelp.ts";
+import {creatCarMesh, creatGroundMesh, creatRoadMesh, creatSkyBoxMesh} from "../utils/roadVisualizeHelp.ts";
+
+import CarLogs from '/src/assets/test_with_roads.json?raw'
+import {VehicleMovementLog} from "../utils/model/general.ts";
+import Car from "../utils/model/Car.ts";
+import {Config} from "../utils/Config.ts";
+
+let cars: Car[] = [];
+let timestamp: number;
+let currTime: number;
 
 const onSceneReady = (scene: Scene) => {
     const camera = new ArcRotateCamera("camera", 0, 0, 10, Vector3.Zero());
-    camera.setTarget(Vector3.Zero());
+    camera.setTarget(new Vector3(-200, 0 , -200));
     camera.upperBetaLimit = 5 * Math.PI / 12;
     camera.lowerRadiusLimit = 3;
     camera.upperRadiusLimit = 120;
@@ -21,20 +30,39 @@ const onSceneReady = (scene: Scene) => {
     const light = new DirectionalLight("light", new Vector3(0.3, -1, 0), scene);
     light.intensity = 0.7;
 
-    creatGround(scene);
-    creatRoad(scene, new Vector2(0, 0), new Vector2(10, 8));
-    creatSkyBox(scene);
+    creatGroundMesh(scene);
+    creatRoadMesh(scene, new Vector2(0, 0), new Vector2(10, 8));
+    creatSkyBoxMesh(scene);
 
-    const car1 = creatCar(scene, new Vector2(0, 0));
-    const car2 = creatCar(scene, new Vector2(0, 0));
-    const points = [new Vector2(0, 0), new Vector2(10, 0), new Vector2(10, 8),
-        new Vector2(0, 8), new Vector2(0, 0)];
+    const carLogs = JSON.parse(CarLogs).map(e => {
+        e.position = JSON.parse(e.position);
+        e.shape = JSON.parse(e.shape);
 
-    car1.moveFollowPoints(scene, points, 2);
-    car2.moveFollowPoints(scene, points, 4);
+        return e;
+    }) as VehicleMovementLog[];
+    const carIds = new Set(carLogs.map(e => e.id));
+
+    for (const carId of carIds) {
+        const carMesh = creatCarMesh(scene);
+        cars.push(new Car(scene, carMesh, carLogs.filter(e => e.id === carId)));
+    }
+
+    currTime = carLogs.sort((a, b) => a.time_meas - b.time_meas)[0].ms_no;
 }
 
 const onRender = (_: Scene) => {
+    if (currTime === null || currTime === undefined) return;
+    if (timestamp === null) {
+        timestamp = performance.now();
+    }
+    const timeInterval = performance.now() - timestamp;
+    currTime += (Number.isNaN(timeInterval) ? 0 : timeInterval) * Config.timeScale;
+
+    for (const car of cars) {
+        car.updatePosition(currTime);
+    }
+
+    timestamp = performance.now();
 }
 
 const MainVisualizationView: React.FC = () => {
