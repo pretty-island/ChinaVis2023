@@ -19,6 +19,7 @@
 .env.production.local
 
 package-lock.json
+pnpm-lock.yaml
 package.json
 .vscode/
 
