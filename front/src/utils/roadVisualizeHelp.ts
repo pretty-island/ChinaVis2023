@@ -1,30 +1,9 @@
-import {Scene, MeshBuilder, Vector3, Vector2, Plane} from "@babylonjs/core";
+import {Scene, MeshBuilder} from "@babylonjs/core";
 import {
-    calculateDistance2D,
-    creatCarMaterial,
     creatGrassMaterial,
-    creatRoadMaterial,
     creatSkyboxMaterial
 } from "./tools.ts";
 import {Config} from "./Config.ts";
-
-export function creatRoadMesh(scene: Scene, start: Vector2, end: Vector2) {
-    const length = calculateDistance2D(start, end);
-
-    const sourcePlane = new Plane(0 , 1, 0, 0);
-    sourcePlane.normalize();
-
-    const road = MeshBuilder.CreatePlane(
-        "road", {
-            width: 1, height: length, sourcePlane: sourcePlane
-        }, scene);
-
-    road.position = new Vector3(start.x, 0.01, start.y);
-    road.addRotation(0, 0, Math.atan((end.y - start.y) / (end.x - start.x)));
-    road.material = creatRoadMaterial(scene, length);
-
-    return road;
-}
 
 export function creatGroundMesh(scene: Scene) {
     const ground = MeshBuilder.CreateGround("ground", {width: Config.groundSize, height: Config.groundSize}, scene);
@@ -38,13 +17,4 @@ export function creatSkyBoxMesh(scene: Scene) {
     skybox.material = creatSkyboxMaterial(scene);
 
     return skybox;
-}
-
-// 创建2*1的立方体暂时代表车辆
-export function creatCarMesh(scene: Scene, initPos?: Vector2) {
-    const car = MeshBuilder.CreateBox("car", {width: 1, depth: 2}, scene);
-    car.material = creatCarMaterial(scene);
-    car.position = new Vector3(initPos?.x ?? 0, Config.carHeight, initPos?.y ?? 0);
-
-    return car;
 }

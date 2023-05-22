@@ -1,5 +1,6 @@
-import {Mesh, Scene, Vector2, Vector3} from "@babylonjs/core";
+import {Mesh, MeshBuilder, Scene, Vector2, Vector3} from "@babylonjs/core";
 import {VehicleMovementLog} from "./general.ts";
+import {creatCarMaterial} from "../tools.ts";
 
 export default class Car {
     scene: Scene;
@@ -21,13 +22,16 @@ export default class Car {
         return this.carMesh.rotation;
     }
 
-    constructor(scene: Scene, carMesh: Mesh, movements: VehicleMovementLog[]) {
+    constructor(scene: Scene, movements: VehicleMovementLog[]) {
         this.scene = scene;
-        this.carMesh = carMesh;
         this.movements = movements.sort((m1, m2) => m1.ms_no - m2.ms_no);
 
         this.startTime = movements[0].ms_no;
         this.endTime = movements[movements.length - 1].ms_no;
+
+        const car = MeshBuilder.CreateBox("car", {width: 1, depth: 2}, scene);
+        car.material = creatCarMaterial(scene);
+        this.carMesh = car;
     }
 
     // 根据节点采集信息计算当前时间应当处于的位置

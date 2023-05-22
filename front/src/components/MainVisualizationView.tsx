@@ -2,16 +2,16 @@ import React from 'react';
 import {
     Vector3,
     Scene,
-    Vector2,
-    ArcRotateCamera, DirectionalLight, FollowCamera
+    ArcRotateCamera, DirectionalLight
 } from '@babylonjs/core';
 import SceneComponent from 'babylonjs-hook';
-import {creatCarMesh, creatGroundMesh, creatRoadMesh, creatSkyBoxMesh} from "../utils/roadVisualizeHelp.ts";
+import {creatGroundMesh, creatSkyBoxMesh} from "../utils/roadVisualizeHelp.ts";
 
 import CarLogs from '/src/assets/test_with_roads.json?raw'
 import {VehicleMovementLog} from "../utils/model/general.ts";
 import Car from "../utils/model/Car.ts";
 import {Config} from "../utils/Config.ts";
+import Road from "../utils/model/Road.ts";
 
 let cars: Car[] = [];
 let timestamp: number;
@@ -31,7 +31,7 @@ const onSceneReady = (scene: Scene) => {
     light.intensity = 0.7;
 
     creatGroundMesh(scene);
-    creatRoadMesh(scene, new Vector2(0, 0), new Vector2(10, 8));
+    const roads = Road.fromJSON(scene);
     creatSkyBoxMesh(scene);
 
     const carLogs = JSON.parse(CarLogs).map(e => {
@@ -43,8 +43,7 @@ const onSceneReady = (scene: Scene) => {
     const carIds = new Set(carLogs.map(e => e.id));
 
     for (const carId of carIds) {
-        const carMesh = creatCarMesh(scene);
-        cars.push(new Car(scene, carMesh, carLogs.filter(e => e.id === carId)));
+        cars.push(new Car(scene, carLogs.filter(e => e.id === carId)));
     }
 
     currTime = carLogs.sort((a, b) => a.time_meas - b.time_meas)[0].ms_no;
