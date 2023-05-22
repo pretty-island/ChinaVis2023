@@ -40,13 +40,22 @@ def getflow():
         data = json.load(f)  # 读取到的数据
     return json.dumps(data)  # 将结果转换为JSON格式并返回
 
-# 获取车辆热力图数据：每隔一小时统计一次各个道路经过+停留的所有车辆数量：断面车流+还没出去的所有车辆
+# 获取每隔一小时不同道路不同车辆类型的车流量和平均速度：每隔一小时统计一次各个道路各个车辆类型的所有数量和平均速度
+# @app.route("/getStatis")
+# def getStatis():
+#     directory = "./dataProcess/data/statis.json"  # json文件所在路径   
+#     with open(directory, "r", encoding="utf-8") as f:
+#         data = json.load(f)  # 读取到的数据
+#     return json.dumps(data)  # 将结果转换为JSON格式并返回
+
+# 获取每隔一小时不同道路的车流量：15段路
 @app.route("/getHeat")
 def getHeat():
-    directory = "./dataProcess/carProcess/data/heat.json"  # json文件所在路径   
+    directory = "./dataProcess/data/carheat.json"  # json文件所在路径   
     with open(directory, "r", encoding="utf-8") as f:
         data = json.load(f)  # 读取到的数据
     return json.dumps(data)  # 将结果转换为JSON格式并返回
+
 
 
 if __name__ == "__main__":
