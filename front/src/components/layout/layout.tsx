@@ -124,12 +124,12 @@ const Layout = () => {
             </div>
             <div className="right">
               <div className="r-top">
-                <BorderBox1 className="rt-left" style={{ width: "65%" }}>
-                  <MainVisualizationView />
+                <BorderBox1 className="rt-left" style={{ height: "100%" ,width: "80%"}}>
+                  <RoadMap />               
                 </BorderBox1>
-                <BorderBox1 className="rt-right" style={{ width: "35%" }}>
-                  <ChartHeader chartName={"车流热力图"} />
-                  <RoadMap />
+                <BorderBox1 className="rt-right" style={{ height: "100%" ,width: "20%"}}>
+                  <ChartHeader chartName={"拥堵分析"} />
+                  
                 </BorderBox1>
               </div>
               <BorderBox1 className="r-bottom" style={{ height: "35%" }}>
