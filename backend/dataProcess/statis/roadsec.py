@@ -111,41 +111,7 @@ for road_name, road_sec_ids in sec.items():
 
         result_entry = {"hour": hour, "road": road_name, "count": count, "speed": speed}
         result.append(result_entry)
-        # for entry in data:
-        #     hour = entry["hour"]
-        #     road_data = entry["road"]
-
-        #     # 初始化累加变量
-        #     count = 0
-        #     speed = 0
-
-        #     for road_entry in road_data:
-        #         road_sec_id = road_entry["road_sec_id"]
-        #         count_all = road_entry["count_all"]
-        #         avg_speed = road_entry["avg_all"]
-
-        #         # 查找对应的道路
-        #         road = None
-
-        #         for road_name, road_sec_ids in sec.items():
-        #             if road_sec_id in road_sec_ids:
-        #                 road = road_name
-        #                 break
-
-        #         # 累加车流量和平均速度
-        #         count += count_all
-        #         speed += avg_speed
-
-        #         # 计算平均速度
-        #         avg_speed = speed / len(road_data)
-
-        #         result_entry = {
-        #             "hour": hour,
-        #             "road": road,
-        #             "count": count,
-        #             "speed": avg_speed
-        #         }
-        #         result.append(result_entry)
+        
         print(result_entry)
 # 保存结果到JSON文件
 with open(output_directory, "w", encoding="utf-8") as file:
