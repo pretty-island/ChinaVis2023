@@ -5,40 +5,37 @@ import "leaflet/dist/leaflet.css";
 
 const RoadMap = () => {
 
-    const mapRef = useRef<HTMLDivElement>(null);
-    useEffect(() => {
-         if (mapRef.current) {
-        const mymap = L.map(mapRef.current,{ crs: L.CRS.EPSG4326 }).setView([-250, -50], 0.09);
-        L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
-            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-            maxZoom: 13,
-            id: 'mapbox/streets-v11',
-            // tileSize: 512,
-            // zoomOffset: -1,
-            accessToken: 'pk.eyJ1Ijoid2xtcWppeWl6aCIsImEiOiJjanNwZ29zcTUwOXA5NGFveHEwNmNzZWgxIn0.rf8H02a7Z-PSV9qz471Cww'
-        }).addTo(mymap);
-        const loadRoadData = async () => {
-            try {
-              const response = await fetch('src/assets/roadData/boundaryroad_with9road.geojson');
-              console.log("response");
-              console.log(response);
-              const boundaryRoadGeoJSON = await response.json();
-              console.log(boundaryRoadGeoJSON);
-              L.geoJSON(boundaryRoadGeoJSON, {
-                // crs: L.CRS.EPSG4326 
-                // style: style,
-                // onEachFeature: onEachFeature,
-              }).addTo(mymap);
-            } catch (error) {
-              console.error('Failed to load road data:', error);
-            }
-          };
-    
-          loadRoadData();
-        }
-    })
+  const mapRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (mapRef.current) {
+      const mymap = L.map(mapRef.current, { attributionControl:false }).setView([-0.0017576975791426756, -0.00042456356621113807], 17);
+      // 设置地图边界范围
+      var southWest = L.latLng(-0.0058576975791426756, -0.00506456356621113807);  // 左下角边界坐标
+      var northEast = L.latLng(0.00220, 0.00440);  // 右上角边界坐标
+      var bounds = L.latLngBounds(southWest, northEast);
+      mymap.setMaxBounds(bounds);
 
-    return <div ref={mapRef} style={{ width: '100%', height: '100%' }}></div>;
+      // 将边界范围以内的区域设置为可见区域
+      mymap.on('drag', function() {
+        mymap.panInsideBounds(bounds, { animate: false });
+      });
+
+      L.control.attribution({ prefix: false }).addTo(mymap);
+      L.tileLayer('src/assets/tiles/{z}/{x}/{y}.png', {
+        attribution: '',
+        minZoom: 17,
+        maxZoom: 20,
+        tms:false,
+        // id: 'mapbox/streets-v11',
+        // // tileSize: 512,
+        // // zoomOffset: -1,
+        // accessToken: 'pk.eyJ1Ijoid2xtcWppeWl6aCIsImEiOiJjanNwZ29zcTUwOXA5NGFveHEwNmNzZWgxIn0.rf8H02a7Z-PSV9qz471Cww'
+      }).addTo(mymap);
+      
+    }
+  })
+
+  return <div ref={mapRef} style={{ width: '94%', height: '94%' }}></div>;
 }
 
 
