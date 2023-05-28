@@ -21,6 +21,21 @@ def hello_world_2():
     print(param)
     return jsonify({"message": "Hello, World2!"})
 
+# 获取每分钟所有道路的不同类型的车流量和速度：包括所有类型总车流量、所有机动车总车流量
+@app.route("/getFlowMin")
+def getFlowMin():
+    directory = "./dataProcess/data/flowminute.json"  # json文件所在路径   
+    with open(directory, "r", encoding="utf-8") as f:
+        data = json.load(f)  # 读取到的数据
+    return json.dumps(data)  # 将结果转换为JSON格式并返回
+
+# 获取每半小时所有道路的不同类型的车流量和速度：包括所有类型总车流量、所有机动车总车流量
+@app.route("/getAllFlow")
+def getAllFlow():
+    directory = "./dataProcess/data/allflow.json"  # json文件所在路径   
+    with open(directory, "r", encoding="utf-8") as f:
+        data = json.load(f)  # 读取到的数据
+    return json.dumps(data)  # 将结果转换为JSON格式并返回
 
 # 获取排队车辆统计数据
 @app.route("/getQueCar")

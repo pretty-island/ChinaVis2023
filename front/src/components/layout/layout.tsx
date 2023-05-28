@@ -12,6 +12,7 @@ import MainVisualizationView from "../MainVisualizationView";
 import RoadMap from "../secondComponents/roadMap/roadMap";
 
 import { BorderBox1, BorderBox13, Decoration6, Decoration8, Decoration11, FullScreenContainer } from '@jiaminghi/data-view-react'
+import Speed from "../firstComponents/trafficFlow/speed";
 const Layout = () => {
   // 当前用户在第几屏，默认第一屏
   const [nowPageIndex, setNowPageIndex] = useState<string>("firstButton");
@@ -20,11 +21,17 @@ const Layout = () => {
   // 第一屏：用户选择的时间
   const [selectedTime, setSelectedTime] = useState<string>("all")
 
+  // 用户切换速度和流量视图
+  const [nowView, setNowView] = useState<string>("流量");
 
   interface ChangePageProps {
     id: string;
     text: string;
   }
+  // interface ChangeViewProps {
+  //   id: string;
+  //   text: string;
+  // }
   // 切换页面的组件
   const ChangePage: React.FC<ChangePageProps> = ({ id, text }) => {
     const color = id === nowPageIndex ? "rgb(26, 152, 252)" : "rgb(0, 69, 124)";
@@ -44,6 +51,20 @@ const Layout = () => {
             // width: '150px', height: '60px'
           }}
         >{text}</Decoration11>
+      </div>
+    )
+  }
+  // 切换流量速度视图的组件
+  const ChangeView: React.FC = () => {
+    // 切换视图的函数
+    const change = (): void => {
+      setNowView(nowView === '流量' ? "速度" : "流量");
+    };
+    const btnText: string = nowView === '流量' ? "切换到速度视图" : "切换到流量视图";
+
+    return (
+      <div>
+        <button onClick={change} style={{color:"black",fontSize:'12px'}}>{btnText}</button>
       </div>
     )
   }
@@ -102,10 +123,32 @@ const Layout = () => {
                   <CarHeat />
                 </BorderBox1>
               </div>
-              <BorderBox1 className="f-r-bottom" style={{ height: "35%" }}>
-                <ChartHeader chartName={"断面车流统计"} />
-                <TrafficFlow />
-              </BorderBox1>
+              <div className="f-r-bottom" style={{ height: "35%" }}>
+                <BorderBox1 className="f-rb-left" style={{ width: "65%" }}>
+                  <div className="changeView">
+                    <ChartHeader chartName={"交通流量与平均速度"} />
+                    <ChangeView />
+                  </div>
+                  {nowView === "流量" &&
+                    <TrafficFlow />
+                  }
+                  {nowView === "速度" &&
+                    <Speed />
+                  }
+                  {/* <ChartHeader chartName={"交通流量统计图"} /> */}
+                  {/* <div > */}
+                  {/* <TrafficFlow /> */}
+                  {/* </div> */}
+                  {/* <div>
+                    <Speed />
+                  </div> */}
+                </BorderBox1 >
+                <BorderBox1 className="f-rb-right" style={{ width: "35%" }}>
+                  <ChartHeader chartName={"统计图"} />
+                </BorderBox1>
+
+
+              </div>
             </div>
           </div>
 
@@ -124,12 +167,12 @@ const Layout = () => {
             </div>
             <div className="right">
               <div className="r-top">
-                <BorderBox1 className="rt-left" style={{ height: "100%" ,width: "80%"}}>
-                  <RoadMap />               
+                <BorderBox1 className="rt-left" style={{ height: "100%", width: "80%" }}>
+                  <RoadMap />
                 </BorderBox1>
-                <BorderBox1 className="rt-right" style={{ height: "100%" ,width: "20%"}}>
+                <BorderBox1 className="rt-right" style={{ height: "100%", width: "20%" }}>
                   <ChartHeader chartName={"拥堵分析"} />
-                  
+
                 </BorderBox1>
               </div>
               <BorderBox1 className="r-bottom" style={{ height: "35%" }}>

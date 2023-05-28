@@ -90,10 +90,11 @@ with open(input_directory, "r") as file:
 
 result = []
 for road_name, road_sec_ids in sec.items():
-    # 初始化累加变量
-    count = 0
-    speed = 0
+    
     for entry in data:
+        # 初始化累加变量
+        count = 0
+        speed = 0
         hour = entry["hour"]
         road_data = entry["road"]
         for road_entry in road_data:
