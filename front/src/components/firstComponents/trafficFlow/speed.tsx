@@ -187,7 +187,7 @@ const Speed: React.FC = () => {
                     flow10.push(matchingData);
                 }
                 else {
-                    flow6.push(0)
+                    flow10.push(0)
                 }
             }
             const allcount=[]
@@ -281,7 +281,7 @@ const Speed: React.FC = () => {
                 ],
                 series: [
                     {
-                        name: "总流量",
+                        name: "总平均速度",
                         type: "bar",
                         itemStyle: {
                             normal: {
@@ -290,45 +290,12 @@ const Speed: React.FC = () => {
                         },
                         data: allcount,
                     },
-                    // {
-                    //     name: "机动车流量",
-                    //     // type: "bar",
-                    //     // stack: "总额",
-                    //     // barWidth: 25,
-                    //     // itemStyle: {
-                    //     //     normal: {
-                    //     //         color:'#A0CEE9',
-                    //     //     }
-                    //     // },
-                    //     type: "line",
-                    //     symbol: "none",
-                    //     itemStyle: {
-                    //         normal: {
-                    //             color: '#A0CEE9',
-                    //             areaStyle: {
-                    //                 color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [
-                    //                     { offset: 0, color: "rgb(73,189,255,0.01)" },
-                    //                     { offset: 0.5, color: "rgb(73,189,255,0.2)" },
-                    //                     { offset: 1, color: "rgb(73,189,255)" },
-                    //                 ]),
-                    //             },
-                    //         },
-                    //     },
-                    //     data: vehicle,
-                    // },
+                
                     {
                         name: "小型车辆",
-                        // type: "bar",
-                        // stack: "总额",
-                        // barWidth: 25,
-                        // itemStyle: {
-                        //     normal: {
-                        //         color:'#127DD1',
-                        //     }
-                        // },
+                        
                         type: "line",
                         smooth: true,
-                        stack: "总额",
                         symbol: "none",
                         itemStyle: {
                             normal: {
@@ -348,7 +315,7 @@ const Speed: React.FC = () => {
                     {
                         name: "卡车",
                         // type: "bar",
-                        stack: "总额",
+                        // stack: "总额",
                         smooth: true,
                         // barWidth: 25,
                         // itemStyle: {
@@ -375,7 +342,7 @@ const Speed: React.FC = () => {
                     {
                         name: "客车",
                         // type: "bar",
-                        stack: "总额",
+                        // stack: "总额",
                         smooth: true,
                         // barWidth: 25,
                         // itemStyle: {
@@ -403,7 +370,7 @@ const Speed: React.FC = () => {
                     {
                         name: "行人",
                         // type: "bar",
-                        stack: "总额",
+                        // stack: "总额",
                         smooth: true,
                         // barWidth: 25,
                         // itemStyle: {
@@ -431,7 +398,7 @@ const Speed: React.FC = () => {
                     {
                         name: "非机动车",
                         // type: "bar",
-                        stack: "总额",
+                        // stack: "总额",
                         smooth: true,
                         // barWidth: 25,
                         // itemStyle: {
@@ -458,7 +425,7 @@ const Speed: React.FC = () => {
                     {
                         name: "手推车、三轮车",
                         // type: "bar",
-                        stack: "总额",
+                        // stack: "总额",
                         smooth: true,
                         // barWidth: 25,
                         // itemStyle: {

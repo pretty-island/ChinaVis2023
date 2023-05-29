@@ -13,6 +13,8 @@ import RoadMap from "../secondComponents/roadMap/roadMap";
 
 import { BorderBox1, BorderBox13, Decoration6, Decoration8, Decoration11, FullScreenContainer } from '@jiaminghi/data-view-react'
 import Speed from "../firstComponents/trafficFlow/speed";
+import Total from "../firstComponents/total/total";
+import EventChart from "../firstComponents/event/eventChart";
 const Layout = () => {
   // 当前用户在第几屏，默认第一屏
   const [nowPageIndex, setNowPageIndex] = useState<string>("firstButton");
@@ -103,11 +105,12 @@ const Layout = () => {
                 />
               </BorderBox13>
               <BorderBox1 className="f-queue">
-                <ChartHeader chartName={"排队车辆统计"} />
+                <ChartHeader chartName={"交通事件"} />
                 <div className="t" style={{ height: "50%" }}>
-                  <QueCar />
+                  <EventChart />
                 </div>
                 <div className="b">
+
                 </div>
                 {/* <QueCar /> */}
               </BorderBox1>
@@ -144,7 +147,8 @@ const Layout = () => {
                   </div> */}
                 </BorderBox1 >
                 <BorderBox1 className="f-rb-right" style={{ width: "35%" }}>
-                  <ChartHeader chartName={"统计图"} />
+                  <ChartHeader chartName={"道路通行量"} />
+                  <Total/>
                 </BorderBox1>
 
 
@@ -161,8 +165,8 @@ const Layout = () => {
                 <ChartHeader chartName={"控制台"} />
               </BorderBox13>
               <BorderBox1 className="queue">
-                {/* <ChartHeader chartName={"排队车辆统计"} />
-                <QueCar /> */}
+                <ChartHeader chartName={"排队车辆统计"} />
+                <QueCar />
               </BorderBox1>
             </div>
             <div className="right">
@@ -178,6 +182,7 @@ const Layout = () => {
               <BorderBox1 className="r-bottom" style={{ height: "35%" }}>
                 {/* <ChartHeader chartName={"断面车流统计"} />
                 <TrafficFlow /> */}
+                
               </BorderBox1>
             </div>
           </div>
