@@ -58,6 +58,7 @@ for hour in range(7, 16):
                 "count_all": count_all,
                 "vehicle_types": [],
             }
+           
             # 根据类型计算车流量和平均速度
             for vehicle_type, vehicles in vehicle_count.items():
                 count = len(vehicles)

@@ -21,7 +21,7 @@ for i in range(10):
         for line in f.readlines():
             data = json.loads(line)
             # 去除异常值："type":-1 的数据
-            if data['type'] not in [-1]:
+            if data["type"] not in [-1]:
                 # 获取当前数据的时间戳
                 timestamp = data["time_meas"]
 

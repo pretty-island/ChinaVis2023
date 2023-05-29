@@ -121,8 +121,15 @@
     padding: 20px;
 }
 
+.f-r-bottom{
+    display: flex;
+}
 .f-r-bottom .border-box-content {
     padding: 20px;
+}
+.changeView{
+    display: flex;
+    justify-content: space-between;
 }
 
 /* 第二屏样式 */
