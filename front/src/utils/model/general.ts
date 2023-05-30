@@ -4,6 +4,7 @@ export interface VehicleMovementLog {
     position: {x: number, y: number};   // 载具当前位置
     shape: {x: number, y: number, z: number};   // 载具形状
     orientation: number;    // 载具车头朝向
+    is_moving: boolean; // 是否在运动
     velocity: number;   // 载具速度
     heading: number;    // 载具运动方向
     time_meas: number;  // 当前时间
