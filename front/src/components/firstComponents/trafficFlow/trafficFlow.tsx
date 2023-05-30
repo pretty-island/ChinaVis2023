@@ -342,7 +342,7 @@ const TrafficFlow: React.FC = () => {
                     left: "2%",
                     top: "18%",
                     right: "5%",
-                    bottom: "10%",
+                    bottom: "18%",
                     containLabel: true
                 },
                 legend: {
@@ -412,15 +412,15 @@ const TrafficFlow: React.FC = () => {
                     //     gridIndex:1
                     // },
                 ],
-                // dataZoom: [
-                //     {
-                //         show: true,
-                //         // bottom:140,
-                //         // height:20
-                //         // start:0,
-                //         // end:50
-                //     }
-                // ],
+                dataZoom: [
+                    {
+                        show: true,
+                        bottom:40,
+                        height:20
+                        // start:0,
+                        // end:50
+                    }
+                ],
                 yAxis: [
                     {
                         name: "流量（辆）",
@@ -499,7 +499,7 @@ const TrafficFlow: React.FC = () => {
                         // },
                         type: "line",
                         smooth: true,
-                        stack: "总额",
+                        // stack: "总额",
                         symbol: "none",
                         itemStyle: {
                             normal: {
@@ -519,7 +519,7 @@ const TrafficFlow: React.FC = () => {
                     {
                         name: "卡车",
                         // type: "bar",
-                        stack: "总额",
+                        // stack: "总额",
                         smooth: true,
                         // barWidth: 25,
                         // itemStyle: {
@@ -546,7 +546,7 @@ const TrafficFlow: React.FC = () => {
                     {
                         name: "客车",
                         // type: "bar",
-                        stack: "总额",
+                        // stack: "总额",
                         smooth: true,
                         // barWidth: 25,
                         // itemStyle: {
@@ -573,7 +573,7 @@ const TrafficFlow: React.FC = () => {
                     {
                         name: "行人",
                         // type: "bar",
-                        stack: "总额",
+                        // stack: "总额",
                         smooth: true,
                         // barWidth: 25,
                         // itemStyle: {
@@ -601,7 +601,7 @@ const TrafficFlow: React.FC = () => {
                     {
                         name: "非机动车",
                         // type: "bar",
-                        stack: "总额",
+                        // stack: "总额",
                         smooth: true,
                         // barWidth: 25,
                         // itemStyle: {
@@ -628,7 +628,7 @@ const TrafficFlow: React.FC = () => {
                     {
                         name: "手推车、三轮车",
                         // type: "bar",
-                        stack: "总额",
+                        // stack: "总额",
                         smooth: true,
                         // barWidth: 25,
                         // itemStyle: {

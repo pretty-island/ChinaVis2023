@@ -145,36 +145,38 @@ const Total: React.FC = () => {
         });
         return result;
     }
-    const data = [
+    const all_data = [
         {
             name: "小型车辆",
-            value: 2500,
-            labelLine: {}
-        },
-        {
-            name: "行人",
-            value: 2022,
-        },
-        {
-            name: "非机动车",
-            value: 1823,
+            value: 41643,
+            // labelLine: {}
         },
         {
             name: "卡车",
-            value: 1511,
+            value: 1440,
         },
         {
             name: "客车",
-            value: 1322,
+            value: 989,
         },
         {
-            name: "手推车、三轮车",
-            value: 901,
+            name: "行人",
+            value: 55346,
         },
-    ].sort((a, b) => {
-        return b.value - a.value;
-    });
-    data.forEach((v, i) => {
+        {
+            name: "非机动车",
+            value: 57489,
+        },
+        
+        {
+            name: "手推车、三轮车",
+            value: 3161,
+        },
+    ]
+    // .sort((a, b) => {
+    //     return b.value - a.value;
+    // });
+    all_data.forEach((v, i) => {
         v.labelLine = {
             lineStyle: {
                 width: 1,
@@ -186,7 +188,7 @@ const Total: React.FC = () => {
         const reg = /(?=(\B)(\d{3})+$)/g;
         return num.toString().replace(reg, ',');
     }
-    const total = data.reduce((a, b) => {
+    const total = all_data.reduce((a, b) => {
         return a + b.value * 1
     }, 0);
 
@@ -199,8 +201,8 @@ const Total: React.FC = () => {
             const option: EChartOption = {
                 tooltip:{
                     trigger:'item',
-                    padding: 10,
-                    borderWidth: 1,
+                    // padding: 10,
+                    // borderWidth: 1,
                 },
                 color:[
                     "#33C0CD",
@@ -223,7 +225,7 @@ const Total: React.FC = () => {
                                 padding: [10, 0]
                             },
                             val: {
-                                fontSize: 26,
+                                fontSize: 23,
                                 fontWeight: 'bolder',
                                 color: '#fff',
                             }
@@ -240,10 +242,23 @@ const Total: React.FC = () => {
                     },
                     show: false
                 }],
+                // graphic: {
+                //     type: 'text',
+                //     left: 'center',
+                //     top: 'center',
+                //     style: {
+                //       text: '烟尘',
+                //       textAlign: 'center',
+                //       fill: 'rgb(149,162,255)',
+                //       width: 30,
+                //       height: 30,
+                //     }
+                //   },
+        
                 series: [
                     {
                         type: "pie",
-                        radius: ["30%","78%"],
+                        radius: ["30%","70%"],
                         center: ["50%", "50%"],
                         // clockwise: true,
                         avoidLabelOverlap: true,
@@ -258,7 +273,7 @@ const Total: React.FC = () => {
                                 const name = params.name;
                                 const value = formatNumber(params.value);
                                 const index = params.dataIndex;
-                                return [`{a${index}|${name}：${value}}`, `{hr${index}|}`].join(
+                                return [`{a${index}|${name}${value}}`, `{hr${index}|}`].join(
                                     "\n"
                                 );
                             },
@@ -267,7 +282,7 @@ const Total: React.FC = () => {
                         labelLine: {
                             normal: {
                                 length: 2,
-                                length2: 20,
+                                length2: 10,
                                 lineStyle: {
                                     // color: '#e6e6e6'
                                 }
@@ -280,7 +295,7 @@ const Total: React.FC = () => {
                                 },
                             },
                         },
-                        data,
+                        data:all_data,
                         roseType: "radius",
                     },
 

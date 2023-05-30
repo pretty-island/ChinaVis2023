@@ -30,10 +30,7 @@ const Layout = () => {
     id: string;
     text: string;
   }
-  // interface ChangeViewProps {
-  //   id: string;
-  //   text: string;
-  // }
+
   // 切换页面的组件
   const ChangePage: React.FC<ChangePageProps> = ({ id, text }) => {
     const color = id === nowPageIndex ? "rgb(26, 152, 252)" : "rgb(0, 69, 124)";
@@ -66,7 +63,7 @@ const Layout = () => {
 
     return (
       <div>
-        <button onClick={change} style={{color:"black",fontSize:'12px'}}>{btnText}</button>
+        <button onClick={change} style={{ color: "black", fontSize: '12px' }}>{btnText}</button>
       </div>
     )
   }
@@ -108,26 +105,20 @@ const Layout = () => {
                 <ChartHeader chartName={"交通事件"} />
                 <div className="t" style={{ height: "50%" }}>
                   <EventChart />
+                  {/* <CarHeat /> */}
                 </div>
                 <div className="b">
-
                 </div>
                 {/* <QueCar /> */}
               </BorderBox1>
             </div>
 
             <div className="f-right" style={{ width: "78%" }}>
-              <div className="f-r-top" style={{ height: "65%" }}>
-                <BorderBox1 className="f-rt-left" style={{ width: "65%" }}>
+              <div className="f-r-left" style={{ width: "65%" }}>
+                <BorderBox1 className="f-rl-top" style={{ height: "65%" }}>
                   <MainVisualizationView />
                 </BorderBox1>
-                <BorderBox1 className="f-rt-right" style={{ width: "35%" }}>
-                  <ChartHeader chartName={"车流热力图"} />
-                  <CarHeat />
-                </BorderBox1>
-              </div>
-              <div className="f-r-bottom" style={{ height: "35%" }}>
-                <BorderBox1 className="f-rb-left" style={{ width: "65%" }}>
+                <BorderBox1 className="f-rl-bottom" style={{ height: "35%" }}>
                   <div className="changeView">
                     <ChartHeader chartName={"交通流量与平均速度"} />
                     <ChangeView />
@@ -145,17 +136,25 @@ const Layout = () => {
                   {/* <div>
                     <Speed />
                   </div> */}
-                </BorderBox1 >
-                <BorderBox1 className="f-rb-right" style={{ width: "35%" }}>
-                  <ChartHeader chartName={"道路通行量"} />
-                  <Total/>
                 </BorderBox1>
-
-
+              </div>
+              <div className="f-r-right" style={{ width: "35%" }}>
+                <BorderBox1 className="f-rr-top" style={{ height: "35%" }}>
+                  <ChartHeader chartName={"道路通行量"} />
+                  <Total />
+                  {/* <EventChart /> */}
+                </BorderBox1 >
+                <BorderBox1 className="f-rr-bottom" style={{ height: "65%" }}>
+                  <div className="rt" style={{ height: "70%" }}>
+                  <ChartHeader chartName={"车流热力图"} />
+                  <CarHeat />
+                  </div>
+                  <div className="rb">
+                  </div>                  
+                </BorderBox1>
               </div>
             </div>
           </div>
-
         }
         {
           nowPageIndex === "secondButton" &&
@@ -182,7 +181,7 @@ const Layout = () => {
               <BorderBox1 className="r-bottom" style={{ height: "35%" }}>
                 {/* <ChartHeader chartName={"断面车流统计"} />
                 <TrafficFlow /> */}
-                
+
               </BorderBox1>
             </div>
           </div>

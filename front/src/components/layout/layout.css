@@ -100,31 +100,36 @@
 .f-right {
     padding: 10px;
     padding-left: 5px;
+    display: flex;
     box-sizing: border-box;
 }
 
-.f-r-top {
+.f-r-right {
     display: flex;
+    flex-direction: column;
+    padding-left: 10px;
 }
 
-.f-rt-left .border-box-content {
+
+.f-rl-top .border-box-content {
     justify-content: center;
     display: flex;
     align-items: center;
 }
 
-.f-rt-right {
-    padding-left: 10px;
-}
 
-.f-rt-right .border-box-content {
+.f-rr-top .border-box-content {
     padding: 20px;
 }
 
-.f-r-bottom{
+.f-r-left{
     display: flex;
+    flex-direction: column;
 }
-.f-r-bottom .border-box-content {
+.f-rr-bottom .border-box-content {
+    padding: 20px;
+}
+.f-rl-bottom .border-box-content {
     padding: 20px;
 }
 .changeView{

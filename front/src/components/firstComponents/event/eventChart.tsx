@@ -5,40 +5,31 @@ import React, { useEffect, useRef, useState } from "react";
 // import { getTotal } from '../../../apis/api';
 const EventChart: React.FC = () => {
     const chartRef = useRef<HTMLDivElement>(null);
-
-    //提示框体
-    function tooltipFormatter(params: { seriesName: string; componentSubType: string; color: string; name: string; value: number; }) {
-        const valuesFormatter = [];
-        if (params.componentSubType == "pie") {
-            valuesFormatter.push(
-                '<div style="border-bottom: 1px solid rgba(255,255,255,.3); font-size: 18px;padding-bottom: 7px;margin-bottom: 7px">' +
-                "本日销量" +
-                "<br>" +
-                "</div>" +
-                '<span style="color:' +
-                params.color +
-                '">' +
-                params.name +
-                "</span>: " +
-                params.value
-            );
-        } else {
-            valuesFormatter.push(
-                '<div style="border-bottom: 1px solid rgba(255,255,255,.3); font-size: 18px;padding-bottom: 7px;margin-bottom: 7px">' +
-                params.seriesName +
-                "</div>" +
-                '<span style="color:' +
-                params.color +
-                '">' +
-                params.name +
-                "</span>: " +
-                params.value +
-                "<br>"
-            );
-        }
-
-        return valuesFormatter;
+    const title = '总量';
+    const formatNumber = function (num: number) {
+        const reg = /(?=(\B)(\d{3})+$)/g;
+        return num.toString().replace(reg, ',');
     }
+    const data = [
+        {
+            value: 111,
+            name: "行人横穿马路",
+        },
+        {
+            value: 111,
+            name: "机动车超速",
+        },
+        {
+            value: 231,
+            name: "机动车占用非机动车道",
+        },
+    ].sort((a, b) => {
+        return b.value - a.value;
+    });
+    const total = data.reduce((a, b) => {
+        return a + b.value * 1
+    }, 0);
+
     useEffect(() => {
         if (chartRef.current !== null) {
             let mychart = echarts.getInstanceByDom(chartRef.current);
@@ -52,11 +43,11 @@ const EventChart: React.FC = () => {
                     // z: 10,
                 },
                 color: [
-                    "#FECE4391",
+                    // "#FECE4391",
                     "rgba(51,192,205,0.57)",
                     "rgba(158,135,255,0.57)",
                     "rgba(252,75,75,0.57)",
-                    "#FDB36ac2",
+                    // "#FDB36ac2",
 
                 ],
                 textStyle: {
@@ -66,7 +57,7 @@ const EventChart: React.FC = () => {
                 polar: {
                     center: ["50%", "50%"],
                     // radius: 150,
-                    radius: ["30%", "70%"],
+                    radius: ["20%", "60%"],
                 },
                 tooltip: {
                     trigger: "item",
@@ -83,20 +74,40 @@ const EventChart: React.FC = () => {
                     // bottom: "0%",
                     containLabel: true,
                 },
+                title: [{
+                    text: '{name|' + title + '}\n{val|' + formatNumber(total) + '}',
+                    top: 'center',
+                    left: 'center',
+                    textStyle: {
+                        rich: {
+                            name: {
+                                fontSize: 14,
+                                fontWeight: 'normal',
+                                color: '#fff',
+                                padding: [10, 0]
+                            },
+                            val: {
+                                fontSize: 24,
+                                fontWeight: 'bolder',
+                                color: '#fff',
+                            }
+                        }
+                    }
+                }],
                 series: [
                     {
-                        name: "每天销量",
+                        name: "全天交通事件",
                         type: "pie",
-                        radius: ["90%", "99%"],
+                        radius: ["75%", "85%"],
                         avoidLabelOverlap: false,
                         label: {
                             normal: {
-                                show: true,
-                                position: "outside",
+                                show: false,
+                                position: "inside",
                                 formatter: "{b} : {c} ({d}%)",
                             },
                             emphasis: {
-                                show: true,
+                                show: false,
                                 textStyle: {
                                     fontSize: "15",
                                     fontWeight: "normal",
@@ -105,9 +116,9 @@ const EventChart: React.FC = () => {
                             tooltip: {
                                 trigger: "item",
                                 padding: 10,
-                                backgroundColor: "#222",
-                                borderColor: "#777",
-                                borderWidth: 1,
+                                // backgroundColor: "#222",
+                                // borderColor: "#777",
+                                // borderWidth: 1,
                                 //   formatter: tooltipFormatter,
                             },
                         },
@@ -116,41 +127,30 @@ const EventChart: React.FC = () => {
                                 show: false,
                             },
                         },
-                        
-                        legend: {
-                            show: true,
-                            orient: "vertical",
-                            x: "left",
-                            y: "bottom",
-                            data: ["行人横穿马路", "机动车逆行", "机动车占用非机动车道"],
-                        },
+
+                        // legend: {
+                        //     show: true,
+                        //     orient: "vertical",
+                        //     x: "left",
+                        //     y: "bottom",
+                        //     data: ["行人横穿马路", "机动车逆行", "机动车占用非机动车道"],
+                        // },
                         itemStyle: {
                             normal: {
-                                borderWidth: 3,
+                                borderWidth: 0,
                                 borderColor: "#ffffff",
                             },
                             emphasis: {
                                 show: true,
+                                borderWidth: 2,
+                                borderColor: "#ffffff",
                                 textStyle: {
                                     fontSize: "15",
                                     fontWeight: "normal",
                                 },
                             },
                         },
-                        data: [
-                            {
-                              value: 111,
-                              name: "行人横穿马路",
-                            },
-                            {
-                              value: 111,
-                              name: "机动车逆行",
-                            },
-                            {
-                              value: 231,
-                              name: "机动车占用非机动车道",
-                            },
-                          ],
+                        data: data
                     },
                     {
                         type: 'bar',
@@ -176,7 +176,7 @@ const EventChart: React.FC = () => {
                         type: 'bar',
                         data: [2, 4, 6, 1, 3, 2, 1],
                         coordinateSystem: 'polar',
-                        name: '机动车逆行',
+                        name: '机动车超速',
                         stack: 'a',
                         itemStyle: {
                             normal: {

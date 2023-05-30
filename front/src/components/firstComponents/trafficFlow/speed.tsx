@@ -279,6 +279,15 @@ const Speed: React.FC = () => {
                         },
                     },
                 ],
+                dataZoom: [
+                    {
+                        show: true,
+                        bottom:40,
+                        height:20
+                        // start:0,
+                        // end:50
+                    }
+                ],
                 series: [
                     {
                         name: "总平均速度",
