@@ -13,9 +13,19 @@ export default class BabylonManager {
     public currTimestamp: number;
     public timeScale: number;
 
-    public constructor(scene: Scene, vehicleMovementLogs: VehicleMovementLog[], currTimestamp?: number, timeScale: number = 0.04) {
-        this.scene = scene;
+    public isSceneReady: boolean;
 
+    public constructor(scene: Scene) {
+        this.scene = scene;
+        this.renderTimestamp = performance.now();
+        this.currTimestamp = 0;
+        this.timeScale = 0.04;
+        this.cars = [];
+
+        this.isSceneReady = false;
+    }
+
+    public updateLogs(vehicleMovementLogs: VehicleMovementLog[], currTimestamp?: number, timeScale: number = 0.04) {
         vehicleMovementLogs.sort((m1, m2) => m1.ms_no - m2.ms_no);
 
         const groupLogs: {[key: number]: VehicleMovementLog[]} = {};
@@ -23,12 +33,10 @@ export default class BabylonManager {
             groupLogs[log.id] = groupLogs[log.id] ?? [];
             groupLogs[log.id].push(log);
         })
-        this.cars = Object.values(groupLogs).map(logs => new Car(scene, logs, BabylonConfig.meshCreator));
+        this.cars = Object.values(groupLogs).map(logs => new Car(this.scene, logs, BabylonConfig.carMeshCreator));
 
         this.currTimestamp = currTimestamp ?? vehicleMovementLogs[0].ms_no;
         this.timeScale = timeScale;
-
-        this.renderTimestamp = performance.now();
     }
 
     public onSceneReady() {
@@ -54,10 +62,14 @@ export default class BabylonManager {
                     mesh.rotation = Vector3.Zero()
                 }
             }
+
+            this.isSceneReady = true;
         })
     }
 
     public onRender() {
+        if (!this.isSceneReady) return;
+
         const timeInterval = performance.now() - this.renderTimestamp;
         this.currTimestamp += (Number.isNaN(timeInterval) ? 0 : timeInterval) * BabylonConfig.timeScale;
 

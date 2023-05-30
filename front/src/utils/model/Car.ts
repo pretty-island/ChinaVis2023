@@ -65,9 +65,13 @@ export default class Car {
         const firstPos = new Vector2(this.movements[firstIndex].position.x, this.movements[firstIndex].position.y);
         const lastPos = new Vector2(this.movements[lastIndex].position.x, this.movements[lastIndex].position.y);
         const currPos = firstPos.add(lastPos.subtract(firstPos).scale(timeRatio));
+
+        if (!((1 - timeRatio > 0.05) && !this.movements[lastIndex].is_moving)) {
+            this.carMesh.lookAt(new Vector3(currPos.x, this.carMesh.position.y, currPos.y));
+        }
         this.position = new Vector3(currPos.x, this.carMesh.position.y, currPos.y);
 
-        const firstHeading = this.movements[firstIndex].heading, lastHeading = this.movements[lastIndex].heading;
-        this.rotation.y = firstHeading + (lastHeading - firstHeading) * timeRatio - Math.PI / 6;
+        // const firstHeading = this.movements[firstIndex].heading, lastHeading = this.movements[lastIndex].heading;
+        // this.rotation.y = firstHeading + (lastHeading - firstHeading) * timeRatio - Math.PI / 6;
     }
 }

@@ -9,7 +9,7 @@ export class BabylonConfig {
     static carHeight = 3;
 
     static timeScale = 0.05;
-    static meshCreator: (scene: Scene, type: number) => Mesh = (scene, _) => {
+    static carMeshCreator: (scene: Scene, type: number) => Mesh = (scene, _) => {
         const car = MeshBuilder.CreateBox("car", {width: 1, depth: 2}, scene);
         car.material = creatCarMaterial(scene);
 
