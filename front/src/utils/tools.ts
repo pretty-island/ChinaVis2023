@@ -47,14 +47,6 @@ export function creatSkyboxMaterial(scene: Scene) {
     return skyboxMaterial;
 }
 
-// 创建白色材质
-export function creatCarMaterial(scene: Scene) {
-    const carMaterial = new StandardMaterial("carMaterial", scene);
-    carMaterial.emissiveColor = new Color3(1, 1, 1);
-
-    return carMaterial;
-}
-
 export function creatCarMeshInstance(meshes: AbstractMesh[], type: number): {meshes: InstancedMesh[], transformNode: TransformNode} {
     const localMeshes = meshes.filter(e => e.id !== "__root__") as Mesh[];
 

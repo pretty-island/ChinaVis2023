@@ -1,8 +1,6 @@
 import React from 'react';
 import { Scene, } from '@babylonjs/core';
 import "@babylonjs/loaders/glTF";
-import "@babylonjs/core/Debug/debugLayer";
-import "@babylonjs/inspector";
 import SceneComponent from 'babylonjs-hook';
 
 import {VehicleMovementLog} from "../utils/model/general.ts";
@@ -11,8 +9,6 @@ import BabylonManager from "../utils/model/BabylonManager.ts";
 let babylonManager: BabylonManager;
 
 const onSceneReady = (scene: Scene) => {
-    scene.debugLayer.show({embedMode: true});
-
     babylonManager = new BabylonManager(scene);
     babylonManager.onSceneReady();
 

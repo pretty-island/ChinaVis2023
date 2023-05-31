@@ -22,6 +22,10 @@ export default class Car {
         return this.transformNode.rotation;
     }
 
+    get type() {
+        return this.movements[0].type;
+    }
+
     constructor(movements: VehicleMovementLog[], transformNode: TransformNode, meshes: AbstractMesh[]) {
         console.assert(
             movements.filter(m => m.type === movements[0].type).length === movements.length,
@@ -35,7 +39,7 @@ export default class Car {
 
         this.transformNode = transformNode;
         this.carMeshes = meshes;
-        this.position.y = BabylonConfig.carHeight;
+        this.position.y = BabylonConfig.carHeightMap[this.type];
     }
 
     // 根据节点采集信息计算当前时间应当处于的位置

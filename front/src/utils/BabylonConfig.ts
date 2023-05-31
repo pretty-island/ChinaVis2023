@@ -5,7 +5,21 @@ export class BabylonConfig {
     static skyboxSize = 5000;
 
     static roadHeight = 0.01;
-    static carHeight = 4;
+    static carHeightMap: {[key: number]: number} = {
+      0: 4,
+      1: 4,
+      2: 4,
+      3: 2,
+      4: 4,
+      5: 4,
+      6: 4,
+      7: 4,
+      8: 4,
+      9: 4,
+      10: 4,
+      11: 4,
+      12: 4,
+    };
 
     static timeScale = 0.05;
 
