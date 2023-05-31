@@ -1,41 +1,40 @@
-import {Mesh, Scene, Vector2, Vector3} from "@babylonjs/core";
+import {AbstractMesh, TransformNode, Vector2, Vector3} from "@babylonjs/core";
 import {VehicleMovementLog} from "./general.ts";
 import {BabylonConfig} from "../BabylonConfig.ts";
 
 export default class Car {
-    scene: Scene;
-    carMesh: Mesh;
-    movements: VehicleMovementLog[];
+    private transformNode: TransformNode;
+    private carMeshes: AbstractMesh[];
+    private movements: VehicleMovementLog[];
 
-    startTime: number;
-    endTime: number;
+    private readonly startTime: number;
+    private readonly endTime: number;
 
     get position() {
-        return this.carMesh.position;
+        return this.transformNode.position;
     }
 
     private set position(value) {
-        this.carMesh.position = value;
+        this.transformNode.position = value
     }
 
     get rotation() {
-        return this.carMesh.rotation;
+        return this.transformNode.rotation;
     }
 
-    constructor(scene: Scene, movements: VehicleMovementLog[], meshCreator: (scene: Scene, type: number) => Mesh) {
+    constructor(movements: VehicleMovementLog[], transformNode: TransformNode, meshes: AbstractMesh[]) {
         console.assert(
             movements.filter(m => m.type === movements[0].type).length === movements.length,
             "All movements should be of the same type"
         );
 
-        this.scene = scene;
         this.movements = movements.sort((m1, m2) => m1.ms_no - m2.ms_no);
 
         this.startTime = movements[0].ms_no;
         this.endTime = movements[movements.length - 1].ms_no;
 
-        this.carMesh = meshCreator(scene, movements[0].type);
-
+        this.transformNode = transformNode;
+        this.carMeshes = meshes;
         this.position.y = BabylonConfig.carHeight;
     }
 
@@ -43,19 +42,23 @@ export default class Car {
     // 当输入时间小于最早/大于最晚时间，物体位置设为最早/最晚记录位置，方向设为运动最早/最晚记录位置的朝向
     // 当输入时间在最早与最晚时间之间，找出离输入时间点最近的两个记录，物体位置和旋转方向均由上述两个记录插值计算
     updatePosition(currTime: number) {
-        if (currTime < this.startTime || currTime > this.endTime) {
-            this.carMesh.isVisible = false;
+        if (currTime < this.startTime) {
+            this.carMeshes.forEach(e => e.isVisible = false);
+            return;
+        } else if (currTime > this.endTime) {
+            this.carMeshes.forEach(e => e.dispose())
+            this.carMeshes = [];
             return;
         }
 
-        this.carMesh.isVisible = true;
+        this.carMeshes.forEach(e => e.isVisible = true);
 
         let lastIndex = this.movements.findIndex(m => m.ms_no > currTime);
         lastIndex = lastIndex === -1 ? 0 : lastIndex;
         const firstIndex = Math.max(lastIndex - 1, 0);
 
         if (!(this.movements[lastIndex].is_moving || this.movements[firstIndex].is_moving)) {
-            this.position = new Vector3(this.movements[firstIndex].position.x, this.carMesh.position.y, this.movements[firstIndex].position.y);
+            this.position = new Vector3(this.movements[firstIndex].position.x, this.transformNode.position.y, this.movements[firstIndex].position.y);
             return;
         }
 
@@ -67,11 +70,9 @@ export default class Car {
         const currPos = firstPos.add(lastPos.subtract(firstPos).scale(timeRatio));
 
         if (!((1 - timeRatio > 0.05) && !this.movements[lastIndex].is_moving)) {
-            this.carMesh.lookAt(new Vector3(currPos.x, this.carMesh.position.y, currPos.y));
+            this.transformNode.lookAt(new Vector3(currPos.x, this.transformNode.position.y, currPos.y));
         }
-        this.position = new Vector3(currPos.x, this.carMesh.position.y, currPos.y);
 
-        // const firstHeading = this.movements[firstIndex].heading, lastHeading = this.movements[lastIndex].heading;
-        // this.rotation.y = firstHeading + (lastHeading - firstHeading) * timeRatio - Math.PI / 6;
+        this.position = new Vector3(currPos.x, this.transformNode.position.y, currPos.y);
     }
 }

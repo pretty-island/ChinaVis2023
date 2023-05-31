@@ -1,7 +1,17 @@
-import {Color3, CubeTexture, Scene, StandardMaterial, Texture, Vector2} from "@babylonjs/core";
+import {
+    AbstractMesh,
+    Color3,
+    CubeTexture, InstancedMesh, Mesh,
+    Scene,
+    StandardMaterial,
+    Texture,
+    TransformNode,
+    Vector2
+} from "@babylonjs/core";
 
 import grassTexture from "/src/assets/texture/grass.jpg"
 import grassNormalMap from "/src/assets/texture/grass_normal.jpeg";
+import {BabylonConfig} from "./BabylonConfig.ts";
 
 
 function getScaleTexture(path: string, uScale: number, vScale: number, scene: Scene) {
@@ -43,4 +53,19 @@ export function creatCarMaterial(scene: Scene) {
     carMaterial.emissiveColor = new Color3(1, 1, 1);
 
     return carMaterial;
+}
+
+export function creatCarMeshInstance(meshes: AbstractMesh[], type: number): {meshes: InstancedMesh[], transformNode: TransformNode} {
+    const localMeshes = meshes.filter(e => e.id !== "__root__") as Mesh[];
+
+    const meshTransformer = new TransformNode("car transformer ");
+    const result = localMeshes.map(e => e.createInstance("car mesh "));
+    result.forEach(e => e.setParent(meshTransformer));
+
+    meshTransformer.rotation = BabylonConfig.carMeshRotationMap[type];
+
+    const transformNode = new TransformNode("car node ");
+    meshTransformer.setParent(transformNode);
+
+    return {meshes: result, transformNode};
 }

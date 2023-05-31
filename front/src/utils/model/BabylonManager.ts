@@ -1,13 +1,19 @@
-import {ArcRotateCamera, Scene, SceneLoader, Vector3} from "@babylonjs/core";
+import {
+    ArcRotateCamera,
+    Scene,
+    SceneLoader,
+    Vector3
+} from "@babylonjs/core";
 import "@babylonjs/loaders";
 import {BabylonConfig} from "../BabylonConfig.ts";
 import {VehicleMovementLog} from "./general.ts";
 import Car from "./Car.ts";
 import {creatGroundMesh, creatSkyBoxMesh} from "../roadVisualizeHelp.ts";
+import {creatCarMeshInstance} from "../tools.ts";
 
 export default class BabylonManager {
     private readonly scene: Scene;
-    private cars: Car[];
+    private cars: Car[] | undefined;
     private renderTimestamp: number;
 
     public currTimestamp: number;
@@ -28,12 +34,31 @@ export default class BabylonManager {
     public updateLogs(vehicleMovementLogs: VehicleMovementLog[], currTimestamp?: number, timeScale: number = 0.04) {
         vehicleMovementLogs.sort((m1, m2) => m1.ms_no - m2.ms_no);
 
+        const idTypeMap: {[key: number]: Set<number>} = {};
         const groupLogs: {[key: number]: VehicleMovementLog[]} = {};
         vehicleMovementLogs.forEach(log => {
             groupLogs[log.id] = groupLogs[log.id] ?? [];
             groupLogs[log.id].push(log);
+            idTypeMap[log.type] = idTypeMap[log.type] ?? new Set<number>();
+            idTypeMap[log.type].add(log.id);
         })
-        this.cars = Object.values(groupLogs).map(logs => new Car(this.scene, logs, BabylonConfig.carMeshCreator));
+
+        const cars: Car[] = []
+
+        Promise.all([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(type => {
+            return BabylonConfig.carMeshCreator(this.scene, type).then(r => [type, r] as const);
+        })).then(values => {
+            for (const value of values) {
+                const [type, r] = value;
+
+                for (const id of (idTypeMap[type] ?? [])) {
+                    const {meshes, transformNode} = creatCarMeshInstance(r.meshes, type);
+                    cars.push(new Car(groupLogs[id], transformNode, meshes));
+                }
+            }
+
+            this.cars = cars;
+        })
 
         this.currTimestamp = currTimestamp ?? vehicleMovementLogs[0].ms_no;
         this.timeScale = timeScale;
@@ -68,12 +93,12 @@ export default class BabylonManager {
     }
 
     public onRender() {
-        if (!this.isSceneReady) return;
+        if (!this.isSceneReady || this.cars === undefined) return;
 
         const timeInterval = performance.now() - this.renderTimestamp;
         this.currTimestamp += (Number.isNaN(timeInterval) ? 0 : timeInterval) * BabylonConfig.timeScale;
 
-        this.cars.forEach(car => {
+        this.cars?.forEach(car => {
             car.updatePosition(this.currTimestamp);
         });
 
