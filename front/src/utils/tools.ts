@@ -1,9 +1,17 @@
-import {Color3, CubeTexture, Scene, StandardMaterial, Texture, Vector2} from "@babylonjs/core";
+import {
+    AbstractMesh,
+    Color3,
+    CubeTexture, InstancedMesh, Mesh,
+    Scene,
+    StandardMaterial,
+    Texture,
+    TransformNode,
+    Vector2
+} from "@babylonjs/core";
 
-// import roadTexture from "/src/assets/texture/road_2.jpg"
 import grassTexture from "/src/assets/texture/grass.jpg"
-import roadNormalMap from "/src/assets/texture/road_normal.jpg";
 import grassNormalMap from "/src/assets/texture/grass_normal.jpeg";
+import {BabylonConfig} from "./BabylonConfig.ts";
 
 
 function getScaleTexture(path: string, uScale: number, vScale: number, scene: Scene) {
@@ -18,14 +26,6 @@ function getScaleTexture(path: string, uScale: number, vScale: number, scene: Sc
 
 export function calculateDistance2D(start: Vector2, end: Vector2) {
     return Math.sqrt(Math.pow(start.x - end.x, 2) + Math.pow(start.y - end.y, 2))
-}
-
-export function creatRoadMaterial(scene: Scene, length: number) {
-    const result = new StandardMaterial("roadMaterial", scene);
-    result.diffuseTexture = new Texture(roadTexture, scene);
-    result.bumpTexture = getScaleTexture(roadNormalMap, 1, length, scene);
-
-    return result;
 }
 
 export function creatGrassMaterial(scene: Scene, uScale: number, vScale: number) {
@@ -47,10 +47,17 @@ export function creatSkyboxMaterial(scene: Scene) {
     return skyboxMaterial;
 }
 
-// 创建白色材质
-export function creatCarMaterial(scene: Scene) {
-    const carMaterial = new StandardMaterial("carMaterial", scene);
-    carMaterial.emissiveColor = new Color3(1, 1, 1);
+export function creatCarMeshInstance(meshes: AbstractMesh[], type: number): {meshes: InstancedMesh[], transformNode: TransformNode} {
+    const localMeshes = meshes.filter(e => e.id !== "__root__") as Mesh[];
 
-    return carMaterial;
+    const meshTransformer = new TransformNode("car transformer ");
+    const result = localMeshes.map(e => e.createInstance("car mesh "));
+    result.forEach(e => e.setParent(meshTransformer));
+
+    meshTransformer.rotation = BabylonConfig.carMeshRotationMap[type];
+
+    const transformNode = new TransformNode("car node ");
+    meshTransformer.setParent(transformNode);
+
+    return {meshes: result, transformNode};
 }
