@@ -18,9 +18,9 @@ import EventChart from "../firstComponents/event/eventChart";
 const Layout = () => {
   // 当前用户在第几屏，默认第一屏
   const [nowPageIndex, setNowPageIndex] = useState<string>("firstButton");
-  // 第一屏：用户选择的路口
-  const [selectedIntersection, setSelectedIntersection] = useState<string>("all")
-  // 第一屏：用户选择的时间
+  // 第一屏：用户选择的道路
+  const [selectedRoad, setSelectedRoad] = useState<string>("all")
+  // 第一屏：用户选择的时间段
   const [selectedTime, setSelectedTime] = useState<string>("all")
 
   // 用户切换速度和流量视图
@@ -95,8 +95,8 @@ const Layout = () => {
             <div className="f-left" style={{ width: "22%" }}>
               <BorderBox13 className="f-console" style={{ height: "22%" }}>
                 <ChartHeader chartName={"控制台"} />
-                <FirstConsole setSelectedIntersection={setSelectedIntersection}
-                  selectedIntersection={selectedIntersection}
+                <FirstConsole setSelectedRoad={setSelectedRoad}
+                  selectedRoad={selectedRoad}
                   setSelectedTime={setSelectedTime}
                   selectedTime={selectedTime}
                 />
@@ -141,7 +141,7 @@ const Layout = () => {
               <div className="f-r-right" style={{ width: "35%" }}>
                 <BorderBox1 className="f-rr-top" style={{ height: "35%" }}>
                   <ChartHeader chartName={"道路通行量"} />
-                  <Total />
+                  <Total selectedRoad={selectedRoad}/>
                   {/* <EventChart /> */}
                 </BorderBox1 >
                 <BorderBox1 className="f-rr-bottom" style={{ height: "65%" }}>

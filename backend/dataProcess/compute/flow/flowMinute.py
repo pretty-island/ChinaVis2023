@@ -1,13 +1,4 @@
-# 不分路段！ 分类型统计所有道路上的车流量：分别统计不同类型的每半个小时的车流量，再求和得到所有道路、所有类型的总车流量。每半小时统计一次， 不分道路、只分类型
-
-# type=7类型为静态物体，不做统计。
-# 统计的所有类型：1；2；3；4；6；10。
-# CAR = 1; //小型车辆
-# PEDESTRIAN = 2;//行人
-# CYCLIST = 3;//非机动车
-# TRUCK = 4;//卡车
-# BUS = 6;//客车
-# TROLLEY = 10;//手推车、三轮车
+# 统计所有道路上统计不同类型的每分钟的车流量。flowminute.json
 
 # 输出数据格式：
 # [{"time":7:00
@@ -26,7 +17,7 @@ from datetime import datetime
 # 车辆数据路径
 input_directory = "D:/VIScode/chinavis-2023/backend/data/situation/time/type/"
 # 输出文件保存路径
-output_directory = "D:/VIScode/chinavis-2023/backend/dataProcess/data/flowminute.json"
+output_directory = "D:/VIScode/chinavis-2023/backend/dataProcess/data/flow/flowminute.json"
 
 # 定义保存结果的字典
 result = defaultdict(list)

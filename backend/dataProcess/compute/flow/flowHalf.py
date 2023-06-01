@@ -1,3 +1,5 @@
+# 每半个小时所有道路的不同类型的车流量。
+
 # 不分路段！ 分类型统计所有道路上的车流量：分别统计不同类型的每半个小时的车流量，再求和得到所有道路、所有类型的总车流量。每半小时统计一次， 不分道路、只分类型
 
 # type=7类型为静态物体，不做统计。
@@ -24,7 +26,7 @@ import json
 # 车辆数据路径
 input_directory = "D:/VIScode/chinavis-2023/backend/data/situation/time/type/"
 # 输出文件保存路径
-output_directory = "D:/VIScode/chinavis-2023/backend/dataProcess/data/allflow.json"
+output_directory = "D:/VIScode/chinavis-2023/backend/dataProcess/data/flowHalf.json"
 
 # 定义保存结果的字典
 result = []

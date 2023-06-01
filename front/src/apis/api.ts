@@ -15,11 +15,21 @@ export const postParams = (path: string, data = {}) => {
     ...
   } 
 */
+// 每分钟所有道路的不同类型的车流量和速度
+export const getTotal = (path: string) => {
+  return api.get(path)
+}
+
+// 每分钟不同道路的不同类型的车流量和速度
+export const getRoad = (path: string) => {
+  return api.get(path)
+}
 
 // 每分钟所有道路的不同类型的车流量和速度
 export const getFlowMin = (path: string) => {
   return api.get(path)
 }
+
 
 // 所有道路的不同类型的车流量和速度
 export const getAllFlow = (path: string) => {

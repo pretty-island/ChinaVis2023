@@ -1,6 +1,6 @@
 import {Color3, CubeTexture, Scene, StandardMaterial, Texture, Vector2} from "@babylonjs/core";
 
-import roadTexture from "/src/assets/texture/road_2.jpg"
+// import roadTexture from "/src/assets/texture/road_2.jpg"
 import grassTexture from "/src/assets/texture/grass.jpg"
 import roadNormalMap from "/src/assets/texture/road_normal.jpg";
 import grassNormalMap from "/src/assets/texture/grass_normal.jpeg";
