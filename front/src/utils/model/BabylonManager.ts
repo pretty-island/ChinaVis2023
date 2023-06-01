@@ -1,5 +1,5 @@
 import {
-    ArcRotateCamera,
+    ArcRotateCamera, FollowCamera,
     Scene,
     SceneLoader,
     Vector3
@@ -11,6 +11,7 @@ import Car from "./Car.ts";
 import {creatGroundMesh, creatSkyBoxMesh} from "../roadVisualizeHelp.ts";
 import {creatCarMeshInstance} from "../tools.ts";
 import {AdvancedDynamicTexture, Control, TextBlock} from "@babylonjs/gui";
+import React from "react";
 
 export default class BabylonManager {
     private readonly scene: Scene;
@@ -19,6 +20,9 @@ export default class BabylonManager {
     private renderTimestamp: number;
     private _beginTimestamp: number | undefined;
     private _endTimestamp: number | undefined;
+
+    private crossroadCameras: ArcRotateCamera[];
+    private followCameras: FollowCamera | undefined;
 
     public get beginTimestamp() {return this._beginTimestamp};
     public get endTimestamp() {return this._endTimestamp};
@@ -37,6 +41,7 @@ export default class BabylonManager {
 
         this.isSceneReady = false;
         this.isCarMeshReady = false;
+        this.crossroadCameras = [];
     }
 
     public updateLogs(vehicleMovementLogs: VehicleMovementLog[], currTimestamp?: number, timeScale: number = 0.04) {
@@ -66,7 +71,7 @@ export default class BabylonManager {
 
                 for (const id of (idTypeMap[type] ?? [])) {
                     const {meshes, transformNode} = creatCarMeshInstance(r.meshes, type);
-                    cars.push(new Car(groupLogs[id], transformNode, meshes));
+                    cars.push(new Car(groupLogs[id], transformNode, meshes, this.followCameras!, this.crossroadCameras[0]));
                 }
             }
 
@@ -78,15 +83,35 @@ export default class BabylonManager {
         this.timeScale = timeScale;
     }
 
-    public onSceneReady() {
-        const camera = new ArcRotateCamera("camera", 0, 0, 10, Vector3.Zero());
-        camera.setTarget(new Vector3(-30, 0, -120));
-        camera.upperBetaLimit = 5 * Math.PI / 12;
-        camera.lowerRadiusLimit = 100;
-        camera.upperRadiusLimit = 300;
+    private initCamera() {
+        const cameras = [0, 1, 2, 3, 4, 5, 6, 7].map(i => {
+            let tempCamera = new ArcRotateCamera("camera " + i, 0, 0, 10, Vector3.Zero());
+            tempCamera.setTarget(BabylonConfig.crossroadCamerasPosition[i]);
+            tempCamera.upperBetaLimit = 5 * Math.PI / 12;
+            tempCamera.lowerRadiusLimit = 50;
+            tempCamera.upperRadiusLimit = 300;
+            tempCamera.attachControl(true);
 
-        const canvas = this.scene.getEngine().getRenderingCanvas();
-        camera.attachControl(canvas, true);
+            return tempCamera;
+        });
+
+        this.crossroadCameras.push(...cameras);
+
+        this.followCameras = new FollowCamera("followCamera", this.crossroadCameras[0].position, this.scene);
+        this.followCameras.attachControl(true);
+        this.followCameras.radius = 30;
+        this.followCameras.heightOffset = 15;
+        this.followCameras.cameraAcceleration = 0.01;
+        this.followCameras.maxCameraSpeed = 150;
+        this.followCameras.lowerHeightOffsetLimit = 15;
+        this.followCameras.lowerRadiusLimit = 30;
+        this.followCameras.upperRadiusLimit = 60;
+
+        this.scene.activeCamera = this.crossroadCameras[0];
+    }
+
+    public onSceneReady() {
+        this.initCamera();
 
         creatGroundMesh(this.scene);
         creatSkyBoxMesh(this.scene);
@@ -145,5 +170,22 @@ export default class BabylonManager {
         advancedTexture.addControl(text);
 
         return text;
+    }
+
+    public onKeyDown(event: React.KeyboardEvent<HTMLCanvasElement>) {
+        if (event.key in ["0", "1", "2", "3", "4", "5", "6", "7"]) {
+            const index = Number(event.key);
+            this.scene.activeCamera = this.crossroadCameras[index];
+        }
+    }
+
+    public setCameraToCrossroad(index: number) {
+        console.assert(index >= 0 && index < 8);
+        this.scene.activeCamera = this.crossroadCameras[index];
+    }
+
+    public focusOnCar(carId: number) {
+        const targetCar = this.cars?.find(car => car.id == carId);
+        targetCar?.focus();
     }
 }

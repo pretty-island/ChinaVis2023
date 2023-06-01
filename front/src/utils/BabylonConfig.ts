@@ -55,6 +55,17 @@ export class BabylonConfig {
         12: "model/car.glb",
     }
 
+    static crossroadCamerasPosition: {[key: number]: Vector3} = {
+        0: new Vector3(-280, 0, 30),
+        1: new Vector3(-30, 0, -120),
+        2: new Vector3(135, 0, -200),
+        3: new Vector3(300, 0, -340),
+        4: new Vector3(-360, 0, -280),
+        5: new Vector3(-140, 0, -380),
+        6: new Vector3(15, 0, -440),
+        7: new Vector3(200, 0, -570),
+    }
+
     static carMeshCreator: (scene: Scene, type: number) => Promise<ISceneLoaderAsyncResult> = (scene, type) => {
         return SceneLoader.ImportMeshAsync("", BabylonConfig.carMeshUrlMap[type], undefined, scene);
     }

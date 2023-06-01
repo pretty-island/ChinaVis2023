@@ -1,4 +1,12 @@
-import {AbstractMesh, TransformNode, Vector2, Vector3} from "@babylonjs/core";
+import {
+    AbstractMesh,
+    ActionManager, Camera,
+    ExecuteCodeAction,
+    FollowCamera,
+    TransformNode,
+    Vector2,
+    Vector3
+} from "@babylonjs/core";
 import {VehicleMovementLog} from "./general.ts";
 import {BabylonConfig} from "../BabylonConfig.ts";
 
@@ -9,6 +17,9 @@ export default class Car {
 
     private readonly startTime: number;
     private readonly endTime: number;
+
+    private readonly followCamera: FollowCamera;
+    private readonly defaultCamera: Camera;
 
     get position() {
         return this.transformNode.position;
@@ -26,7 +37,11 @@ export default class Car {
         return this.movements[0].type;
     }
 
-    constructor(movements: VehicleMovementLog[], transformNode: TransformNode, meshes: AbstractMesh[]) {
+    get id() {
+        return this.movements[0].id;
+    }
+
+    constructor(movements: VehicleMovementLog[], transformNode: TransformNode, meshes: AbstractMesh[], followCamera: FollowCamera, defaultCamera: Camera) {
         console.assert(
             movements.filter(m => m.type === movements[0].type).length === movements.length,
             "All movements should be of the same type"
@@ -39,7 +54,20 @@ export default class Car {
 
         this.transformNode = transformNode;
         this.carMeshes = meshes;
+        this.followCamera = followCamera;
+        this.defaultCamera = defaultCamera;
         this.position.y = BabylonConfig.carHeightMap[this.type];
+
+        this.carMeshes.forEach(e => {
+            e.actionManager = new ActionManager()
+            e.actionManager.registerAction(new ExecuteCodeAction(ActionManager.OnLeftPickTrigger, () => {this.focus()}));
+        })
+    }
+
+    focus() {
+        this.followCamera.position = this.transformNode.getScene().activeCamera!.position;
+        this.followCamera.lockedTarget = this.carMeshes[0];
+        this.transformNode.getScene().activeCamera = this.followCamera;
     }
 
     // 根据节点采集信息计算当前时间应当处于的位置
@@ -50,6 +78,13 @@ export default class Car {
             this.carMeshes.forEach(e => e.isVisible = false);
             return;
         } else if (currTime > this.endTime) {
+            if (this.followCamera.lockedTarget === this.carMeshes[0]) {
+                console.log("reset camera");
+
+                this.followCamera.lockedTarget = null;
+                this.transformNode.getScene().activeCamera = this.defaultCamera;
+            }
+
             this.carMeshes.forEach(e => e.dispose())
             this.carMeshes = [];
             return;
