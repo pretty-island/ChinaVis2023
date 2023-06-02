@@ -66,6 +66,27 @@ export class BabylonConfig {
         7: new Vector3(200, 0, -570),
     }
 
+    static roadPosition: {[key: number]: Vector3} = {
+        0: new Vector3(-360, 0, 60),
+        1: new Vector3(-150, 0, -50),
+        2: new Vector3(55, 0, -160),
+        3: new Vector3(200, 0, -250),
+        4: new Vector3(350, 0, -370),
+        5: new Vector3(-420, 0, -260),
+        6: new Vector3(-250, 0, -330),
+        7: new Vector3(-60, 0, -410),
+        8: new Vector3(106, 0, -510),
+        9: new Vector3(250, 0, -600),
+        10: new Vector3(-320, 0, -175),
+        11: new Vector3(-85, 0, -250),
+        12: new Vector3(75, 0, -320),
+        13: new Vector3(250, 0, -460),
+        14: new Vector3(0, 0, -60),
+    }
+
+    static roadVisibleTags: number[][] = [[0], [0, 1], [1, 2], [2, 3], [3], [4], [4, 5], [5, 6], [6, 7], [7], [0, 4], [1, 5], [2, 6], [3, 7], [1]];
+    static crossroadVisibleTags: number[][] = [[0, 1, 10], [1, 2, 11, 13], [2, 3, 12], [3, 4, 13], [5, 6, 10], [6, 7, 11], [7, 8 ,12], [8, 9, 13]];
+
     static carMeshCreator: (scene: Scene, type: number) => Promise<ISceneLoaderAsyncResult> = (scene, type) => {
         return SceneLoader.ImportMeshAsync("", BabylonConfig.carMeshUrlMap[type], undefined, scene);
     }

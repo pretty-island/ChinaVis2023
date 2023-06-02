@@ -20,6 +20,7 @@ export default class Car {
 
     private readonly followCamera: FollowCamera;
     private readonly defaultCamera: Camera;
+    private readonly onFocusChanged: (isFocus: boolean) => void;
 
     get position() {
         return this.transformNode.position;
@@ -41,7 +42,12 @@ export default class Car {
         return this.movements[0].id;
     }
 
-    constructor(movements: VehicleMovementLog[], transformNode: TransformNode, meshes: AbstractMesh[], followCamera: FollowCamera, defaultCamera: Camera) {
+    constructor(
+        movements: VehicleMovementLog[],
+        transformNode: TransformNode, meshes: AbstractMesh[],
+        followCamera: FollowCamera, defaultCamera: Camera,
+        onFocusChanged: (isFocus: boolean) => void
+    ) {
         console.assert(
             movements.filter(m => m.type === movements[0].type).length === movements.length,
             "All movements should be of the same type"
@@ -61,13 +67,16 @@ export default class Car {
         this.carMeshes.forEach(e => {
             e.actionManager = new ActionManager()
             e.actionManager.registerAction(new ExecuteCodeAction(ActionManager.OnLeftPickTrigger, () => {this.focus()}));
-        })
+        });
+
+        this.onFocusChanged = onFocusChanged;
     }
 
     focus() {
         this.followCamera.position = this.transformNode.getScene().activeCamera!.position;
         this.followCamera.lockedTarget = this.carMeshes[0];
         this.transformNode.getScene().activeCamera = this.followCamera;
+        this.onFocusChanged(true);
     }
 
     // 根据节点采集信息计算当前时间应当处于的位置
@@ -83,6 +92,7 @@ export default class Car {
 
                 this.followCamera.lockedTarget = null;
                 this.transformNode.getScene().activeCamera = this.defaultCamera;
+                this.onFocusChanged(false);
             }
 
             this.carMeshes.forEach(e => e.dispose())

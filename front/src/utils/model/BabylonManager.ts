@@ -1,7 +1,7 @@
 import {
     ArcRotateCamera, FollowCamera,
     Scene,
-    SceneLoader,
+    SceneLoader, TransformNode,
     Vector3
 } from "@babylonjs/core";
 import "@babylonjs/loaders";
@@ -10,7 +10,7 @@ import {VehicleMovementLog} from "./general.ts";
 import Car from "./Car.ts";
 import {creatGroundMesh, creatSkyBoxMesh} from "../roadVisualizeHelp.ts";
 import {creatCarMeshInstance} from "../tools.ts";
-import {AdvancedDynamicTexture, Control, TextBlock} from "@babylonjs/gui";
+import {AdvancedDynamicTexture, Control, Rectangle, TextBlock} from "@babylonjs/gui";
 import React from "react";
 
 export default class BabylonManager {
@@ -21,7 +21,10 @@ export default class BabylonManager {
     private _beginTimestamp: number | undefined;
     private _endTimestamp: number | undefined;
 
-    private crossroadCameras: ArcRotateCamera[];
+    private readonly crossroadCameras: ArcRotateCamera[];
+    private readonly roadCameras: ArcRotateCamera[];
+    private readonly crossroadTags: Rectangle[];
+    private readonly roadTags: Rectangle[];
     private followCameras: FollowCamera | undefined;
 
     public get beginTimestamp() {return this._beginTimestamp};
@@ -42,6 +45,9 @@ export default class BabylonManager {
         this.isSceneReady = false;
         this.isCarMeshReady = false;
         this.crossroadCameras = [];
+        this.roadCameras = [];
+        this.crossroadTags = [];
+        this.roadTags = [];
     }
 
     public updateLogs(vehicleMovementLogs: VehicleMovementLog[], currTimestamp?: number, timeScale: number = 0.04) {
@@ -71,7 +77,11 @@ export default class BabylonManager {
 
                 for (const id of (idTypeMap[type] ?? [])) {
                     const {meshes, transformNode} = creatCarMeshInstance(r.meshes, type);
-                    cars.push(new Car(groupLogs[id], transformNode, meshes, this.followCameras!, this.crossroadCameras[0]));
+                    cars.push(
+                        new Car(groupLogs[id], transformNode, meshes, this.followCameras!, this.crossroadCameras[0], (isFocus) => {
+                            this.updateTags(false, isFocus ? -1 : 0);
+                        })
+                    );
                 }
             }
 
@@ -83,19 +93,25 @@ export default class BabylonManager {
         this.timeScale = timeScale;
     }
 
+    private createArcCameras(endIndex: number, positions: {[key: number]: Vector3}): ArcRotateCamera[] {
+        const result: ArcRotateCamera[] = [];
+        for (let i = 0; i <= endIndex; i++) {
+            const camera = new ArcRotateCamera("camera " + i, 0, 0, 10, Vector3.Zero());
+            camera.setTarget(positions[i]);
+            camera.upperBetaLimit = 5 * Math.PI / 12;
+            camera.lowerRadiusLimit = 50;
+            camera.upperRadiusLimit = 300;
+            camera.attachControl(true);
+
+            result.push(camera);
+        }
+
+        return result;
+    }
+
     private initCamera() {
-        const cameras = [0, 1, 2, 3, 4, 5, 6, 7].map(i => {
-            let tempCamera = new ArcRotateCamera("camera " + i, 0, 0, 10, Vector3.Zero());
-            tempCamera.setTarget(BabylonConfig.crossroadCamerasPosition[i]);
-            tempCamera.upperBetaLimit = 5 * Math.PI / 12;
-            tempCamera.lowerRadiusLimit = 50;
-            tempCamera.upperRadiusLimit = 300;
-            tempCamera.attachControl(true);
-
-            return tempCamera;
-        });
-
-        this.crossroadCameras.push(...cameras);
+        this.crossroadCameras.push(...this.createArcCameras(7, BabylonConfig.crossroadCamerasPosition));
+        this.roadCameras.push(...this.createArcCameras(14, BabylonConfig.roadPosition));
 
         this.followCameras = new FollowCamera("followCamera", this.crossroadCameras[0].position, this.scene);
         this.followCameras.attachControl(true);
@@ -118,7 +134,19 @@ export default class BabylonManager {
 
         this.scene.createDefaultLight(true);
 
-        this.text = this.creatTimestampText();
+        const advancedTexture = AdvancedDynamicTexture.CreateFullscreenUI("UI");
+        this.text = this.creatTimestampText(advancedTexture);
+
+        this.roadTags.push(...Object.entries(BabylonConfig.roadPosition).map(
+            (position) =>
+                this.createSceneTag(advancedTexture, position[1], "道路" + (Number(position[0]) + 1))
+        ));
+        this.crossroadTags.push(...Object.entries(BabylonConfig.crossroadCamerasPosition).map(
+            (position) =>
+                this.createSceneTag(advancedTexture, position[1], "路口" + (Number(position[0]) + 1))
+        ));
+
+        this.updateTags(false, 0);
 
         SceneLoader.ImportMeshAsync("", "model/scene.glb", undefined,
             this.scene).then(r => {
@@ -133,16 +161,32 @@ export default class BabylonManager {
         })
     }
 
+    private getCurrTime() {
+        let date = new Date(this.currTimestamp * 100);
+        const formattedDateNumber = (num: number) => {
+            if (num < 10) {
+                return "0" + num;
+            } else {
+                return num.toString();
+            }
+        }
+        return formattedDateNumber(date.getFullYear()) + "-" +
+            formattedDateNumber(date.getMonth()) + "-" +
+            formattedDateNumber(date.getDay()) + " " +
+            formattedDateNumber(date.getHours()) + ":" +
+            formattedDateNumber(date.getMinutes()) + ":" +
+            formattedDateNumber(date.getSeconds());
+    }
+
     public onRender() {
         if (!this.isSceneReady || !this.isCarMeshReady || this.cars === undefined) return;
+        if (this.timeScale === 0) return;
 
         const timeInterval = performance.now() - this.renderTimestamp;
         this.currTimestamp += (Number.isNaN(timeInterval) ? 0 : timeInterval) * BabylonConfig.timeScale;
 
         if (this.text !== undefined) {
-            this.text.text = `Timestamp: ${this.currTimestamp.toFixed(2)}\n` +
-            `Begin Timestamp: ${this.beginTimestamp?.toFixed(2) ?? "Unknow"}\n` +
-            `End Timestamp: ${this.endTimestamp?.toFixed(2) ?? "Unknow"}`;
+            this.text.text = this.getCurrTime()
         }
 
         this.cars?.forEach(car => {
@@ -152,9 +196,7 @@ export default class BabylonManager {
         this.renderTimestamp = performance.now();
     }
 
-    private creatTimestampText() {
-        const advancedTexture = AdvancedDynamicTexture.CreateFullscreenUI("UI");
-
+    private creatTimestampText(advancedTexture: AdvancedDynamicTexture) {
         const text = new TextBlock();
         text.text = "Loading...";
         text.color = "white";
@@ -172,16 +214,64 @@ export default class BabylonManager {
         return text;
     }
 
+    private createSceneTag(advancedTexture: AdvancedDynamicTexture, position: Vector3, text: string) {
+        const node = new TransformNode("Scene Tag", this.scene);
+        node.position = position;
+
+        let rect1 = new Rectangle();
+        rect1.width = 0.1;
+        rect1.thickness = 0;
+        advancedTexture.addControl(rect1);
+        rect1.linkWithMesh(node);
+
+        let label = new TextBlock();
+        label.text = text;
+        label.color = 'white'
+        label.outlineWidth = 2;
+        label.outlineColor = "black";
+        label.alpha = 0.4;
+        rect1.addControl(label);
+
+        return rect1;
+    }
+
     public onKeyDown(event: React.KeyboardEvent<HTMLCanvasElement>) {
-        if (event.key in ["0", "1", "2", "3", "4", "5", "6", "7"]) {
-            const index = Number(event.key);
-            this.scene.activeCamera = this.crossroadCameras[index];
+        if (["Digit0", "Digit1", "Digit2", "Digit3", "Digit4", "Digit5", "Digit6", "Digit7", "Digit8", "Digit9"].indexOf(event.code) !== -1) {
+            const index = Number(event.code.slice(5));
+            this.setCameraToRoad(index);
+        }
+
+        if (["Numpad0", "Numpad1", "Numpad2", "Numpad3", "Numpad4"].indexOf(event.code) !== -1) {
+            const index = Number(event.code.slice(6));
+            this.setCameraToRoad(index + 10);
+        }
+    }
+
+    private updateTags(isRoad: boolean, index: number) {
+        this.roadTags.forEach(e => e.isVisible = false);
+        this.crossroadTags.forEach(e => e.isVisible = false);
+
+        if (index === -1) return;
+
+        if (isRoad) {
+            this.roadTags[index].isVisible = true;
+            BabylonConfig.roadVisibleTags[index].forEach(i => this.crossroadTags[i].isVisible = true);
+        } else {
+            this.crossroadTags[index].isVisible = true;
+            BabylonConfig.crossroadVisibleTags[index].forEach(i => this.roadTags[i].isVisible = true);
         }
     }
 
     public setCameraToCrossroad(index: number) {
         console.assert(index >= 0 && index < 8);
         this.scene.activeCamera = this.crossroadCameras[index];
+        this.updateTags(false, index);
+    }
+
+    public setCameraToRoad(index: number) {
+        console.assert(index >= 0 && index < 15);
+        this.scene.activeCamera = this.roadCameras[index];
+        this.updateTags(true, index);
     }
 
     public focusOnCar(carId: number) {
