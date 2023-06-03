@@ -1,11 +1,14 @@
 import * as echarts from 'echarts';
 import { EChartOption } from 'echarts';
 import React, { useEffect, useRef, useState } from "react";
-import { getFlowMin } from '../../../apis/api';
+import { getMinRoad, getMinTotal } from '../../../apis/api';
 
-const Speed: React.FC = () => {
+interface SpeedProps {
+    selectedRoad: string;
+}
+const Speed: React.FC<SpeedProps> = ({ selectedRoad }) => {
     const chartRef = useRef<HTMLDivElement>(null);
-    interface FlowData {
+    interface SpeedData {
         type: number;
         mins: {
             time: string;
@@ -13,27 +16,63 @@ const Speed: React.FC = () => {
             avg_speed: number;
         }[];
     }
-
-    const [flowData, setFlowData] = useState<FlowData[]>([]);
+    interface MinTotal {
+        type: number;
+        mins: {
+            time: string;
+            count: number;
+            avg_speed: number;
+        }[];
+    }
+    interface MinRoad {
+        type: number;
+        roads: {
+            road: string;
+            mins: {
+                time: string;
+                count: number;
+                avg_speed: number;
+            }[];
+        }[];
+    }
+    const [minRoadSpeed, setMinRoadSpeed] = useState<MinRoad[]>([]);
+    const [minTotalSpeed, setMinTotalSpeed] = useState<MinTotal[]>([]);
+    const [speedData, setSpeedData] = useState<SpeedData[]>([]);
     // 获取数据
     useEffect(() => {
-        getFlowMin("/getFlowMin").then((res) => {
-            const data = res.data;
-            setFlowData(data);
+        getMinTotal("/getMinTotal").then((res) => {
+            setMinTotalSpeed(res.data);
+        });
+        getMinRoad("/getMinRoad").then((res) => {
+            setMinRoadSpeed(res.data);
         });
     }, []);
-
+    // 设置数据
+    useEffect(() => {
+        if (minRoadSpeed && minTotalSpeed) {
+            if (selectedRoad == "all") {
+                setSpeedData(minTotalSpeed)
+            }
+            else {
+                const road_data = minRoadSpeed.flatMap(item => {
+                    const { type, roads } = item;
+                    return roads.map(({ road, mins }) => ({ type, road, mins }));
+                });
+                const use_data = road_data.filter(item => item.road.replace("道路", "") === selectedRoad);
+                setSpeedData(use_data);
+            }
+        }
+    }, [minRoadSpeed, minTotalSpeed, selectedRoad])
     useEffect(() => {
         if (chartRef.current !== null) {
             let mychart = echarts.getInstanceByDom(chartRef.current);
             if (mychart == null) {
                 mychart = echarts.init(chartRef.current, undefined);
             }
-            const type_data = flowData.map(item => {
+            const type_data = speedData.map(item => {
                 const { type, mins } = item;
                 return mins.map(({ time, avg_speed }) => ({ type, time, avg_speed }));
             });
-            // console.log(type_data[0]);
 
             // 生成时间数组
             const time_data = [];
@@ -190,10 +229,21 @@ const Speed: React.FC = () => {
                     flow10.push(0)
                 }
             }
-            const allcount=[]
-            for(let i = 0; i < 546; i++){
-                allcount.push((flow1[i]+flow10[i]+flow2[i]+flow3[i]+flow4[i]+flow6[i])/6)
+            const allcount = []
+            for (let i = 0; i < 546; i++) {
+                allcount.push((flow1[i] + flow10[i] + flow2[i] + flow3[i] + flow4[i] + flow6[i]) / 6)
             }
+            const roadMapping = function(num:string){
+                let x="";
+                switch(num){
+                    case "all":
+                        x= "所有道路"
+                        break;
+                    default:
+                        x="道路"+num
+                }
+                return x
+            };
             const option: EChartOption = {
                 tooltip: {
                     trigger: "axis",
@@ -217,6 +267,19 @@ const Speed: React.FC = () => {
                         color: '#FFFFFF',
                     },
                 },
+                graphic: [
+                    {
+                      type: 'text',
+                      left: '15',
+                      top: '8',
+                      style: {
+                        text: roadMapping(selectedRoad),
+                        fill: '#fFF',
+                        fontSize: 13,
+                        // fontWeight: 'bold'
+                      }
+                    }
+                  ],
                 // calculable: true,
                 xAxis: [
                     {
@@ -282,8 +345,8 @@ const Speed: React.FC = () => {
                 dataZoom: [
                     {
                         show: true,
-                        bottom:40,
-                        height:20
+                        bottom: 40,
+                        height: 20
                         // start:0,
                         // end:50
                     }
@@ -294,15 +357,15 @@ const Speed: React.FC = () => {
                         type: "bar",
                         itemStyle: {
                             normal: {
-                                color:'#092d46',
+                                color: '#092d46',
                             },
                         },
                         data: allcount,
                     },
-                
+
                     {
                         name: "小型车辆",
-                        
+
                         type: "line",
                         smooth: true,
                         symbol: "none",
@@ -391,7 +454,7 @@ const Speed: React.FC = () => {
                         symbol: "none",
                         itemStyle: {
                             normal: {
-                                
+
                                 color: '#FFA500',
                                 // areaStyle: {
                                 //     color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [
@@ -466,7 +529,7 @@ const Speed: React.FC = () => {
             }
         }
 
-    })
+    }, [speedData])
     return (
         <div ref={chartRef} style={{ width: "100%", height: "100%" }}></div>
     )
