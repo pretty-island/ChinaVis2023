@@ -1,61 +1,127 @@
-import {Mesh, MeshBuilder, Scene, Vector2, Vector3} from "@babylonjs/core";
+import {
+    AbstractMesh,
+    ActionManager, Camera,
+    ExecuteCodeAction,
+    FollowCamera,
+    TransformNode,
+    Vector2,
+    Vector3
+} from "@babylonjs/core";
 import {VehicleMovementLog} from "./general.ts";
-import {creatCarMaterial} from "../tools.ts";
+import {BabylonConfig} from "../BabylonConfig.ts";
 
 export default class Car {
-    scene: Scene;
-    carMesh: Mesh;
-    movements: VehicleMovementLog[];
+    private transformNode: TransformNode;
+    private carMeshes: AbstractMesh[];
+    private movements: VehicleMovementLog[];
 
-    startTime: number;
-    endTime: number;
+    private readonly startTime: number;
+    private readonly endTime: number;
+
+    private readonly followCamera: FollowCamera;
+    private readonly defaultCamera: Camera;
+    private readonly onFocusChanged: (isFocus: boolean) => void;
 
     get position() {
-        return this.carMesh.position;
+        return this.transformNode.position;
     }
 
     private set position(value) {
-        this.carMesh.position = value;
+        this.transformNode.position = value
     }
 
     get rotation() {
-        return this.carMesh.rotation;
+        return this.transformNode.rotation;
     }
 
-    constructor(scene: Scene, movements: VehicleMovementLog[]) {
-        this.scene = scene;
+    get type() {
+        return this.movements[0].type;
+    }
+
+    get id() {
+        return this.movements[0].id;
+    }
+
+    constructor(
+        movements: VehicleMovementLog[],
+        transformNode: TransformNode, meshes: AbstractMesh[],
+        followCamera: FollowCamera, defaultCamera: Camera,
+        onFocusChanged: (isFocus: boolean) => void
+    ) {
+        console.assert(
+            movements.filter(m => m.type === movements[0].type).length === movements.length,
+            "All movements should be of the same type"
+        );
+
         this.movements = movements.sort((m1, m2) => m1.ms_no - m2.ms_no);
 
         this.startTime = movements[0].ms_no;
         this.endTime = movements[movements.length - 1].ms_no;
 
-        const car = MeshBuilder.CreateBox("car", {width: 1, depth: 2}, scene);
-        car.material = creatCarMaterial(scene);
-        this.carMesh = car;
+        this.transformNode = transformNode;
+        this.carMeshes = meshes;
+        this.followCamera = followCamera;
+        this.defaultCamera = defaultCamera;
+        this.position.y = BabylonConfig.carHeightMap[this.type];
+
+        this.carMeshes.forEach(e => {
+            e.actionManager = new ActionManager()
+            e.actionManager.registerAction(new ExecuteCodeAction(ActionManager.OnLeftPickTrigger, () => {this.focus()}));
+        });
+
+        this.onFocusChanged = onFocusChanged;
+    }
+
+    focus() {
+        this.followCamera.position = this.transformNode.getScene().activeCamera!.position;
+        this.followCamera.lockedTarget = this.carMeshes[0];
+        this.transformNode.getScene().activeCamera = this.followCamera;
+        this.onFocusChanged(true);
     }
 
     // 根据节点采集信息计算当前时间应当处于的位置
     // 当输入时间小于最早/大于最晚时间，物体位置设为最早/最晚记录位置，方向设为运动最早/最晚记录位置的朝向
     // 当输入时间在最早与最晚时间之间，找出离输入时间点最近的两个记录，物体位置和旋转方向均由上述两个记录插值计算
     updatePosition(currTime: number) {
-        if (currTime < this.startTime || currTime > this.endTime) {
-            this.carMesh.isVisible = false;
+        if (currTime < this.startTime) {
+            this.carMeshes.forEach(e => e.isVisible = false);
+            return;
+        } else if (currTime > this.endTime) {
+            if (this.followCamera.lockedTarget === this.carMeshes[0]) {
+                console.log("reset camera");
+
+                this.followCamera.lockedTarget = null;
+                this.transformNode.getScene().activeCamera = this.defaultCamera;
+                this.onFocusChanged(false);
+            }
+
+            this.carMeshes.forEach(e => e.dispose())
+            this.carMeshes = [];
+            return;
         }
 
-        this.carMesh.isVisible = true;
+        this.carMeshes.forEach(e => e.isVisible = true);
 
         let lastIndex = this.movements.findIndex(m => m.ms_no > currTime);
         lastIndex = lastIndex === -1 ? 0 : lastIndex;
         const firstIndex = Math.max(lastIndex - 1, 0);
+
+        if (!(this.movements[lastIndex].is_moving || this.movements[firstIndex].is_moving)) {
+            this.position = new Vector3(this.movements[firstIndex].position.x, this.transformNode.position.y, this.movements[firstIndex].position.y);
+            return;
+        }
+
         const timeInterval = this.movements[lastIndex].ms_no - this.movements[firstIndex].ms_no;
         const timeRatio = timeInterval != 0 ? (currTime - this.movements[firstIndex].ms_no) / timeInterval : 1;
 
         const firstPos = new Vector2(this.movements[firstIndex].position.x, this.movements[firstIndex].position.y);
         const lastPos = new Vector2(this.movements[lastIndex].position.x, this.movements[lastIndex].position.y);
         const currPos = firstPos.add(lastPos.subtract(firstPos).scale(timeRatio));
-        this.position = new Vector3(currPos.x, this.carMesh.position.y, currPos.y);
 
-        const firstHeading = this.movements[firstIndex].heading, lastHeading = this.movements[lastIndex].heading;
-        this.rotation.y = firstHeading + (lastHeading - firstHeading) * timeRatio - Math.PI / 4;
+        if (!((1 - timeRatio > 0.05) && !this.movements[lastIndex].is_moving)) {
+            this.transformNode.lookAt(new Vector3(currPos.x, this.transformNode.position.y, currPos.y));
+        }
+
+        this.position = new Vector3(currPos.x, this.transformNode.position.y, currPos.y);
     }
 }

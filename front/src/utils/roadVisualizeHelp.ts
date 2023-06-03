@@ -3,17 +3,17 @@ import {
     creatGrassMaterial,
     creatSkyboxMaterial
 } from "./tools.ts";
-import {Config} from "./Config.ts";
+import {BabylonConfig} from "./BabylonConfig.ts";
 
 export function creatGroundMesh(scene: Scene) {
-    const ground = MeshBuilder.CreateGround("ground", {width: Config.groundSize, height: Config.groundSize}, scene);
-    ground.material = creatGrassMaterial(scene, Config.groundSize, Config.groundSize);
+    const ground = MeshBuilder.CreateGround("ground", {width: BabylonConfig.groundSize, height: BabylonConfig.groundSize}, scene);
+    ground.material = creatGrassMaterial(scene, BabylonConfig.groundSize, BabylonConfig.groundSize);
 
     return ground;
 }
 
 export function creatSkyBoxMesh(scene: Scene) {
-    const skybox = MeshBuilder.CreateBox("skyBox", {size: Config.skyboxSize}, scene);
+    const skybox = MeshBuilder.CreateBox("skyBox", {size: BabylonConfig.skyboxSize}, scene);
     skybox.material = creatSkyboxMaterial(scene);
 
     return skybox;

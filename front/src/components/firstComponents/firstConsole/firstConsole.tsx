@@ -8,37 +8,42 @@ interface IntersectionOption {
     name: string;
 }
 const IntersectionOptions: IntersectionOption[] = [
-    { id: "all", name: "所有路口" },
-    { id: "1", name: "路口1" },
-    { id: "2", name: "路口2" },
-    { id: "3", name: "路口3" },
-    { id: "4", name: "路口4" }
+    { id: "all", name: "所有道路" },
+    { id: "1", name: "道路1" },
+    { id: "2", name: "道路2" },
+    { id: "3", name: "道路3" },
+    { id: "4", name: "道路4" },
+    { id: "5", name: "道路5" },
+    { id: "6", name: "道路6" },
+    { id: "7", name: "道路7" },
+    { id: "8", name: "道路8" },
+    { id: "9", name: "道路9" },
+    { id: "10", name: "道路10" },
+    { id: "11", name: "道路11" },
+    { id: "12", name: "道路12" },
+    { id: "13", name: "道路13" },
+    { id: "14", name: "道路14" },
+    { id: "15", name: "道路15" }
 ];
 interface TimeOption {
     id: string;
     name: string;
 }
 const TimeOptions: TimeOption[] = [
-    { id: '7', name: '7点' },
-    { id: '8', name: '8点' },
-    { id: '9', name: '9点' },
-    { id: '10', name: '10点' },
-    { id: '11', name: '11点' },
-    { id: '12', name: '12点' },
-    { id: '13', name: '13点' },
-    { id: '14', name: '14点' },
-    { id: '15', name: '15点' },
-    { id: 'all', name: '全部9小时' }
+    { id: 'all', name: '全部9小时' },
+    { id: '1', name: '一小时' },
+    { id: '2', name: '半小时' },
+    { id: '3', name: '1分钟' },
 ];
 interface FirstConsoleProps {
-    setSelectedIntersection: React.Dispatch<React.SetStateAction<string>>;
-    selectedIntersection: string;
+    setSelectedRoad: React.Dispatch<React.SetStateAction<string>>;
+    selectedRoad: string;
     setSelectedTime: React.Dispatch<React.SetStateAction<string>>;
     selectedTime: string;
 }
-const FirstConsole: React.FC<FirstConsoleProps> = ({ setSelectedIntersection, selectedIntersection, setSelectedTime, selectedTime }) => {
+const FirstConsole: React.FC<FirstConsoleProps> = ({ setSelectedRoad, selectedRoad, setSelectedTime, selectedTime }) => {
     const handleIntersectionChange = (value: string) => {
-        setSelectedIntersection(value);
+        setSelectedRoad(value);
     }
     const handleTimeChange = (value: string) => {
         setSelectedTime(value);
@@ -46,8 +51,8 @@ const FirstConsole: React.FC<FirstConsoleProps> = ({ setSelectedIntersection, se
     return (
         <div style={{ height: "32.2vh", width: "100%" }}>
             <div className="multipleCheck" style={{ height: "20%", width: "100%" }}>
-                <span>选择路口：</span>
-                <Select value={selectedIntersection} style={{ width: 120 }} onChange={handleIntersectionChange}>
+                <span>选择道路：</span>
+                <Select value={selectedRoad} style={{ width: 120 }} onChange={handleIntersectionChange}>
                     {IntersectionOptions.map((option) => {
                         return < Option key={option.id} value={option.id} > {option.name}</Option>
                     })}
@@ -55,7 +60,7 @@ const FirstConsole: React.FC<FirstConsoleProps> = ({ setSelectedIntersection, se
                 </Select>
             </div>
             <div>
-                <span>选择时间：</span>
+                <span>选择时间段：</span>
                 <Select value={selectedTime} style={{ width: 120 }} onChange={handleTimeChange}>
                     {TimeOptions.map((option) => {
                         return <Option key={option.id} value={option.id}>

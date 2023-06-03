@@ -1,73 +1,43 @@
 import React from 'react';
-import {
-    Vector3,
-    Scene,
-    ArcRotateCamera, DirectionalLight
-} from '@babylonjs/core';
+import { Scene, } from '@babylonjs/core';
+import "@babylonjs/loaders/glTF";
 import SceneComponent from 'babylonjs-hook';
-import {creatGroundMesh, creatSkyBoxMesh} from "../utils/roadVisualizeHelp.ts";
 
-import CarLogs from '/src/assets/test_with_roads.json?raw'
 import {VehicleMovementLog} from "../utils/model/general.ts";
-import Car from "../utils/model/Car.ts";
-import {Config} from "../utils/Config.ts";
-import Road from "../utils/model/Road.ts";
+import BabylonManager from "../utils/model/BabylonManager.ts";
 
-let cars: Car[] = [];
-let timestamp: number;
-let currTime: number;
+export let babylonManager: BabylonManager | undefined;
 
 const onSceneReady = (scene: Scene) => {
-    const camera = new ArcRotateCamera("camera", 0, 0, 10, Vector3.Zero());
-    camera.setTarget(new Vector3(-200, 0 , -200));
-    camera.upperBetaLimit = 5 * Math.PI / 12;
-    camera.lowerRadiusLimit = 3;
-    camera.upperRadiusLimit = 120;
+    babylonManager = new BabylonManager(scene);
+    babylonManager.onSceneReady();
 
-    const canvas = scene.getEngine().getRenderingCanvas();
-    camera.attachControl(canvas, true);
+    Promise.all(["data/type_1.json", "data/type_2.json", "data/type_3.json",
+        "data/type_4.json", "data/type_6.json", "data/type_10.json"].map(url => fetch(url).then(res => res.json())))
+        .then(data => {
+            babylonManager!.updateLogs(data
+                .reduce((prev, curr) => {
+                    prev.push(...curr);
+                    return prev;
+                })
+                .map(e => {
+                    e.position = JSON.parse(e.position);
+                    e.shape = JSON.parse(e.shape);
 
-    const light = new DirectionalLight("light", new Vector3(0.3, -1, 0), scene);
-    light.intensity = 0.7;
-
-    creatGroundMesh(scene);
-    const roads = Road.fromJSON(scene);
-    creatSkyBoxMesh(scene);
-
-    const carLogs = JSON.parse(CarLogs).map(e => {
-        e.position = JSON.parse(e.position);
-        e.shape = JSON.parse(e.shape);
-
-        return e;
-    }) as VehicleMovementLog[];
-    const carIds = new Set(carLogs.map(e => e.id));
-
-    for (const carId of carIds) {
-        cars.push(new Car(scene, carLogs.filter(e => e.id === carId)));
-    }
-
-    currTime = carLogs.sort((a, b) => a.time_meas - b.time_meas)[0].ms_no;
+                    return e as VehicleMovementLog;
+                })
+            );
+        })
 }
 
 const onRender = (_: Scene) => {
-    if (currTime === null || currTime === undefined) return;
-    if (timestamp === null) {
-        timestamp = performance.now();
-    }
-    const timeInterval = performance.now() - timestamp;
-    currTime += (Number.isNaN(timeInterval) ? 0 : timeInterval) * Config.timeScale;
-
-    for (const car of cars) {
-        car.updatePosition(currTime);
-    }
-
-    timestamp = performance.now();
+    babylonManager?.onRender();
 }
 
 const MainVisualizationView: React.FC = () => {
     return (
         <div className={"MainView"} style={{width: "94%", height: "94%"}}>
-            <SceneComponent observeCanvasResize antialias onSceneReady={onSceneReady} onRender={onRender} id='my-canvas' />
+            <SceneComponent observeCanvasResize antialias onSceneReady={onSceneReady} onRender={onRender} onKeyDown={e => babylonManager?.onKeyDown(e)} id='my-canvas' />
         </div>
     )
 }

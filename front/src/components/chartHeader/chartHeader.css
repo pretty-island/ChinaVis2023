@@ -3,14 +3,14 @@
     display: inline-block;
     padding: 5px 10px;
     color: #fff;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: bold;
     letter-spacing: 2px;
     text-transform: uppercase;
     border-left: 4px solid #0c4b78;
     background-color: #1a1d26;
     transition: all 0.3s ease-in-out;
-    margin-bottom: 20px;
+    /* margin-bottom: 20px; */
     /* width:100%;
     height: 2.8vh; */
     /* background-color: #7c7e7f; */

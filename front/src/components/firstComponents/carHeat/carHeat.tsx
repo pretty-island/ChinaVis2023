@@ -74,8 +74,8 @@ const CarHeat: React.FC = () => {
                     }
                 },
                 visualMap: [{
-                    min: 0,
-                    max: 10000,
+                    min: 100,
+                    max: 6300,
                     // max: Math.max(...data.map((item) => item[2])),
                     calculable: true,
                     orient: 'horizontal',
