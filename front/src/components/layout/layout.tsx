@@ -10,6 +10,7 @@ import TrafficFlow from "../firstComponents/trafficFlow/trafficFlow";
 import CarHeat from "../firstComponents/carHeat/carHeat";
 import MainVisualizationView from "../MainVisualizationView";
 import RoadMap from "../secondComponents/roadMap/roadMap";
+import RelativeMap from "../secondComponents/relativeMap/relativemap";
 
 import { BorderBox1, BorderBox13, Decoration6, Decoration8, Decoration11, FullScreenContainer } from '@jiaminghi/data-view-react'
 const Layout = () => {
@@ -117,9 +118,9 @@ const Layout = () => {
               <BorderBox13 className="console">
                 <ChartHeader chartName={"控制台"} />
               </BorderBox13>
-              <BorderBox1 className="queue">
-                {/* <ChartHeader chartName={"排队车辆统计"} />
-                <QueCar /> */}
+              <BorderBox1 className="relative">
+                <ChartHeader chartName={"排队车辆统计"} />
+                <RelativeMap />
               </BorderBox1>
             </div>
             <div className="right">
