@@ -11,6 +11,7 @@ import CarHeat from "../firstComponents/carHeat/carHeat";
 import MainVisualizationView from "../MainVisualizationView";
 import RoadMap from "../secondComponents/roadMap/roadMap";
 import RelativeMap from "../secondComponents/relativeMap/relativemap";
+import CarScatter from "../secondComponents/carScatter/carScatter";
 
 import { BorderBox1, BorderBox13, Decoration6, Decoration8, Decoration11, FullScreenContainer } from '@jiaminghi/data-view-react'
 import Speed from "../firstComponents/trafficFlow/speed";
@@ -180,8 +181,8 @@ const Layout = () => {
                 </BorderBox1>
               </div>
               <BorderBox1 className="r-bottom" style={{ height: "35%" }}>
-                {/* <ChartHeader chartName={"断面车流统计"} />
-                <TrafficFlow /> */}
+                <ChartHeader chartName={"断面车流统计"} />
+                <CarScatter />
 
               </BorderBox1>
             </div>
