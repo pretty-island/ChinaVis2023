@@ -199,6 +199,7 @@ const Total: React.FC<TotalProps> = ({ selectedRoad }) => {
             // console.log(selectedRoad);
             const all_data = useData?.[selectedRoad]
             all_data?.sort((a, b) => {
+            all_data?.sort((a, b) => {
                 return b.value - a.value;
             });
             // const all_data = [
@@ -242,7 +243,9 @@ const Total: React.FC<TotalProps> = ({ selectedRoad }) => {
             const formatNumber = function (num: number) {
                 const reg = /(?=(\B)(\d{3})+$)/g;
                 return num?.toString().replace(reg, ',');
+                return num?.toString()?.replace(reg, ',');
             }
+            const total = all_data?.reduce((a, b) => {
             const total = all_data?.reduce((a, b) => {
                 return a + b.value * 1
             }, 0);

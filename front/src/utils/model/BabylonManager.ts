@@ -79,7 +79,7 @@ export default class BabylonManager {
                     const {meshes, transformNode} = creatCarMeshInstance(r.meshes, type);
                     cars.push(
                         new Car(groupLogs[id], transformNode, meshes, this.followCameras!, this.crossroadCameras[0], (isFocus) => {
-                            this.updateTags(false, isFocus ? -1 : 0);
+                            // this.updateTags(false, isFocus ? -1 : 0);
                         })
                     );
                 }
@@ -137,16 +137,16 @@ export default class BabylonManager {
         const advancedTexture = AdvancedDynamicTexture.CreateFullscreenUI("UI");
         this.text = this.creatTimestampText(advancedTexture);
 
-        this.roadTags.push(...Object.entries(BabylonConfig.roadPosition).map(
-            (position) =>
-                this.createSceneTag(advancedTexture, position[1], "道路" + (Number(position[0]) + 1))
-        ));
-        this.crossroadTags.push(...Object.entries(BabylonConfig.crossroadCamerasPosition).map(
-            (position) =>
-                this.createSceneTag(advancedTexture, position[1], "路口" + (Number(position[0]) + 1))
-        ));
+        // this.roadTags.push(...Object.entries(BabylonConfig.roadPosition).map(
+        //     (position) =>
+        //         this.createSceneTag(advancedTexture, position[1], "道路" + (Number(position[0]) + 1))
+        // ));
+        // this.crossroadTags.push(...Object.entries(BabylonConfig.crossroadCamerasPosition).map(
+        //     (position) =>
+        //         this.createSceneTag(advancedTexture, position[1], "路口" + (Number(position[0]) + 1))
+        // ));
 
-        this.updateTags(false, 0);
+        // this.updateTags(false, 0);
 
         SceneLoader.ImportMeshAsync("", "model/scene.glb", undefined,
             this.scene).then(r => {
@@ -265,13 +265,13 @@ export default class BabylonManager {
     public setCameraToCrossroad(index: number) {
         console.assert(index >= 0 && index < 8);
         this.scene.activeCamera = this.crossroadCameras[index];
-        this.updateTags(false, index);
+        // this.updateTags(false, index);
     }
 
     public setCameraToRoad(index: number) {
         console.assert(index >= 0 && index < 15);
         this.scene.activeCamera = this.roadCameras[index];
-        this.updateTags(true, index);
+        // this.updateTags(true, index);
     }
 
     public focusOnCar(carId: number) {
