@@ -194,12 +194,11 @@ const Total: React.FC<TotalProps> = ({ selectedRoad }) => {
                     };
                 });
                 return result;
-            }
-
-            
-            console.log(useData?.[selectedRoad]);
-            console.log(selectedRoad);
+            }            
+            // console.log(useData?.[selectedRoad]);
+            // console.log(selectedRoad);
             const all_data = useData?.[selectedRoad]
+            all_data?.sort((a, b) => {
             all_data?.sort((a, b) => {
                 return b.value - a.value;
             });
@@ -243,12 +242,24 @@ const Total: React.FC<TotalProps> = ({ selectedRoad }) => {
 
             const formatNumber = function (num: number) {
                 const reg = /(?=(\B)(\d{3})+$)/g;
+                return num?.toString().replace(reg, ',');
                 return num?.toString()?.replace(reg, ',');
             }
             const total = all_data?.reduce((a, b) => {
+            const total = all_data?.reduce((a, b) => {
                 return a + b.value * 1
             }, 0);
-
+            const roadMapping = function(num:string){
+                let x="";
+                switch(num){
+                    case "all":
+                        x= "所有道路"
+                        break;
+                    default:
+                        x="道路"+num
+                }
+                return x
+            };
 
             const option: EChartOption = {
                 tooltip: {
@@ -264,6 +275,19 @@ const Total: React.FC<TotalProps> = ({ selectedRoad }) => {
                     "#FDB36A",
                     "#FECE43",
                 ],
+                graphic: [
+                    {
+                      type: 'text',
+                      left: '13',
+                      top: '10',
+                      style: {
+                        text: '时间范围：7:00-16:00'+"\n"+"\n"+roadMapping(selectedRoad),
+                        fill: '#fFF',
+                        fontSize: 13,
+                        // fontWeight: 'bold'
+                      }
+                    }
+                  ],
                 title: [{
                     text: '{name|' + title + '}\n{val|' + formatNumber(total) + '}',
                     top: 'center',

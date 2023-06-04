@@ -1,9 +1,12 @@
 import * as echarts from 'echarts';
 import { EChartOption } from 'echarts';
 import React, { useEffect, useRef, useState } from "react";
-import { getFlowMin } from '../../../apis/api';
+import { getMinRoad, getMinTotal } from '../../../apis/api';
 
-const TrafficFlow: React.FC = () => {
+interface FlowProps {
+    selectedRoad: string;
+}
+const TrafficFlow: React.FC<FlowProps> = ({ selectedRoad }) => {
     const chartRef = useRef<HTMLDivElement>(null);
     interface FlowData {
         type: number;
@@ -13,15 +16,67 @@ const TrafficFlow: React.FC = () => {
             avg_speed: number;
         }[];
     }
-
+    interface MinTotal {
+        type: number;
+        mins: {
+            time: string;
+            count: number;
+            avg_speed: number;
+        }[];
+    }
+    interface MinRoad {
+        type: number;
+        roads: {
+            road: string;
+            mins: {
+                time: string;
+                count: number;
+                avg_speed: number;
+            }[];
+        }[];
+    }
+    const [minRoad, setMinRoad] = useState<MinRoad[]>([]);
+    const [minTotal, setMinTotal] = useState<MinTotal[]>([]);
     const [flowData, setFlowData] = useState<FlowData[]>([]);
+
     // 获取数据
     useEffect(() => {
-        getFlowMin("/getFlowMin").then((res) => {
-            const data = res.data;
-            setFlowData(data);
+        getMinTotal("/getMinTotal").then((res) => {
+            setMinTotal(res.data);
+        });
+        getMinRoad("/getMinRoad").then((res) => {
+            setMinRoad(res.data);
         });
     }, []);
+    // 设置数据
+    useEffect(() => {
+        if (minRoad && minTotal) {
+            if (selectedRoad == "all") {
+                setFlowData(minTotal)
+            }
+            else {
+                // const road_data = minRoad.map(item => {
+                //     const { type, roads } = item;
+                //     return roads.map(({ road, mins }) => ({ type, road, mins }));
+                // });
+                // const use_data = road_data.map(item => {
+                //     // const roadNumber = road["road"].replace("道路", "");
+                //     const data = []
+                //     item.map(i => {                        
+                //         if (i["road"].replace("道路", "") == selectedRoad) { data.push(i) }
+                //     })
+                //     return data
+                // })
+                // setFlowData(use_data)
+                const road_data = minRoad.flatMap(item => {
+                    const { type, roads } = item;
+                    return roads.map(({ road, mins }) => ({ type, road, mins }));
+                });                
+                const use_data = road_data.filter(item => item.road.replace("道路", "") === selectedRoad);
+                setFlowData(use_data);
+            }
+        }
+    }, [minRoad, minTotal, selectedRoad])
 
     useEffect(() => {
         if (chartRef.current !== null) {
@@ -29,9 +84,11 @@ const TrafficFlow: React.FC = () => {
             if (mychart == null) {
                 mychart = echarts.init(chartRef.current, undefined);
             }
-            const type_data = flowData.map(item => {
+            // console.log(flowData);
+            
+            const type_data = flowData?.map(item => {
                 const { type, mins } = item;
-                return mins.map(({ time, count, avg_speed }) => ({ type, time, count, avg_speed }));
+                return mins?.map(({ time, count, avg_speed }) => ({ type, time, count, avg_speed }));
             });
             // console.log(type_data[0]);
 
@@ -320,6 +377,17 @@ const TrafficFlow: React.FC = () => {
             // for (let i = 0; i < 540; i++) {
             //     allspeed.push((speed1[i] + speed2[i] + speed3[i] + speed4[i] + speed6[i] + speed10[i])/6)
             // }
+            const roadMapping = function(num:string){
+                let x="";
+                switch(num){
+                    case "all":
+                        x= "所有道路"
+                        break;
+                    default:
+                        x="道路"+num
+                }
+                return x
+            };
             const option: EChartOption = {
                 tooltip: {
                     trigger: "axis",
@@ -327,6 +395,19 @@ const TrafficFlow: React.FC = () => {
                 textStyle: {
                     color: "#fff",
                 },
+                graphic: [
+                    {
+                      type: 'text',
+                      left: '15',
+                      top: '8',
+                      style: {
+                        text: roadMapping(selectedRoad),
+                        fill: '#fFF',
+                        fontSize: 13,
+                        // fontWeight: 'bold'
+                      }
+                    }
+                  ],
                 // title: [
                 //     {
                 //       left: 'center',
@@ -415,8 +496,8 @@ const TrafficFlow: React.FC = () => {
                 dataZoom: [
                     {
                         show: true,
-                        bottom:40,
-                        height:20
+                        bottom: 40,
+                        height: 20
                         // start:0,
                         // end:50
                     }
@@ -850,7 +931,7 @@ const TrafficFlow: React.FC = () => {
             }
         }
 
-    })
+    },[flowData,selectedRoad])
     return (
         <div ref={chartRef} style={{ width: "100%", height: "100%" }}></div>
     )

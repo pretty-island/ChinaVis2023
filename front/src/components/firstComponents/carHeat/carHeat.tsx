@@ -2,7 +2,7 @@
 import * as echarts from 'echarts';
 import { EChartOption } from 'echarts';
 import React, { useEffect, useRef, useState } from "react";
-import { getHeat, getStatis } from '../../../apis/api';
+import { getHeat } from '../../../apis/api';
 
 const CarHeat: React.FC = () => {
     const chartRef = useRef<HTMLDivElement>(null);
@@ -28,7 +28,6 @@ const CarHeat: React.FC = () => {
             if (mychart == null) {
                 mychart = echarts.init(chartRef.current, undefined);
             }
-
             const hour = heatData.map(function (item) {
                 return item.hour;
             });
@@ -51,9 +50,7 @@ const CarHeat: React.FC = () => {
 
             const option: EChartOption = {
                 tooltip: {
-                    position: 'top',
-                    
-
+                    position: 'top',                  
                 },
                 grid: {
                     height: '50%',

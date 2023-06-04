@@ -18,7 +18,7 @@ import { BorderBox1, BorderBox13, Decoration6, Decoration8, Decoration11, FullSc
 import Speed from "../firstComponents/trafficFlow/speed";
 import Total from "../firstComponents/total/total";
 import EventChart from "../firstComponents/event/eventChart";
-
+import TotalHeat from "../firstComponents/carHeat/totalHeat";
 const Layout = () => {
   // 当前用户在第几屏，默认第一屏
   const [nowPageIndex, setNowPageIndex] = useState<string>("firstButton");
@@ -128,10 +128,10 @@ const Layout = () => {
                     <ChangeView />
                   </div>
                   {nowView === "流量" &&
-                    <TrafficFlow />
+                    <TrafficFlow selectedRoad={selectedRoad}/>
                   }
                   {nowView === "速度" &&
-                    <Speed />
+                    <Speed selectedRoad={selectedRoad}/>
                   }
                   {/* <ChartHeader chartName={"交通流量统计图"} /> */}
                   {/* <div > */}
@@ -150,8 +150,9 @@ const Layout = () => {
                 </BorderBox1 >
                 <BorderBox1 className="f-rr-bottom" style={{ height: "65%" }}>
                   <div className="rt" style={{ height: "70%" }}>
-                  <ChartHeader chartName={"车流热力图"} />
-                  <CarHeat />
+                  <ChartHeader chartName={"道路流量热力图"} />
+                  {/* <CarHeat /> */}
+                  <TotalHeat/>
                   </div>
                   <div className="rb">
                   </div>                  
