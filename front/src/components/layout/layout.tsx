@@ -12,11 +12,13 @@ import MainVisualizationView from "../MainVisualizationView";
 import RoadMap from "../secondComponents/roadMap/roadMap";
 import RelativeMap from "../secondComponents/relativeMap/relativemap";
 import CarScatter from "../secondComponents/carScatter/carScatter";
+import SecurityParallel from "../secondComponents/securityParallel/securityParallel";
 
 import { BorderBox1, BorderBox13, Decoration6, Decoration8, Decoration11, FullScreenContainer } from '@jiaminghi/data-view-react'
 import Speed from "../firstComponents/trafficFlow/speed";
 import Total from "../firstComponents/total/total";
 import EventChart from "../firstComponents/event/eventChart";
+
 const Layout = () => {
   // 当前用户在第几屏，默认第一屏
   const [nowPageIndex, setNowPageIndex] = useState<string>("firstButton");
@@ -172,19 +174,20 @@ const Layout = () => {
             </div>
             <div className="right">
               <div className="r-top">
-                <BorderBox1 className="rt-left" style={{ height: "100%", width: "80%" }}>
+                <BorderBox1 className="rt-left" style={{ height: "100%", width: "65%" }}>
                   <RoadMap />
                 </BorderBox1>
-                <BorderBox1 className="rt-right" style={{ height: "100%", width: "20%" }}>
+                <BorderBox1 className="rt-right" style={{ height: "100%", width: "35%" }}>
                   <ChartHeader chartName={"拥堵分析"} />
-
+                  <SecurityParallel />
                 </BorderBox1>
               </div>
-              <BorderBox1 className="r-bottom" style={{ height: "35%" }}>
-                <ChartHeader chartName={"断面车流统计"} />
-                <CarScatter />
-
-              </BorderBox1>
+                <BorderBox1 className="r-bottom" style={{ height: "35%" }}>
+                  <ChartHeader chartName={"断面车流统计"} />
+                  <CarScatter />
+                </BorderBox1>
+                
+              
             </div>
           </div>
         }
