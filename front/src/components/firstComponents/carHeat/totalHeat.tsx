@@ -37,6 +37,8 @@ const TotalHeat: React.FC = () => {
     const [roads, setRoads] = useState();
     const [xData, setXData] = useState();
     const [typeName, setTypeName] = useState("");
+    const [speeds, setSpeeds] = useState();
+
 
     // 获取数据
     useEffect(() => {
@@ -51,6 +53,7 @@ const TotalHeat: React.FC = () => {
     useEffect(() => {
         if (roadData && hourData) {
             const data = [];
+            const speedData = [];
             const typeArray = [];
             const roadArray = [];
             const typeMapping = {
@@ -66,9 +69,14 @@ const TotalHeat: React.FC = () => {
                 const { type, roads } = dataItem;
                 typeArray.push(typeMapping[type]);
                 roads.forEach((road) => {
-                    const { road: r, count } = road;
+                    const { road: r, count, avg_speed } = road;
                     roadArray.push(r);
                     data.push([typeMapping[type], r, count]);
+
+                    if (!(type in speedData)) {
+                        speedData[type] = []
+                    }
+                    speedData[type].push({ "road": r, "speed": avg_speed })
                 });
             });
             const roadsdata = [...new Set(roadArray)];
@@ -82,7 +90,26 @@ const TotalHeat: React.FC = () => {
                 const lastDigitB = getLastDigitFromRoad(b);
                 return lastDigitA - lastDigitB;
             });
-            console.log(data);
+
+            const sortedSpeed = {}
+            // 自定义排序函数
+            function compareByLastDigit(a, b) {
+                const lastDigitA = getLastDigitFromRoad(a.road);
+                const lastDigitB = getLastDigitFromRoad(b.road);
+                return lastDigitA - lastDigitB;
+            }
+
+            // 对每个 type 的道路速度数组进行排序
+            for (const type in speedData) {
+                const roads = speedData[type];
+                const sortedRoads = roads.sort(compareByLastDigit);
+                sortedSpeed[type] = sortedRoads.map((item) => { return item.speed });
+            }
+
+            // console.log(speedData[10][1].speed);
+            console.log(sortedSpeed);
+
+            setSpeeds(sortedSpeed)
             setTypeName("")
             setRoads(roadsdata)
             setXData(typeArray)
@@ -169,7 +196,7 @@ const TotalHeat: React.FC = () => {
                         6: "客车",
                         10: "手推车、三轮车",
                     };
-        
+
                     roadData.map((dataItem) => {
                         const { type, roads } = dataItem;
                         typeArray.push(typeMapping[type]);
@@ -190,7 +217,7 @@ const TotalHeat: React.FC = () => {
                         const lastDigitB = getLastDigitFromRoad(b);
                         return lastDigitA - lastDigitB;
                     });
-                    console.log(data);
+                    // console.log(data);
                     setTypeName("")
                     setRoads(roadsdata)
                     setXData(typeArray)
@@ -204,15 +231,81 @@ const TotalHeat: React.FC = () => {
             // console.log(maxCount);
 
             const option: EChartOption = {
+                color: [
+                    "#003A6C",
+                    "#33C0CD",
+                    "#73ACFF",
+                    "#9E87FF",
+                    "#FE6969",
+                    "#FDB36A",
+                    "#FECE43",
+                ],
                 tooltip: {
                     position: 'top',
                 },
                 textStyle: {
                     color: "#fff",
                 },
-                grid: {
-                    height: '50%',
-                    top: '10%'
+                grid: [{
+                    // height: '50%',
+                    // top: '10%',
+                    left: '0%',
+                    right: '7%',
+                    bottom: '14%',
+                    top: '15%',
+                    containLabel: true
+                },
+                {
+                    left: '0%',
+                    right: '78%',
+                    bottom: '17%',
+                    top: '12.06%',
+                    containLabel: true
+                },
+                {
+                    left: '13.8%',
+                    right: '71%',
+                    bottom: '17%',
+                    top: '12.06%',
+                    containLabel: true
+                },
+                {
+                    left: '27.8%',
+                    right: '50%',
+                    bottom: '17%',
+                    top: '12.06%',
+                    containLabel: true
+                },
+                {
+                    left: '41.6%',
+                    right: '36%',
+                    bottom: '17%',
+                    top: '12.06%',
+                    containLabel: true
+                },
+                {
+                    left: '55.5%',
+                    right: '22.5%',
+                    bottom: '17%',
+                    top: '12.06%',
+                    containLabel: true
+                },
+                {
+                    left: '69.4%',
+                    right: '9%',
+                    bottom: '17%',
+                    top: '12.06%',
+                    containLabel: true
+                }
+                ],
+                legend: {
+                    //     // data: ['总车流量', '排队车辆']
+                    textStyle: {
+                        fontSize: 12,
+                        fontFamily: 'SourceHanSansCN-Regular',
+                        color: '#FFFFFF',
+                    },
+                    top: "5%",
                 },
                 graphic: [
                     {
@@ -237,12 +330,12 @@ const TotalHeat: React.FC = () => {
                         // saveAsImage: { show: true }
                     }
                 },
-                xAxis: {
+                xAxis: [{
                     type: 'category',
                     data: xData,
                     // data: ["全部9小时"],
                     splitArea: {
-                        show: true
+                        // show: true
                     },
                     axisLabel: {
                         show: true,
@@ -254,14 +347,115 @@ const TotalHeat: React.FC = () => {
                         }
                     }
                 },
-                yAxis: {
-                    type: 'category',
-                    data: roads,
-                    splitArea: {
-                        show: true
+                {
+                    // name: "速度（m/s）",
+                    splitLine: { show: true },
+                    // axisLine: {
+                    //     lineStyle: {
+                    //         // color: "#B4B4B4",
+                    //     },
+                    // },
+                    axisLabel: {
+                        position: 'top',
+                        //   formatter: "{value} m/s",
                     },
+                    boundaryGap: true,
+                    gridIndex: 1,
+                    position: 'top',
 
                 },
+                {
+                    splitLine: { show: true },
+                    axisLabel: {
+                        position: 'top',
+                        //   formatter: "{value} m/s",
+                    },
+                    boundaryGap: true,
+                    gridIndex: 2,
+                    position: 'top',
+                },
+                {
+                    splitLine: { show: true },
+                    axisLabel: {
+                        position: 'top',
+                        //   formatter: "{value} m/s",
+                    },
+                    boundaryGap: true,
+                    gridIndex: 3,
+                    position: 'top',
+                },
+                {
+                    splitLine: { show: true },
+                    axisLabel: {
+                        position: 'top',
+                        //   formatter: "{value} m/s",
+                    },
+                    boundaryGap: true,
+                    gridIndex: 4,
+                    position: 'top',
+                },
+                {
+                    splitLine: { show: true },
+                    axisLabel: {
+                        position: 'top',
+                        //   formatter: "{value} m/s",
+                    },
+                    boundaryGap: true,
+                    gridIndex: 5,
+                    position: 'top',
+                },
+                {
+                    splitLine: { show: true },
+                    axisLabel: {
+                        position: 'top',
+                        //   formatter: "{value} m/s",
+                    },
+                    boundaryGap: true,
+                    gridIndex: 6,
+                    position: 'top',
+                },
+                ],
+                yAxis: [
+                    {
+                        type: 'category',
+                        data: roads,
+                        splitArea: {
+                            show: true
+                        },
+                    },
+                    {
+                        // type: 'category',
+                        // show: false,
+                        // position: "left",
+                        data: roads,
+                        // offset: 50,
+                        // splitArea: {
+                        //     show: true
+                        // },
+                        gridIndex: 1
+                    },
+                    {                
+                        data: roads,                       
+                        gridIndex: 2
+                    },
+                    {                
+                        data: roads,                       
+                        gridIndex: 3
+                    },
+                    {                
+                        data: roads,                       
+                        gridIndex: 4
+                    },
+                    {                
+                        data: roads,                       
+                        gridIndex: 5
+                    },
+                    {                
+                        data: roads,                      
+                        gridIndex: 6
+                    },
+
+                ],
                 visualMap: [{
                     // min: 129,
                     // max: 18683,
@@ -275,7 +469,8 @@ const TotalHeat: React.FC = () => {
                     calculable: true,
                     orient: 'horizontal',
                     left: 'center',
-                    bottom: '15%'
+                    bottom: '3%',
+                    seriesIndex: 0
                 }],
                 series: [
                     {
@@ -297,8 +492,116 @@ const TotalHeat: React.FC = () => {
                                 shadowColor: 'rgba(0, 0, 0, 0.5)'
                             }
                         }
+                    },
+                    {
+                        name: '小型车辆速度',
+                        type: 'line',
+                        data: speeds?.[1],
+                        smooth: true,
+                        xAxisIndex: 1,
+                        yAxisIndex: 1,
+                        // label: {
+                        //     show: true,
+
+                        // },
+                        emphasis: {
+                            itemStyle: {
+                                shadowBlur: 10,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        }
+                    },
+                    {
+                        name: '行人速度',
+                        type: 'line',
+                        data: speeds?.[2],
+                        smooth: true,
+                        xAxisIndex: 2,
+                        yAxisIndex: 2,
+                        // label: {
+                        //     show: true,
+
+                        // },
+                        emphasis: {
+                            itemStyle: {
+                                shadowBlur: 10,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        }
+                    },
+                    {
+                        name: '非机动车速度',
+                        type: 'line',
+                        data: speeds?.[3],
+                        smooth: true,
+                        xAxisIndex: 3,
+                        yAxisIndex: 3,
+                        // label: {
+                        //     show: true,
+
+                        // },
+                        emphasis: {
+                            itemStyle: {
+                                shadowBlur: 10,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        }
+                    },
+                    {
+                        name: '卡车速度',
+                        type: 'line',
+                        data: speeds?.[4],
+                        smooth: true,
+                        xAxisIndex: 4,
+                        yAxisIndex: 4,
+                        // label: {
+                        //     show: true,
+
+                        // },
+                        emphasis: {
+                            itemStyle: {
+                                shadowBlur: 10,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        }
+                    },
+                    {
+                        name: '客车速度',
+                        type: 'line',
+                        data: speeds?.[6],
+                        smooth: true,
+                        xAxisIndex: 5,
+                        yAxisIndex: 5,
+                        // label: {
+                        //     show: true,
+
+                        // },
+                        emphasis: {
+                            itemStyle: {
+                                shadowBlur: 10,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        }
+                    },
+                    {
+                        name: '手推车、三轮车速度',
+                        type: 'line',
+                        data: speeds?.[10],
+                        smooth: true,
+                        xAxisIndex: 6,
+                        yAxisIndex: 6,
+                        // label: {
+                        //     show: true,
+
+                        // },
+                        emphasis: {
+                            itemStyle: {
+                                shadowBlur: 10,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        }
                     }
-                ]
+                ],
             };
             // if (option) {
             mychart.setOption(option, true);
@@ -317,7 +620,7 @@ const TotalHeat: React.FC = () => {
             }
         }
 
-    }, [heatData, hourData, roads, xData, typeName])
+    }, [heatData, hourData, roads, xData, typeName, speeds])
     return (
         <div ref={chartRef} style={{ width: "100%", height: "100%" }}></div>
     )

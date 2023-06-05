@@ -36,7 +36,8 @@
     /* flex-basis: auto; */
     display: flex;
     align-items: center;
-    margin-right: 3.1%;
+    margin-right: 4.1%;
+    justify-content: right;
 }
 
 .head-center {
@@ -57,7 +58,7 @@
 
 .head-title span {
     position: absolute;
-    /* top: 0%; */
+    top: 20%;
     width: 100%;
     text-align: center;
     font-size: 28px;
