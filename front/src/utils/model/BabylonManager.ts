@@ -1,7 +1,7 @@
 import {
     ArcRotateCamera, FollowCamera,
     Scene,
-    SceneLoader, TransformNode,
+    SceneLoader,
     Vector3
 } from "@babylonjs/core";
 import "@babylonjs/loaders";
@@ -10,27 +10,34 @@ import {VehicleMovementLog} from "./general.ts";
 import Car from "./Car.ts";
 import {creatGroundMesh, creatSkyBoxMesh} from "../roadVisualizeHelp.ts";
 import {creatCarMeshInstance} from "../tools.ts";
-import {AdvancedDynamicTexture, Control, Rectangle, TextBlock} from "@babylonjs/gui";
+import {AdvancedDynamicTexture, Control, TextBlock} from "@babylonjs/gui";
 import React from "react";
 
 export default class BabylonManager {
     private readonly scene: Scene;
     private cars: Car[] | undefined;
-    private text: TextBlock | undefined;
+    private timestampText: TextBlock | undefined;
+    private timeScaleText: TextBlock | undefined;
     private renderTimestamp: number;
     private _beginTimestamp: number | undefined;
     private _endTimestamp: number | undefined;
 
     private readonly crossroadCameras: ArcRotateCamera[];
     private readonly roadCameras: ArcRotateCamera[];
-    private readonly crossroadTags: Rectangle[];
-    private readonly roadTags: Rectangle[];
     private followCameras: FollowCamera | undefined;
+
+    private timeScaleIndex: number = BabylonConfig.defaultTimeScalesIndex;
+    private _timeScale: number = BabylonConfig.timeScales[this.timeScaleIndex];
 
     public get beginTimestamp() {return this._beginTimestamp};
     public get endTimestamp() {return this._endTimestamp};
     public currTimestamp: number;
-    public timeScale: number;
+
+    get timeScale() {return this._timeScale}
+    set timeScale(value) {
+        this.timeScaleIndex = BabylonConfig.timeScales.findIndex(v => v === value);
+        this._timeScale = value;
+    }
 
     public isSceneReady: boolean;
     public isCarMeshReady: boolean;
@@ -39,18 +46,16 @@ export default class BabylonManager {
         this.scene = scene;
         this.renderTimestamp = performance.now();
         this.currTimestamp = 0;
-        this.timeScale = 0.04;
+        this.timeScale = BabylonConfig.timeScales[this.timeScaleIndex];
         this.cars = [];
 
         this.isSceneReady = false;
         this.isCarMeshReady = false;
         this.crossroadCameras = [];
         this.roadCameras = [];
-        this.crossroadTags = [];
-        this.roadTags = [];
     }
 
-    public updateLogs(vehicleMovementLogs: VehicleMovementLog[], currTimestamp?: number, timeScale: number = 0.04) {
+    public updateLogs(vehicleMovementLogs: VehicleMovementLog[], onSuccess: () => void) {
         vehicleMovementLogs.sort((m1, m2) => m1.ms_no - m2.ms_no);
 
         this._beginTimestamp = vehicleMovementLogs[0].ms_no;
@@ -78,19 +83,17 @@ export default class BabylonManager {
                 for (const id of (idTypeMap[type] ?? [])) {
                     const {meshes, transformNode} = creatCarMeshInstance(r.meshes, type);
                     cars.push(
-                        new Car(groupLogs[id], transformNode, meshes, this.followCameras!, this.crossroadCameras[0], (isFocus) => {
-                            // this.updateTags(false, isFocus ? -1 : 0);
-                        })
+                        new Car(groupLogs[id], transformNode, meshes, this.followCameras!, this.crossroadCameras[0])
                     );
                 }
             }
 
             this.cars = cars;
             this.isCarMeshReady = true;
+            onSuccess();
         })
 
-        this.currTimestamp = currTimestamp ?? vehicleMovementLogs[0].ms_no;
-        this.timeScale = timeScale;
+        this.currTimestamp = vehicleMovementLogs[0].ms_no;
     }
 
     private createArcCameras(endIndex: number, positions: {[key: number]: Vector3}): ArcRotateCamera[] {
@@ -117,7 +120,7 @@ export default class BabylonManager {
         this.followCameras.attachControl(true);
         this.followCameras.radius = 30;
         this.followCameras.heightOffset = 15;
-        this.followCameras.cameraAcceleration = 0.01;
+        this.followCameras.cameraAcceleration = 0.005;
         this.followCameras.maxCameraSpeed = 150;
         this.followCameras.lowerHeightOffsetLimit = 15;
         this.followCameras.lowerRadiusLimit = 30;
@@ -135,18 +138,8 @@ export default class BabylonManager {
         this.scene.createDefaultLight(true);
 
         const advancedTexture = AdvancedDynamicTexture.CreateFullscreenUI("UI");
-        this.text = this.creatTimestampText(advancedTexture);
-
-        // this.roadTags.push(...Object.entries(BabylonConfig.roadPosition).map(
-        //     (position) =>
-        //         this.createSceneTag(advancedTexture, position[1], "道路" + (Number(position[0]) + 1))
-        // ));
-        // this.crossroadTags.push(...Object.entries(BabylonConfig.crossroadCamerasPosition).map(
-        //     (position) =>
-        //         this.createSceneTag(advancedTexture, position[1], "路口" + (Number(position[0]) + 1))
-        // ));
-
-        // this.updateTags(false, 0);
+        this.timestampText = this.creatTimestampText(advancedTexture);
+        this.timeScaleText = this.creatTimeScaleText(advancedTexture);
 
         SceneLoader.ImportMeshAsync("", "model/scene.glb", undefined,
             this.scene).then(r => {
@@ -183,10 +176,14 @@ export default class BabylonManager {
         if (this.timeScale === 0) return;
 
         const timeInterval = performance.now() - this.renderTimestamp;
-        this.currTimestamp += (Number.isNaN(timeInterval) ? 0 : timeInterval) * BabylonConfig.timeScale;
+        this.currTimestamp += (Number.isNaN(timeInterval) ? 0 : timeInterval) * this.timeScale;
 
-        if (this.text !== undefined) {
-            this.text.text = this.getCurrTime()
+        if (this.timestampText !== undefined) {
+            this.timestampText.text = this.getCurrTime()
+        }
+
+        if (this.timeScaleText !== undefined) {
+            this.timeScaleText.text = "时间速率: " + this.timeScale * 100 + "x";
         }
 
         this.cars?.forEach(car => {
@@ -214,64 +211,66 @@ export default class BabylonManager {
         return text;
     }
 
-    private createSceneTag(advancedTexture: AdvancedDynamicTexture, position: Vector3, text: string) {
-        const node = new TransformNode("Scene Tag", this.scene);
-        node.position = position;
+    private creatTimeScaleText(advancedTexture: AdvancedDynamicTexture) {
+        const text = new TextBlock();
+        text.color = "white";
+        text.fontSize = 24;
+        text.fontFamily = "Arial";
+        text.textHorizontalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT;
+        text.textVerticalAlignment = Control.VERTICAL_ALIGNMENT_TOP;
+        text.outlineWidth = 2;
+        text.outlineColor = "black";
+        text.paddingLeft = 12;
+        text.paddingTop = 12;
 
-        let rect1 = new Rectangle();
-        rect1.width = 0.1;
-        rect1.thickness = 0;
-        advancedTexture.addControl(rect1);
-        rect1.linkWithMesh(node);
+        advancedTexture.addControl(text);
 
-        let label = new TextBlock();
-        label.text = text;
-        label.color = 'white'
-        label.outlineWidth = 2;
-        label.outlineColor = "black";
-        label.alpha = 0.4;
-        rect1.addControl(label);
-
-        return rect1;
+        return text;
     }
 
     public onKeyDown(event: React.KeyboardEvent<HTMLCanvasElement>) {
         if (["Digit0", "Digit1", "Digit2", "Digit3", "Digit4", "Digit5", "Digit6", "Digit7", "Digit8", "Digit9"].indexOf(event.code) !== -1) {
             const index = Number(event.code.slice(5));
             this.setCameraToRoad(index);
+            return;
         }
 
         if (["Numpad0", "Numpad1", "Numpad2", "Numpad3", "Numpad4"].indexOf(event.code) !== -1) {
             const index = Number(event.code.slice(6));
             this.setCameraToRoad(index + 10);
+            return;
         }
-    }
 
-    private updateTags(isRoad: boolean, index: number) {
-        this.roadTags.forEach(e => e.isVisible = false);
-        this.crossroadTags.forEach(e => e.isVisible = false);
+        switch (event.key) {
+            case "+":
+            case "=":
+                if (this.timeScaleIndex === -1) {
+                    this.timeScaleIndex = BabylonConfig.defaultTimeScalesIndex + 1;
+                } else {
+                    this.timeScaleIndex = Math.min(this.timeScaleIndex + 1, BabylonConfig.timeScales.length - 1);
+                }
+                break;
+            case "-":
+                if (this.timeScaleIndex === -1) {
+                    this.timeScaleIndex = BabylonConfig.defaultTimeScalesIndex - 1;
+                } else {
+                    this.timeScaleIndex = Math.max(this.timeScaleIndex - 1, 0);
+                }
+                break;
 
-        if (index === -1) return;
-
-        if (isRoad) {
-            this.roadTags[index].isVisible = true;
-            BabylonConfig.roadVisibleTags[index].forEach(i => this.crossroadTags[i].isVisible = true);
-        } else {
-            this.crossroadTags[index].isVisible = true;
-            BabylonConfig.crossroadVisibleTags[index].forEach(i => this.roadTags[i].isVisible = true);
         }
+        this._timeScale = BabylonConfig.timeScales[this.timeScaleIndex];
+        return;
     }
 
     public setCameraToCrossroad(index: number) {
         console.assert(index >= 0 && index < 8);
         this.scene.activeCamera = this.crossroadCameras[index];
-        // this.updateTags(false, index);
     }
 
     public setCameraToRoad(index: number) {
         console.assert(index >= 0 && index < 15);
         this.scene.activeCamera = this.roadCameras[index];
-        // this.updateTags(true, index);
     }
 
     public focusOnCar(carId: number) {

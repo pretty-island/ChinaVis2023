@@ -20,7 +20,6 @@ export default class Car {
 
     private readonly followCamera: FollowCamera;
     private readonly defaultCamera: Camera;
-    private readonly onFocusChanged: (isFocus: boolean) => void;
 
     get position() {
         return this.transformNode.position;
@@ -45,8 +44,7 @@ export default class Car {
     constructor(
         movements: VehicleMovementLog[],
         transformNode: TransformNode, meshes: AbstractMesh[],
-        followCamera: FollowCamera, defaultCamera: Camera,
-        onFocusChanged: (isFocus: boolean) => void
+        followCamera: FollowCamera, defaultCamera: Camera
     ) {
         console.assert(
             movements.filter(m => m.type === movements[0].type).length === movements.length,
@@ -68,15 +66,13 @@ export default class Car {
             e.actionManager = new ActionManager()
             e.actionManager.registerAction(new ExecuteCodeAction(ActionManager.OnLeftPickTrigger, () => {this.focus()}));
         });
-
-        this.onFocusChanged = onFocusChanged;
     }
 
     focus() {
+        console.log(this.id);
         this.followCamera.position = this.transformNode.getScene().activeCamera!.position;
         this.followCamera.lockedTarget = this.carMeshes[0];
         this.transformNode.getScene().activeCamera = this.followCamera;
-        this.onFocusChanged(true);
     }
 
     // 根据节点采集信息计算当前时间应当处于的位置
@@ -87,16 +83,11 @@ export default class Car {
             this.carMeshes.forEach(e => e.isVisible = false);
             return;
         } else if (currTime > this.endTime) {
+            this.carMeshes.forEach(e => e.isVisible = false);
             if (this.followCamera.lockedTarget === this.carMeshes[0]) {
-                console.log("reset camera");
-
                 this.followCamera.lockedTarget = null;
                 this.transformNode.getScene().activeCamera = this.defaultCamera;
-                this.onFocusChanged(false);
             }
-
-            this.carMeshes.forEach(e => e.dispose())
-            this.carMeshes = [];
             return;
         }
 
