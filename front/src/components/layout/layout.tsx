@@ -13,6 +13,7 @@ import RoadMap from "../secondComponents/roadMap/roadMap";
 import RelativeMap from "../secondComponents/relativeMap/relativeMap";
 import CarScatter from "../secondComponents/carScatter/carScatter";
 import SecurityParallel from "../secondComponents/securityParallel/securityParallel";
+import LineMap from "../thirdComponents/lineMap/lineMap";
 
 import { BorderBox1, BorderBox13, Decoration6, Decoration8, Decoration11, FullScreenContainer } from '@jiaminghi/data-view-react'
 import Speed from "../firstComponents/trafficFlow/speed";
@@ -240,16 +241,9 @@ const Layout = () => {
                 <MainVisualizationView />
               </BorderBox1>
               <BorderBox1 className="f-rl-bottom" style={{ height: "35%" }}>
-                <div className="changeView">
-                  <ChartHeader chartName={"交通流量与平均速度"} />
-                  <ChangeView />
-                </div>
-                {nowView === "流量" &&
-                  <TrafficFlow selectedRoad={selectedRoad} />
-                }
-                {nowView === "速度" &&
-                  <Speed selectedRoad={selectedRoad} />
-                }
+                <LineMap />
+                
+                
                 {/* <ChartHeader chartName={"交通流量统计图"} /> */}
                 {/* <div > */}
                 {/* <TrafficFlow /> */}

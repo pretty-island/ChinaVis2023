@@ -21,8 +21,6 @@ export class BabylonConfig {
       12: 4,
     };
 
-    static timeScale = 0.05;
-
     static carMeshRotationMap: {[key: number]: Vector3} = {
         0: new Vector3(Math.PI / 2, Math.PI / 2, 0),
         1: new Vector3(Math.PI / 2, Math.PI / 2, 0),
@@ -84,8 +82,8 @@ export class BabylonConfig {
         14: new Vector3(0, 0, -60),
     }
 
-    static roadVisibleTags: number[][] = [[0], [0, 1], [1, 2], [2, 3], [3], [4], [4, 5], [5, 6], [6, 7], [7], [0, 4], [1, 5], [2, 6], [3, 7], [1]];
-    static crossroadVisibleTags: number[][] = [[0, 1, 10], [1, 2, 11, 13], [2, 3, 12], [3, 4, 13], [5, 6, 10], [6, 7, 11], [7, 8 ,12], [8, 9, 13]];
+    static timeScales: number[] = [-0.1, -0.04, -0.02, -0.01, 0.01, 0.02, 0.04, 0.1];
+    static defaultTimeScalesIndex: number = 4;
 
     static carMeshCreator: (scene: Scene, type: number) => Promise<ISceneLoaderAsyncResult> = (scene, type) => {
         return SceneLoader.ImportMeshAsync("", BabylonConfig.carMeshUrlMap[type], undefined, scene);

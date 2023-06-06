@@ -12,8 +12,7 @@ const onSceneReady = (scene: Scene) => {
     babylonManager = new BabylonManager(scene);
     babylonManager.onSceneReady();
 
-    Promise.all(["data/type_1.json", "data/type_2.json", "data/type_3.json",
-        "data/type_4.json", "data/type_6.json", "data/type_10.json"].map(url => fetch(url).then(res => res.json())))
+    Promise.all(["data/8_30hour.json"].map(url => fetch(url).then(res => res.json())))
         .then(data => {
             babylonManager!.updateLogs(data
                 .reduce((prev, curr) => {
@@ -25,7 +24,10 @@ const onSceneReady = (scene: Scene) => {
                     e.shape = JSON.parse(e.shape);
 
                     return e as VehicleMovementLog;
-                })
+                }),
+                () => {
+                    babylonManager!.timeScale = 0.01;
+                }
             );
         })
 }
