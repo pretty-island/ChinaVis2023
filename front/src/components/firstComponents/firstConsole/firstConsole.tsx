@@ -31,9 +31,15 @@ interface TimeOption {
 }
 const TimeOptions: TimeOption[] = [
     { id: 'all', name: '全部9小时' },
-    { id: '1', name: '一小时' },
-    { id: '2', name: '半小时' },
-    { id: '3', name: '1分钟' },
+    { id: '1', name: '7:00-8:00' },
+    { id: '2', name: '8:00-9:00' },
+    { id: '3', name: '9:00-10:00' },
+    { id: '4', name: '10:00-11:00' },
+    { id: '5', name: '11:00-12:00' },
+    { id: '6', name: '12:00-13:00' },
+    { id: '7', name: '13:00-14:00' },
+    { id: '8', name: '14:00-15:00' },
+    { id: '9', name: '15:00-16:00' },
 ];
 interface FirstConsoleProps {
     setSelectedRoad: React.Dispatch<React.SetStateAction<string>>;
@@ -49,18 +55,17 @@ const FirstConsole: React.FC<FirstConsoleProps> = ({ setSelectedRoad, selectedRo
         setSelectedTime(value);
     }
     return (
-        <div style={{ height: "32.2vh", width: "100%" }}>
-            <div className="multipleCheck" style={{ height: "20%", width: "100%" }}>
+        <div style={{ height: "100%", width: "100%" }}>
+            <div className="multipleCheck" style={{  padding:"10px" }}>
                 <span>选择道路：</span>
                 <Select value={selectedRoad} style={{ width: 120 }} onChange={handleIntersectionChange}>
                     {IntersectionOptions.map((option) => {
                         return < Option key={option.id} value={option.id} > {option.name}</Option>
                     })}
-
                 </Select>
             </div>
-            <div>
-                <span>选择时间段：</span>
+            <div style={{ padding:"10px" }}>
+                <span>选择时间：</span>
                 <Select value={selectedTime} style={{ width: 120 }} onChange={handleTimeChange}>
                     {TimeOptions.map((option) => {
                         return <Option key={option.id} value={option.id}>
@@ -69,8 +74,6 @@ const FirstConsole: React.FC<FirstConsoleProps> = ({ setSelectedRoad, selectedRo
                     })}
                 </Select>
             </div>
-
-
         </div >
     )
 }

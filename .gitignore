@@ -28,3 +28,4 @@ yarn-debug.log*
 yarn-error.log*
 /front/src/assets/road_0.json
 /front/src/assets/type_*.json
+/front/public/data

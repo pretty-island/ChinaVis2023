@@ -111,6 +111,8 @@ const Speed: React.FC<SpeedProps> = ({ selectedRoad }) => {
                 }
                 if (matchingData) {
                     flow1.push(matchingData);
+                }else {
+                    flow1.push(0)
                 }
             }
             // console.log(flow1);
@@ -133,6 +135,8 @@ const Speed: React.FC<SpeedProps> = ({ selectedRoad }) => {
                 // 如果找到匹配的数据项，则将其 count 添加到 flow2 数组中
                 if (matchingData) {
                     flow2.push(matchingData);
+                }else {
+                    flow2.push(0)
                 }
             }
             // console.log(flow2);
@@ -153,6 +157,8 @@ const Speed: React.FC<SpeedProps> = ({ selectedRoad }) => {
                 // 如果找到匹配的数据项，则将其 count 添加到 flow3 数组中
                 if (matchingData) {
                     flow3.push(matchingData);
+                }else {
+                    flow3.push(0)
                 }
             }
             // console.log(flow3);

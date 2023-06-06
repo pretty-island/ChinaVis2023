@@ -20,6 +20,8 @@ import Total from "../firstComponents/total/total";
 import EventChart from "../firstComponents/event/eventChart";
 import TotalHeat from "../firstComponents/carHeat/totalHeat";
 import Flow from "../firstComponents/carHeat/flow";
+import EventTable from "../firstComponents/event/eventTable";
+import Radar from "../firstComponents/firstConsole/radar";
 const Layout = () => {
   // 当前用户在第几屏，默认第一屏
   const [nowPageIndex, setNowPageIndex] = useState<string>("firstButton");
@@ -27,6 +29,9 @@ const Layout = () => {
   const [selectedRoad, setSelectedRoad] = useState<string>("all")
   // 第一屏：用户选择的时间段
   const [selectedTime, setSelectedTime] = useState<string>("all")
+  // 用户选择的类型
+  const [typeName, setTypeName] = useState("");
+  const [eventName, setEventName] = useState("全天交通事件");
 
   // 用户切换速度和流量视图
   const [nowView, setNowView] = useState<string>("流量");
@@ -45,7 +50,7 @@ const Layout = () => {
           setNowPageIndex(id)
         }}
         // style={{ cursor: 'pointer' }}>
-        style={{ cursor: 'pointer', width: '35%', height: '90%' }}>
+        style={{ cursor: 'pointer', width: '29%', height: '81%' }}>
         {/* style={{ cursor: 'pointer', width: '150px', height: '60px' }}> */}
         <Decoration11
           id={id}
@@ -78,19 +83,20 @@ const Layout = () => {
         <div className="head">
           <div className="head-left" id="changeButton">
             <ChangePage id="firstButton" text="交通概览" ></ChangePage>
-            <ChangePage id="secondButton" text="道路健康度"></ChangePage>
+            <ChangePage id="secondButton" text="拥堵分析"></ChangePage>
+            <ChangePage id="thirdButton" text="驾驶行为" ></ChangePage>
           </div>
           <div className="head-center">
             <Decoration8 style={{ width: '50%', height: '70%' }} />
             <div className="head-title">
-              <span>交通态势与可视分析系统</span>
+              <span>交通态势感知与可视分析系统</span>
               <Decoration6 style={{ width: '75%', height: '13%' }}></Decoration6>
             </div>
             <Decoration8 reverse={true} style={{ width: '50%', height: '70%' }} />
           </div>
           <div className="head-right">
-            <ChangePage id="thirdButton" text="拥堵分析" ></ChangePage>
-            <ChangePage id="fourthButton" text="驾驶行为"></ChangePage>
+            {/* <ChangePage id="thirdButton" text="拥堵分析" ></ChangePage> */}
+            {/* <ChangePage id="fourthButton" text="驾驶行为"></ChangePage> */}
             {/* <div style={{ width: '35%', height: '76%' }}></div>
             <div style={{ width: '35%', height: '76%' }}></div> */}
           </div>
@@ -99,87 +105,47 @@ const Layout = () => {
           nowPageIndex === "firstButton" &&
           <div className="container">
             <div className="f-left" style={{ width: "22%" }}>
-              <BorderBox13 className="f-console" style={{ height: "22%" }}>
-                <ChartHeader chartName={"控制台"} />
-                <FirstConsole setSelectedRoad={setSelectedRoad}
+              <BorderBox1 className="f-console" style={{ height: "35%" }}>
+                <ChartHeader chartName={"道路运行健康度"} />
+                {/* <FirstConsole setSelectedRoad={setSelectedRoad}
                   selectedRoad={selectedRoad}
                   setSelectedTime={setSelectedTime}
                   selectedTime={selectedTime}
-                />
-              </BorderBox13>
-              <BorderBox1 className="f-queue">
-                <ChartHeader chartName={"道路流量速度统计"} />
-
-                  <Flow/>
-
+                /> */}
+                <Radar selectedRoad={selectedRoad} />
               </BorderBox1>
-            </div>
-
-            <div className="f-right" style={{ width: "78%" }}>
-              <div className="f-r-left" style={{ width: "65%" }}>
-                <BorderBox1 className="f-rl-top" style={{ height: "65%" }}>
-                  <MainVisualizationView />
-                </BorderBox1>
-                <BorderBox1 className="f-rl-bottom" style={{ height: "35%" }}>
-                  <div className="changeView">
-                    <ChartHeader chartName={"交通流量与平均速度"} />
-                    <ChangeView />
-                  </div>
-                  {nowView === "流量" &&
-                    <TrafficFlow selectedRoad={selectedRoad} />
-                  }
-                  {nowView === "速度" &&
-                    <Speed selectedRoad={selectedRoad} />
-                  }
-                </BorderBox1>
-              </div>
-              <div className="f-r-right" style={{ width: "35%" }}>
-                <BorderBox1 className="f-rr-top" style={{ height: "35%" }}>
-                  <ChartHeader chartName={"道路通行量"} />
-                  <Total selectedRoad={selectedRoad} />
-                  {/* <EventChart /> */}
-                </BorderBox1 >
-                <BorderBox1 className="f-rr-bottom" style={{ height: "65%" }}>
-                  {/* <div className="rt" style={{ height: "70%" }}> */}
-                    <ChartHeader chartName={"道路流量热力图"} />
-                    {/* <CarHeat /> */}
-                    <TotalHeat />
-                  {/* </div> */}
-                  {/* <div className="rb"> */}
-                  {/* </div> */}
-                </BorderBox1>
-              </div>
-            </div>
-          </div>
-        }
-        {
-          nowPageIndex === "thirdButton" &&
-          <div className="container">
-            <div className="f-left" style={{ width: "22%" }}>
-              <BorderBox13 className="f-console" style={{ height: "22%" }}>
-                <ChartHeader chartName={"控制台"} />
-                <FirstConsole setSelectedRoad={setSelectedRoad}
-                  selectedRoad={selectedRoad}
-                  setSelectedTime={setSelectedTime}
-                  selectedTime={selectedTime}
-                />
-              </BorderBox13>
-              <BorderBox1 className="f-queue">
+              <BorderBox1 className="f-queue" style={{ height: "65%" }}>
                 <ChartHeader chartName={"交通事件"} />
-                <div className="t" style={{ height: "50%" }}>
-                  <EventChart />
+
+                <div className="t" style={{ width: "100%", height: "50%" }}>
+                  <EventChart setEventName={setEventName} />
                   {/* <CarHeat /> */}
                 </div>
-                <div className="b">
+                <div className="b" style={{ width: "100%", height: "50%" }}>
+                  <EventTable eventName={eventName} setEventName={setEventName} />
                 </div>
-                {/* <QueCar /> */}
+
               </BorderBox1>
             </div>
 
             <div className="f-right" style={{ width: "78%" }}>
               <div className="f-r-left" style={{ width: "65%" }}>
-                <BorderBox1 className="f-rl-top" style={{ height: "65%" }}>
+                <BorderBox1 className="f-rl-top" style={{ height: "65%", position: "relative", float: "left" }}>
+                  <div style={{ position: "absolute", top: "40px", left: "50px", float: "left" }}>
+                    {/* <BorderBox13 className="f-console" style={{ position:"absolute" }}> */}
+                    {/* <ChartHeader chartName={"控制台"} /> */}
+                    <FirstConsole setSelectedRoad={setSelectedRoad}
+                      selectedRoad={selectedRoad}
+                      setSelectedTime={setSelectedTime}
+                      selectedTime={selectedTime}
+                    />
+                    {/* <Radar selectedRoad={selectedRoad} /> */}
+                    {/* </BorderBox13> */}
+                  </div>
+                  {/* <div style={{ position:"absolute" }}> */}
                   <MainVisualizationView />
+                  {/* </div> */}
+
                 </BorderBox1>
                 <BorderBox1 className="f-rl-bottom" style={{ height: "35%" }}>
                   <div className="changeView">
@@ -192,28 +158,22 @@ const Layout = () => {
                   {nowView === "速度" &&
                     <Speed selectedRoad={selectedRoad} />
                   }
-                  {/* <ChartHeader chartName={"交通流量统计图"} /> */}
-                  {/* <div > */}
-                  {/* <TrafficFlow /> */}
-                  {/* </div> */}
-                  {/* <div>
-                    <Speed />
-                  </div> */}
                 </BorderBox1>
               </div>
               <div className="f-r-right" style={{ width: "35%" }}>
                 <BorderBox1 className="f-rr-top" style={{ height: "35%" }}>
                   <ChartHeader chartName={"道路通行量"} />
-                  <Total selectedRoad={selectedRoad} />
+                  <Total selectedRoad={selectedRoad} typeName={typeName} setTypeName={setTypeName} />
                   {/* <EventChart /> */}
                 </BorderBox1 >
                 <BorderBox1 className="f-rr-bottom" style={{ height: "65%" }}>
-                  <div className="rt" style={{ height: "70%" }}>
+                  <div className="rt" style={{ height: "60%" }}>
                     <ChartHeader chartName={"道路流量热力图"} />
                     {/* <CarHeat /> */}
-                    <TotalHeat />
+                    <TotalHeat setTypeName={setTypeName} typeName={typeName} />
                   </div>
-                  <div className="rb">
+                  <div className="rb" style={{ width: "100%", height: "40%" }}>
+                    <Flow typeName={typeName} />
                   </div>
                 </BorderBox1>
               </div>
@@ -242,14 +202,64 @@ const Layout = () => {
                   <SecurityParallel />
                 </BorderBox1>
               </div>
-                <BorderBox1 className="r-bottom" style={{ height: "35%" }}>
-                  <ChartHeader chartName={"断面车流统计"} />
-                  <CarScatter />
-                </BorderBox1>
-                
-              
+              <BorderBox1 className="r-bottom" style={{ height: "35%" }}>
+                <ChartHeader chartName={"断面车流统计"} />
+                <CarScatter />
+              </BorderBox1>
+
+
             </div>
           </div>
+        }
+        {
+          nowPageIndex === "thirdButton" &&
+          <div className="container">
+            {/* <div className="f-right" style={{ width: "78%" }}> */}
+            <div className="f-r-left" style={{ width: "65%" }}>
+              <BorderBox1 className="f-rl-top" style={{ height: "65%" }}>
+                <MainVisualizationView />
+              </BorderBox1>
+              <BorderBox1 className="f-rl-bottom" style={{ height: "35%" }}>
+                <div className="changeView">
+                  <ChartHeader chartName={"交通流量与平均速度"} />
+                  <ChangeView />
+                </div>
+                {nowView === "流量" &&
+                  <TrafficFlow selectedRoad={selectedRoad} />
+                }
+                {nowView === "速度" &&
+                  <Speed selectedRoad={selectedRoad} />
+                }
+                {/* <ChartHeader chartName={"交通流量统计图"} /> */}
+                {/* <div > */}
+                {/* <TrafficFlow /> */}
+                {/* </div> */}
+                {/* <div>
+                    <Speed />
+                  </div> */}
+              </BorderBox1>
+            </div>
+            <div className="f-r-right" style={{ width: "35%" }}>
+              <BorderBox1 className="f-rr-top" style={{ height: "35%" }}>
+                <ChartHeader chartName={"道路通行量"} />
+                <Total selectedRoad={selectedRoad} />
+                {/* <EventChart /> */}
+              </BorderBox1 >
+              <BorderBox1 className="f-rr-bottom" style={{ height: "65%" }}>
+
+                <ChartHeader chartName={"交通事件"} />
+
+                <div className="t" style={{ width: "100%", height: "50%" }}>
+                  <EventChart />
+                  {/* <CarHeat /> */}
+                </div>
+                <div className="b" style={{ width: "100%", height: "50%" }}>
+                  <EventTable />
+                </div>
+              </BorderBox1>
+            </div>
+          </div>
+          // </div>
         }
       </FullScreenContainer >
     </div >

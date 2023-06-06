@@ -6,8 +6,10 @@ import { getRoad, getTotal } from '../../../apis/api';
 
 interface TotalProps {
     selectedRoad: string;
+    setTypeName: React.Dispatch<React.SetStateAction<string>>;
+    typeName: string;
 }
-const Total: React.FC<TotalProps> = ({ selectedRoad }) => {
+const Total: React.FC<TotalProps> = ({ selectedRoad, typeName,setTypeName}) => {
     const chartRef = useRef<HTMLDivElement>(null);
     const [useData, setUseData] = useState();
     const [totalData, setTotalData] = useState();
@@ -45,7 +47,7 @@ const Total: React.FC<TotalProps> = ({ selectedRoad }) => {
 
                 }
             }
-            setUseData(nowData)            
+            setUseData(nowData)
         }
     }, [totalData, roadData])
 
@@ -194,11 +196,11 @@ const Total: React.FC<TotalProps> = ({ selectedRoad }) => {
                     };
                 });
                 return result;
-            }            
+            }
             // console.log(useData?.[selectedRoad]);
             // console.log(selectedRoad);
             const all_data = useData?.[selectedRoad]
-            all_data?.sort((a, b) => {
+            
             all_data?.sort((a, b) => {
                 return b.value - a.value;
             });
@@ -245,22 +247,32 @@ const Total: React.FC<TotalProps> = ({ selectedRoad }) => {
                 return num?.toString().replace(reg, ',');
                 return num?.toString()?.replace(reg, ',');
             }
-            const total = all_data?.reduce((a, b) => {
+            
             const total = all_data?.reduce((a, b) => {
                 return a + b.value * 1
             }, 0);
-            const roadMapping = function(num:string){
-                let x="";
-                switch(num){
+            const roadMapping = function (num: string) {
+                let x = "";
+                switch (num) {
                     case "all":
-                        x= "所有道路"
+                        x = "所有道路"
                         break;
                     default:
-                        x="道路"+num
+                        x = "道路" + num
                 }
                 return x
             };
-
+            const handleClick = (typeIndex) => {
+                // if (typeIndex in typeMapping1) {
+                    // const hourFlow = useData[typeMapping1[typeIndex]]
+                    // console.log(typeIndex);
+                    // setHeatData(hourFlow)
+                    // currentData = hourFlow;
+                    // const currentXAxisData = generateHourXAxis();
+                    // setXData(currentXAxisData)
+                    setTypeName(typeIndex + "流量")
+                // }
+            }
             const option: EChartOption = {
                 tooltip: {
                     trigger: 'item',
@@ -277,17 +289,17 @@ const Total: React.FC<TotalProps> = ({ selectedRoad }) => {
                 ],
                 graphic: [
                     {
-                      type: 'text',
-                      left: '13',
-                      top: '10',
-                      style: {
-                        text: '时间范围：7:00-16:00'+"\n"+"\n"+roadMapping(selectedRoad),
-                        fill: '#fFF',
-                        fontSize: 13,
-                        // fontWeight: 'bold'
-                      }
+                        type: 'text',
+                        left: '13',
+                        top: '10',
+                        style: {
+                            text: '时间范围：7:00-16:00' + "\n" + "\n" + roadMapping(selectedRoad),
+                            fill: '#fFF',
+                            fontSize: 13,
+                            // fontWeight: 'bold'
+                        }
                     }
-                  ],
+                ],
                 title: [{
                     text: '{name|' + title + '}\n{val|' + formatNumber(total) + '}',
                     top: 'center',
@@ -381,9 +393,16 @@ const Total: React.FC<TotalProps> = ({ selectedRoad }) => {
             if (option) {
                 mychart.setOption(option, true);
             }
+            mychart.on('click', 'series', (params) => {
+                const typeIndex = params.name;
+                handleClick(typeIndex);
+                console.log("1111111111111111");
+                console.log(params.name);
+            })
         }
+        // }
 
-    }, [useData, selectedRoad])
+    }, [useData, selectedRoad,typeName,setTypeName])
     return (
         <div ref={chartRef} style={{ width: "100%", height: "100%" }}></div>
     )

@@ -1,10 +1,12 @@
 from flask import Flask, jsonify, json, request
 from flask_cors import CORS
 from datetime import datetime, timedelta
+import pandas as pd
 
 app = Flask(__name__)
 # cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
+
 
 # 匹配的路由
 @app.route("/")
@@ -12,6 +14,7 @@ def hello_world():
     print(111)
     # 返回给前端的数据
     return jsonify({"message": "Hello, World!"})
+
 
 @app.route("/passParam", methods=["POST"])
 def hello_world_2():
@@ -28,6 +31,7 @@ def getTotal():
         data = json.load(f)  # 读取到的数据
     return json.dumps(data)  # 将结果转换为JSON格式并返回
 
+
 # 获取所有道路每小时的不同类型的车流量和速度
 @app.route("/getHourTotal")
 def getHourTotal():
@@ -35,6 +39,7 @@ def getHourTotal():
     with open(directory, "r", encoding="utf-8") as f:
         data = json.load(f)  # 读取到的数据
     return json.dumps(data)  # 将结果转换为JSON格式并返回
+
 
 # 获取所有道路每半小时的不同类型的车流量和速度
 @app.route("/getHalfTotal")
@@ -44,6 +49,7 @@ def getHalfTotal():
         data = json.load(f)  # 读取到的数据
     return json.dumps(data)  # 将结果转换为JSON格式并返回
 
+
 # 获取所有道路每分钟的不同类型的车流量和速度
 @app.route("/getMinTotal")
 def getMinTotal():
@@ -51,6 +57,7 @@ def getMinTotal():
     with open(directory, "r", encoding="utf-8") as f:
         data = json.load(f)  # 读取到的数据
     return json.dumps(data)  # 将结果转换为JSON格式并返回
+
 
 # 获取不同道路所有时间的不同类型的车流量和速度
 @app.route("/getRoad")
@@ -60,6 +67,7 @@ def getRoad():
         data = json.load(f)  # 读取到的数据
     return json.dumps(data)  # 将结果转换为JSON格式并返回
 
+
 # 获取不同道路每小时的不同类型的车流量和速度
 @app.route("/getHourRoad")
 def getHourRoad():
@@ -67,6 +75,7 @@ def getHourRoad():
     with open(directory, "r", encoding="utf-8") as f:
         data = json.load(f)  # 读取到的数据
     return json.dumps(data)  # 将结果转换为JSON格式并返回
+
 
 # 获取不同道路每半小时的不同类型的车流量和速度
 @app.route("/getHalfRoad")
@@ -76,6 +85,7 @@ def getHalfRoad():
         data = json.load(f)  # 读取到的数据
     return json.dumps(data)  # 将结果转换为JSON格式并返回
 
+
 # 获取不同道路每分钟的不同类型的车流量和速度
 @app.route("/getMinRoad")
 def getMinRoad():
@@ -83,7 +93,6 @@ def getMinRoad():
     with open(directory, "r", encoding="utf-8") as f:
         data = json.load(f)  # 读取到的数据
     return json.dumps(data)  # 将结果转换为JSON格式并返回
-
 
 
 # # 获取每半小时所有道路的不同类型的车流量和速度：包括所有类型总车流量、所有机动车总车流量
@@ -127,6 +136,26 @@ def getflow():
 @app.route("/getHeat")
 def getHeat():
     directory = "./dataProcess/data/carheat.json"  # json文件所在路径
+    with open(directory, "r", encoding="utf-8") as f:
+        data = json.load(f)  # 读取到的数据
+    return json.dumps(data)  # 将结果转换为JSON格式并返回
+
+
+@app.route("/getEventTable",methods=["GET"])
+def getEventTable():
+    hour=request.args.get("hour")
+    event_name=request.args.get("event_name")
+
+    file_path = f"./dataProcess/data/abnormal/{hour}h/{event_name}.csv"
+    # file_path = f"./dataProcess/data/abnormal/{hour}/time_true_cross.csv"
+    data = pd.read_csv(file_path)
+    data = data[["id", "time", "road","event_name"]]
+    data = data.to_json(orient="records")
+    return data
+
+@app.route("/getEvent")
+def getEvent():
+    directory = "./dataProcess/data/abnormal/event.json"  # json文件所在路径
     with open(directory, "r", encoding="utf-8") as f:
         data = json.load(f)  # 读取到的数据
     return json.dumps(data)  # 将结果转换为JSON格式并返回

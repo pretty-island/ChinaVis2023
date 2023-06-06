@@ -1,0 +1,61 @@
+.ant-table {
+    background-color: #18263c !important;
+   
+    /* background-color: transparent !important; */
+
+}
+:where(.css-dev-only-do-not-override-ed5zg0).ant-table-wrapper .ant-table.ant-table-middle .ant-table-title{
+     color: #fff;
+     font-size: x-large;
+     text-align: center;
+     /* padding: auto; */
+}
+.odd-row {
+    background-color: #18263c !important;
+    color: #fff;
+}
+
+.even-row {
+    background-color: #2b3b52;
+    color: #fff;
+}
+
+:where(.css-dev-only-do-not-override-ed5zg0).ant-table-wrapper .ant-table.ant-table-middle .ant-table-tbody>tr>td {
+    text-align: center;
+}
+
+:where(.css-dev-only-do-not-override-ed5zg0).ant-table-wrapper .ant-table-container table>thead>tr:first-child>*:last-child {
+    background-color: #18263c !important;
+    /* text-align: center; */
+}
+
+::-webkit-scrollbar {
+    background-color: #18263c !important;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #2b3b52 !important;
+}
+
+.ant-table-empty .ant-table-body {
+    background-color: #18263c !important;
+}
+
+.ant-table-thead>tr>th {
+    background-color: #18263c !important;
+    color: #fff !important;
+    /* text-align: center; */
+}
+
+:where(.css-dev-only-do-not-override-ed5zg0).ant-table-wrapper .ant-table-container table>thead>tr>* {
+    text-align: center;
+
+}
+
+.ant-table-tbody>tr>td {
+    background: rgba(255, 255, 255, 0) !important;
+}
+
+.ant-table-tbody>tr:hover {
+    background: #43526a !important;
+}

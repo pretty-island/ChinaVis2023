@@ -130,25 +130,10 @@ const TrafficFlow: React.FC<FlowProps> = ({ selectedRoad }) => {
                 if (matchingData) {
                     flow1.push(matchingData);
                 }
+                else {
+                    flow1.push(0)
+                }
             }
-            // // 类型1速度
-            // const speed1 = []
-            // // // 遍历时间数组 time_data
-            // for (let i = 0; i < 540; i++) {
-            //     const currentTime = time_data[i];
-            //     // 在数据数组 data 中查找与当前时间匹配的数据项
-            //     let matchingData = 0;
-            //     // 在数据数组 data 中查找与当前时间匹配的数据项
-            //     for (let j = 0; j < 540; j++) {
-            //         if (type_data?.[0]?.[j]?.time === currentTime) {
-            //             matchingData = type_data?.[0]?.[j]?.avg_speed;
-            //             break;
-            //         }
-            //     }
-            //     if (matchingData) {
-            //         speed1.push(matchingData);
-            //     }
-            // }
 
             // 类型2流量
             const flow2 = []
@@ -169,27 +154,11 @@ const TrafficFlow: React.FC<FlowProps> = ({ selectedRoad }) => {
                 if (matchingData) {
                     flow2.push(matchingData);
                 }
+                else {
+                    flow2.push(0)
+                }
             }
-            // 类型2速度
-            // const speed2 = []
-            // // 遍历时间数组 time_data
-            // for (let i = 0; i < 540; i++) {
-            //     const currentTime = time_data[i];
-            //     // 在数据数组 data 中查找与当前时间匹配的数据项
-            //     let matchingData = 0;
-
-            //     // 在数据数组 data 中查找与当前时间匹配的数据项
-            //     for (let j = 0; j < 540; j++) {
-            //         if (type_data?.[2]?.[j]?.time === currentTime) {
-            //             matchingData = type_data?.[2]?.[j]?.avg_speed;
-            //             break;
-            //         }
-            //     }
-            //     // 如果找到匹配的数据项，则将其 count 添加到 speed2 数组中
-            //     if (matchingData) {
-            //         speed2.push(matchingData);
-            //     }
-            // }
+            
             // 类型3流量
             const flow3 = []
             for (let i = 0; i < 540; i++) {
@@ -208,26 +177,11 @@ const TrafficFlow: React.FC<FlowProps> = ({ selectedRoad }) => {
                 if (matchingData) {
                     flow3.push(matchingData);
                 }
+                else {
+                    flow3.push(0)
+                }
             }
-            // // 类型3速度
-            // const speed3 = []
-            // for (let i = 0; i < 540; i++) {
-            //     const currentTime = time_data[i];
-            //     // 在数据数组 data 中查找与当前时间匹配的数据项
-            //     let matchingData = 0;
-
-            //     // 在数据数组 data 中查找与当前时间匹配的数据项
-            //     for (let j = 0; j < 540; j++) {
-            //         if (type_data?.[3]?.[j]?.time === currentTime) {
-            //             matchingData = type_data?.[3]?.[j]?.avg_speed;
-            //             break;
-            //         }
-            //     }
-            //     // 如果找到匹配的数据项，则将其 count 添加到 speed3 数组中
-            //     if (matchingData) {
-            //         speed3.push(matchingData);
-            //     }
-            // }
+            
             // 类型4流量
             const flow4 = []
             for (let i = 0; i < 540; i++) {
@@ -298,29 +252,7 @@ const TrafficFlow: React.FC<FlowProps> = ({ selectedRoad }) => {
                     flow6.push(0)
                 }
             }
-            // // 类型6速度
-            // const speed6 = []
-            // for (let i = 0; i < 540; i++) {
-            //     const currentTime = time_data[i];
-            //     // 在数据数组 data 中查找与当前时间匹配的数据项
-            //     let matchingData = 0;
-            //     // 在数据数组 data 中查找与当前时间匹配的数据项
-            //     for (let j = 0; j < 540; j++) {
-            //         if (type_data?.[5]?.[j]) {
-            //             if (type_data?.[5]?.[j]?.time === currentTime) {
-            //                 matchingData = type_data?.[5]?.[j]?.avg_speed;
-            //                 break;
-            //             }
-            //         }
-            //     }
-            //     // 如果找到匹配的数据项，则将其 count 添加到 speed6 数组中
-            //     if (matchingData) {
-            //         speed6.push(matchingData);
-            //     }
-            //     else {
-            //         speed6.push(0)
-            //     }
-            // }
+
             // 类型10流量
             const flow10 = []
             // 遍历时间数组 time_data
@@ -345,38 +277,12 @@ const TrafficFlow: React.FC<FlowProps> = ({ selectedRoad }) => {
                     flow10.push(0)
                 }
             }
-            // // 类型10速度
-            // const speed10 = []
-            // // 遍历时间数组 time_data
-            // for (let i = 0; i < 540; i++) {
-            //     const currentTime = time_data[i];
-            //     // 在数据数组 data 中查找与当前时间匹配的数据项
-            //     let matchingData = 0;
-            //     // 在数据数组 data 中查找与当前时间匹配的数据项
-            //     for (let j = 0; j < 540; j++) {
-            //         if (type_data?.[1]?.[j]) {
-            //             if (type_data?.[1]?.[j]?.time === currentTime) {
-            //                 matchingData = type_data?.[1]?.[j]?.avg_speed;
-            //                 break;
-            //             }
-            //         }
-            //     }
-            //     // 如果找到匹配的数据项，则将其 count 添加到 speed10 数组中
-            //     if (matchingData) {
-            //         speed10.push(matchingData);
-            //     }
-            //     else {
-            //         speed10.push(0)
-            //     }
-            // }
+            
             const allcount = []
             for (let i = 0; i < 540; i++) {
                 allcount.push(flow1[i] + flow10[i] + flow2[i] + flow3[i] + flow4[i] + flow6[i])
             }
-            // const allspeed = []
-            // for (let i = 0; i < 540; i++) {
-            //     allspeed.push((speed1[i] + speed2[i] + speed3[i] + speed4[i] + speed6[i] + speed10[i])/6)
-            // }
+
             const roadMapping = function(num:string){
                 let x="";
                 switch(num){

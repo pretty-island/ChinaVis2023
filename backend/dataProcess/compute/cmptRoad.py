@@ -196,15 +196,15 @@ with open(output_directory, "w", encoding="utf-8") as f:
 #             # 统计该类型所有车辆的平均速度
 #             min_speed = defaultdict(list)
 
-#             for item in data:
-#                 id = item["id"]
-#                 type = item["type"]
-#                 velocity = item["velocity"]
-#                 # 获取当前数据的时间戳
-#                 timestamp = item["time_meas"]
-#                 # 将时间戳转换为datetime对象，获取小时数
-#                 dt = datetime.fromtimestamp(timestamp / 1000000)
-#                 time = dt.strftime("%H:%M")
+            # for item in data:
+            #     id = item["id"]
+            #     type = item["type"]
+            #     velocity = item["velocity"]
+            #     # 获取当前数据的时间戳
+            #     timestamp = item["time_meas"]
+            #     # 将时间戳转换为datetime对象，获取小时数
+            #     dt = datetime.fromtimestamp(timestamp / 1000000)
+            #     time = dt.strftime("%H:%M")
 
 #                 # 添加车辆ID到集合里
 #                 min_count[time].add(id)
