@@ -245,7 +245,6 @@ const Total: React.FC<TotalProps> = ({ selectedRoad, typeName,setTypeName}) => {
             const formatNumber = function (num: number) {
                 const reg = /(?=(\B)(\d{3})+$)/g;
                 return num?.toString().replace(reg, ',');
-                return num?.toString()?.replace(reg, ',');
             }
             
             const total = all_data?.reduce((a, b) => {

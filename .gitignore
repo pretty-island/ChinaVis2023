@@ -5,6 +5,7 @@
 /front/.pnp
 /front/.pnp.js
 /backend/data
+/backend/dataProcess/data/line_up/crossturn.json
 # testing
 /front/coverage
 

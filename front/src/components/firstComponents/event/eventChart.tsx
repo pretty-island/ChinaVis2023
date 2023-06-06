@@ -2,62 +2,130 @@
 import * as echarts from 'echarts';
 import { EChartOption } from 'echarts';
 import React, { useEffect, useRef, useState } from "react";
-import { getEvent } from '../../../apis/api';
+import { getEvent, getEventRoad } from '../../../apis/api';
 interface EventProps {
-    // selectedRoad: string;
+    selectedRoad: string;
     setEventName: React.Dispatch<React.SetStateAction<string>>;
     // typeName: string;
 }
-const EventChart: React.FC <EventProps>= ({setEventName}) => {
+const EventChart: React.FC<EventProps> = ({ selectedRoad, setEventName }) => {
     const chartRef = useRef<HTMLDivElement>(null);
     const [eventData, setEventData] = useState();
+    const [eventRoadData, setEventRoadData] = useState();
     const [useData, setUseData] = useState();
     // 获取数据
     useEffect(() => {
         getEvent("/getEvent").then((res) => {
             setEventData(res.data);
-            console.log(eventData);
-            
+            // console.log(eventData);
+        });
+        getEventRoad("/getEventRoad").then((res) => {
+            setEventRoadData(res.data);
+            // console.log(eventData);
         });
     }, []);
     // 设置数据
     useEffect(() => {
-        if (eventData) {
-            const data = Object.keys(eventData)?.map((eventName) => {
-                const eventDetails = eventData[eventName];
-                let totalCount = 0;
-                Object.keys(eventDetails)?.forEach((time) => {
-                    const roadData = eventDetails[time];
-                    Object.values(roadData)?.forEach((count) => {
-                        totalCount += count;
-                    });
-                });
-                let displayName = eventName
-                if (eventName === "time_nixing") {
-                    displayName = "逆行"
-                }
-                else if (eventName === "time_true_cross") {
-                    displayName = "行人横穿马路"
-                }
-                else if (eventName === "time_true_error_way") {
-                    displayName = "机动车占用非机动车道"
-                }
-                else if (eventName === "time_true_overspeed") {
-                    displayName = "机动车超速"
-                }
-                return { value: totalCount, name: displayName };
-            });
-            const data1 = data.sort((a, b) => {
-                return b.value - a.value;
-            });
-            setUseData(data1);
+        if (eventData && eventRoadData) {
+            if (selectedRoad == "all") {
+                setUseData(eventData)
+            }
+            else {
+                setUseData(eventRoadData["道路" + selectedRoad])
+            }
+            // const data = Object.keys(eventData)?.map((eventName) => {
+            //     const eventDetails = eventData[eventName];
+            //     let totalCount = 0;
+            //     Object.keys(eventDetails)?.forEach((time) => {
+            //         const roadData = eventDetails[time];
+            //         Object.values(roadData)?.forEach((count) => {
+            //             totalCount += count;
+            //         });
+            //     });
+            //     let displayName = eventName
+            //     if (eventName === "time_nixing") {
+            //         displayName = "逆行"
+            //     }
+            //     else if (eventName === "time_true_cross") {
+            //         displayName = "行人横穿马路"
+            //     }
+            //     else if (eventName === "time_true_error_way") {
+            //         displayName = "机动车占用非机动车道"
+            //     }
+            //     else if (eventName === "time_true_overspeed") {
+            //         displayName = "机动车超速"
+            //     }
+            //     return { value: totalCount, name: displayName };
+            // });
+            // const data1 = data.sort((a, b) => {
+            //     return b.value - a.value;
+            // });
+            // setUseData(data1);
+            // if(selectedRoad=="all"){
+            // const data = Object.keys(eventData)?.map((eventName) => {
+            //     const eventDetails = eventData[eventName];
+            //     let totalCount = 0;
+            //     Object.values(eventDetails)?.forEach((count) => {
+            //         totalCount += count;
+            //     });
+            //     let displayName = eventName
+            //     if (eventName === "time_nixing") {
+            //         displayName = "逆行"
+            //     }
+            //     else if (eventName === "time_true_cross") {
+            //         displayName = "行人横穿马路"
+            //     }
+            //     else if (eventName === "time_true_error_way") {
+            //         displayName = "机动车占用非机动车道"
+            //     }
+            //     else if (eventName === "time_true_overspeed") {
+            //         displayName = "机动车超速"
+            //     }
+            //     return { value: totalCount, name: displayName };
+            // });
+            // const data1 = data.sort((a, b) => {
+            //     return b.value - a.value;
+            // });
+            // setUseData(data1);
+            // }
+            // else{
+            //     const road="道路"+selectedRoad;
+            //     const data = Object.keys(eventData)?.map((eventName) => {
+            //         const eventDetails = eventData[eventName];
+            //         let totalCount = 0;
+            //         Object.keys(eventDetails)?.forEach((time) => {
+            //             const roadData = eventDetails[time];
+            //             Object.values(roadData)?.forEach((count) => {
+            //                 totalCount += count;
+            //             });
+            //         });
+            //         let displayName = eventName
+            //         if (eventName === "time_nixing") {
+            //             displayName = "逆行"
+            //         }
+            //         else if (eventName === "time_true_cross") {
+            //             displayName = "行人横穿马路"
+            //         }
+            //         else if (eventName === "time_true_error_way") {
+            //             displayName = "机动车占用非机动车道"
+            //         }
+            //         else if (eventName === "time_true_overspeed") {
+            //             displayName = "机动车超速"
+            //         }
+            //         return { value: totalCount, name: displayName };
+            //     });
+            //     const data1 = data.sort((a, b) => {
+            //         return b.value - a.value;
+            //     });
+            //     setUseData(data1);
 
+            // }
             // Object.keys(eventData)?.map((eventName)=>{
             // console.log(eventData?.["time_nixing"]);
 
             // })
         }
-    }, [eventData])
+    }, [eventData, eventRoadData, selectedRoad])
     // useEffect(() => {
     //     if (eventData) {
     //         const b = []
@@ -84,19 +152,69 @@ const EventChart: React.FC <EventProps>= ({setEventName}) => {
             if (mychart == null) {
                 mychart = echarts.init(chartRef.current, undefined);
             }
+
+            console.log(useData);
+            let alldata = []
+            if (useData) {
+                alldata = Object.keys(useData)?.map((eventName) => {
+                    const eventDetails = useData[eventName];
+                    if (eventDetails) {
+                        let totalCount = 0;
+                        Object.values(eventDetails)?.forEach((count) => {
+                            totalCount += count;
+                        });
+                        let displayName = eventName
+                        if (eventName === "time_nixing") {
+                            displayName = "逆行"
+                        }
+                        else if (eventName === "time_true_cross") {
+                            displayName = "行人横穿马路"
+                        }
+                        else if (eventName === "time_true_error_way") {
+                            displayName = "机动车占用非机动车道"
+                        }
+                        else if (eventName === "time_true_overspeed") {
+                            displayName = "机动车超速"
+                        }
+                        return { value: totalCount, name: displayName };
+                    }
+                });
+            }
+            // const alldata = totaldata.sort((a, b) => {
+            //     return b.value - a.value;
+            // });
+            // console.log(alldata);
+
+            const data = ['7h', '8h', '9h', '10h', '11h', '12h', '13h', '14h', '15h'];
+
+            const time_nixing = data.map(hour => (useData?.['time_nixing']?.[hour]) ? (useData?.['time_nixing']?.[hour]) : 0);
+            const time_true_cross = data.map(hour => (useData?.['time_true_cross']?.[hour]) ? (useData?.['time_true_cross']?.[hour]) : 0);
+            const time_true_error_way = data.map(hour => (useData?.['time_true_error_way']?.[hour]) ? (useData?.['time_true_error_way']?.[hour]) : 0);
+            const time_true_overspeed = data.map(hour => (useData?.['time_true_overspeed']?.[hour]) ? (useData?.['time_true_overspeed']?.[hour]) : 0);
+            // console.log("time_nixing");
+            // console.log(time_nixing);
             const title = '总量';
             const formatNumber = function (num: number) {
                 const reg = /(?=(\B)(\d{3})+$)/g;
                 return num?.toString()?.replace(reg, ',');
             }
-            const total = useData?.reduce((a, b) => {
+            const total = alldata?.reduce((a, b) => {
                 return a + b.value * 1
             }, 0);
             const handleClick = (eventIndex) => {
-                    setEventName(eventIndex)
+                setEventName(eventIndex)
             }
-            console.log(useData);
-            
+            const roadMapping = function (num: string) {
+                let x = "";
+                switch (num) {
+                    case "all":
+                        x = "所有道路"
+                        break;
+                    default:
+                        x = "道路" + num
+                }
+                return x
+            };
             const option: EChartOption = {
                 angleAxis: {
                     type: 'category',
@@ -115,6 +233,15 @@ const EventChart: React.FC <EventProps>= ({setEventName}) => {
                 textStyle: {
                     color: "#fff",
                 },
+                // legend: {
+                // top: '5%',
+                // right: '30%',
+                //     textStyle: {
+                //         fontSize: 12,
+                //         fontFamily: 'SourceHanSansCN-Regular',
+                //         color: '#FFFFFF',
+                //     },
+                // },
                 radiusAxis: {},
                 polar: {
                     center: ["50%", "55%"],
@@ -133,9 +260,22 @@ const EventChart: React.FC <EventProps>= ({setEventName}) => {
                     // bottom: "0%",
                     containLabel: true,
                 },
+                graphic: [
+                    {
+                        type: 'text',
+                        left: '13',
+                        top: '10',
+                        style: {
+                            text: roadMapping(selectedRoad),
+                            fill: '#fFF',
+                            fontSize: 13,
+                            // fontWeight: 'bold'
+                        }
+                    }
+                ],
                 title: [{
                     text: '{name|' + title + '}\n{val|' + formatNumber(total) + '}',
-                    top: 'center',
+                    top: '45%',
                     left: 'center',
                     textStyle: {
                         rich: {
@@ -153,6 +293,12 @@ const EventChart: React.FC <EventProps>= ({setEventName}) => {
                         }
                     }
                 }],
+                // toolbox: {
+                //     feature: {
+                //         restore: { show: true },
+                //         // saveAsImage: { show: true }
+                //     }
+                // },
                 series: [
                     {
                         name: "全天交通事件",
@@ -198,11 +344,30 @@ const EventChart: React.FC <EventProps>= ({setEventName}) => {
                                 },
                             },
                         },
-                        data: useData
+                        data: alldata
+                    },{
+                        type: 'bar',
+                        data:time_true_cross,
+                        coordinateSystem: 'polar',
+                        name: '行人横穿马路',
+                        stack: 'a',
+                        itemStyle: {
+                            normal: {
+                                borderWidth: 0,
+                            },
+                            emphasis: {
+                                borderWidth: 2,
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: "rgba(0, 0, 0, 0.5)",
+                                borderColor: "#ffffff",
+                            },
+                        },
                     },
+                    
                     {
                         type: 'bar',
-                        data: [102, 137, 162, 175, 186, 203, 188, 209, 193],
+                        data: time_true_error_way,
                         coordinateSystem: 'polar',
                         name: '机动车占用非机动车道',
                         stack: 'a',
@@ -219,10 +384,10 @@ const EventChart: React.FC <EventProps>= ({setEventName}) => {
                             },
                         },
 
-                    },
+                    },                    
                     {
                         type: 'bar',
-                        data: [266, 214, 123, 105, 119, 83, 97, 110, 92],
+                        data: time_true_overspeed,
                         coordinateSystem: 'polar',
                         name: '机动车超速',
                         stack: 'a',
@@ -240,7 +405,7 @@ const EventChart: React.FC <EventProps>= ({setEventName}) => {
                         },
                     }, {
                         type: 'bar',
-                        data: [5, 10, 19, 28, 42, 51, 66, 79, 20],
+                        data: time_nixing,
                         coordinateSystem: 'polar',
                         name: '逆行',
                         stack: 'a',
@@ -258,32 +423,14 @@ const EventChart: React.FC <EventProps>= ({setEventName}) => {
                             },
                         },
                     },
-                    {
-                        type: 'bar',
-                        data: [241, 475, 329, 204, 373, 377, 306, 231, 289],
-                        coordinateSystem: 'polar',
-                        name: '行人横穿马路',
-                        stack: 'a',
-                        itemStyle: {
-                            normal: {
-                                borderWidth: 0,
-                            },
-                            emphasis: {
-                                borderWidth: 2,
-                                shadowBlur: 10,
-                                shadowOffsetX: 0,
-                                shadowColor: "rgba(0, 0, 0, 0.5)",
-                                borderColor: "#ffffff",
-                            },
-                        },
-                    },
+                    
                 ],
                 legend: {
                     show: true,
-                    top: '0%',
-                    left: '3%',
+                    top: '1.5%',
+                    right: '3%',
                     textStyle: {
-                        fontSize: 10,
+                        fontSize: 13,
                         // fontFamily: 'SourceHanSansCN-Regular',
                         color: '#FFFFFF',
                     },
@@ -294,14 +441,21 @@ const EventChart: React.FC <EventProps>= ({setEventName}) => {
                 mychart.setOption(option, true);
             }
             mychart.on('click', 'series', (params) => {
-                const eventIndex = params.name+params.seriesName;
+                const eventIndex = params.name + params.seriesName;
                 handleClick(eventIndex);
                 // console.log("1111111111111111");
                 // console.log(params.name+params.seriesName);
             })
+            // mychart.on('restore', ()=>{
+            //     setEventName("全天交通事件")
+            // });
+
+            return () => {
+                mychart.dispose();
+            }
         }
 
-    }, [useData])
+    }, [useData, selectedRoad, eventData, eventRoadData, setEventName])
     return (
         <div ref={chartRef} style={{ width: "100%", height: "100%" }}></div>
     )

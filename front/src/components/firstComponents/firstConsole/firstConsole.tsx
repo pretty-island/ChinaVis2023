@@ -47,6 +47,7 @@ interface FirstConsoleProps {
     setSelectedTime: React.Dispatch<React.SetStateAction<string>>;
     selectedTime: string;
 }
+
 const FirstConsole: React.FC<FirstConsoleProps> = ({ setSelectedRoad, selectedRoad, setSelectedTime, selectedTime }) => {
     const handleIntersectionChange = (value: string) => {
         setSelectedRoad(value);
@@ -54,6 +55,7 @@ const FirstConsole: React.FC<FirstConsoleProps> = ({ setSelectedRoad, selectedRo
     const handleTimeChange = (value: string) => {
         setSelectedTime(value);
     }
+    
     return (
         <div style={{ height: "100%", width: "100%" }}>
             <div className="multipleCheck" style={{  padding:"10px" }}>

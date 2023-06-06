@@ -6,17 +6,20 @@ import "./evt.css"
 
 interface EventTableProps {
     eventName: string;
+    setViewId: React.Dispatch<React.SetStateAction<string>>;
+    setViewTime: React.Dispatch<React.SetStateAction<string>>;
     setEventName: React.Dispatch<React.SetStateAction<string>>;
-    // typeName: string;
+    selectedRoad: string;
 }
-const EventTable: React.FC<EventTableProps> = ({ eventName, setEventName }) => {
+const EventTable: React.FC<EventTableProps> = ({ setViewId,setViewTime,selectedRoad, eventName, setEventName }) => {
 
-    interface OverSpeedData {
-        id: string;
-        ms_no: number;
-        road_sec_id: string;
-    }
-    const [OverSpeedData, setOverSpeedData] = useState<OverSpeedData[]>([]);
+    // interface OverSpeedData {
+    //     id: string;
+    //     ms_no: number;
+    //     road_sec_id: string;
+    // }
+    const [useEventData, setUseEventData] = useState();
+    const [OverSpeedData, setOverSpeedData] = useState();
     // 获取数据
     useEffect(() => {
         const eventmap = {
@@ -35,7 +38,7 @@ const EventTable: React.FC<EventTableProps> = ({ eventName, setEventName }) => {
                     getEventTable("/getEventTable", i, eventmap[j]).then((res) => {
                         data.push(...res.data);
                         // console.log(data);
-                        setOverSpeedData(data);
+                        setUseEventData(data);
                     });
                 }
             }
@@ -46,7 +49,7 @@ const EventTable: React.FC<EventTableProps> = ({ eventName, setEventName }) => {
             const event = eventName?.split("点")[1]
             getEventTable("/getEventTable", hour, eventmap[event]).then((res) => {
                 const data = res.data;
-                setOverSpeedData(data);
+                setUseEventData(data);
                 // console.log("data");
                 // console.log(data);
             });
@@ -58,15 +61,32 @@ const EventTable: React.FC<EventTableProps> = ({ eventName, setEventName }) => {
             for (const i of hour) {
                 getEventTable("/getEventTable", i, eventmap[event]).then((res) => {
                     data.push(...res.data);
-                    setOverSpeedData(data);
+                    setUseEventData(data);
                     // console.log("data");
                     // console.log(data);
                 });
             }
-            // else if(eventName.includes("全天交通事件")){
-
         }
     }, [eventName]);
+    // 设置数据
+    useEffect(() => {
+        if (useEventData && selectedRoad) {
+            console.log(OverSpeedData);
+            console.log(selectedRoad);
+            if (selectedRoad == "all") {
+                setOverSpeedData(useEventData)
+            }
+            else {
+                let data = []
+                useEventData?.map((item) => {
+                    if (item.road === ("道路" + selectedRoad)) {
+                        data.push(item)
+                    }
+                })
+                setOverSpeedData(data);
+            }
+        }
+    }, [useEventData, selectedRoad]);
 
     const colums = [
         {
@@ -101,31 +121,21 @@ const EventTable: React.FC<EventTableProps> = ({ eventName, setEventName }) => {
         style={{ marginTop: '20px' }}
         // title={() => text}
         size="middle"
-        sticky
-        scroll={{ y: 300 }}
+        // sticky
+        scroll={{ y: 270 }}
+        // scroll={{ y: "max-content-200px" }}
         className="custom-table"
         // bordered
         rowKey={(record, index) => index}
-    // onRow={(record) => {
-    //     return {
-    //         onClick: (event) => {
-    //             // let tr = e.target.parentNode; 
-    //             // //拿到tr标签
-    //             // if (tr.nodeName !== 'TR') {tr = tr.parentNode}
-    //             // //给所有tr标签设置颜色
-    //             // for (let i = 0; i < tr.parentNode.childNodes.length; i++) 
-    //             // {tr.parentNode.childNodes[i].style.color = 'white'}
-    //             // //单独设置被选中的标签颜色
-    //             // tr.style.color = "rgb(115,201,236)";
-    //         },
-    //         onDoubleClick: (event) => { },
-    //         onContextMenu: (event) => { },
-    //         onMouseEnter: (event) => { }, // 鼠标移入行
-    //         onMouseLeave: (event) => { },
-    //     };
-    // }}
+        onRow={(record) => {
+            return {
+                onClick: (event) => {
+                    // console.log(record.time);
+                    setViewId(record.id);
+                    setViewTime(record.time);                   
+                },               
+            };
+        }}
     />
-
-
 }
 export default EventTable;

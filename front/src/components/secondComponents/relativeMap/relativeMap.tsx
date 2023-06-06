@@ -6,8 +6,9 @@ interface RelativeMapProps {
     selectedCross: string;
     selectedHour: string;
     selectedMin: string;
+    setTurnName:React.Dispatch<React.SetStateAction<string>>;
 }
-const RelativeMap: React.FC<RelativeMapProps> = ({ selectedCross, selectedHour, selectedMin }) => {
+const RelativeMap: React.FC<RelativeMapProps> = ({ setTurnName,selectedCross, selectedHour, selectedMin }) => {
     const chartRef = useRef<HTMLDivElement>(null);
     const [turnData, setTurnData] = useState();
     const [turnUse, setTurnUse] = useState();
@@ -17,18 +18,18 @@ const RelativeMap: React.FC<RelativeMapProps> = ({ selectedCross, selectedHour, 
             setTurnData(res.data);
             // console.log(turnData);            
         });
-    },[]);
+    }, []);
     // 设置数据
     useEffect(() => {
         if (selectedCross && selectedHour && selectedMin && turnData) {
-            let data=[]
+            let data = []
             if (["7点", "8点", "9点"].includes(selectedHour)) {
-                const time = "0" + selectedHour.replace("点", "") + ":" + selectedMin.split("-")[0];                
-                data=turnData[time]["路口"+selectedCross];               
+                const time = "0" + selectedHour.replace("点", "") + ":" + selectedMin.split("-")[0];
+                data = turnData[time]["路口" + selectedCross];
             }
-            else {                
+            else {
                 const time = selectedHour.replace("点", "") + ":" + selectedMin.split("-")[0];
-                data=turnData[time]["路口"+selectedCross];
+                data = turnData[time]["路口" + selectedCross];
             }
             setTurnUse(data);
         }
@@ -152,7 +153,7 @@ const RelativeMap: React.FC<RelativeMapProps> = ({ selectedCross, selectedHour, 
                 };
             });
 
-
+            const time = selectedHour.replace("点", "") + ":" + selectedMin.split("-")[0]+"-"+selectedHour.replace("点", "") + ":" + selectedMin.split("-")[1];
             const option: EChartOption = {
                 // animationDurationUpdate: 1500,
                 // animationEasingUpdate: 'quinticInOut',
@@ -171,18 +172,31 @@ const RelativeMap: React.FC<RelativeMapProps> = ({ selectedCross, selectedHour, 
                     },
                     triggerOn: 'click'
                 },
+                graphic: [
+                    {
+                        type: 'text',
+                        left: '14',
+                        top: '10',
+                        style: {
+                            text: '时间：'+time + "     " + "路口"+selectedCross,
+                            fill: '#fFF',
+                            fontSize: 13,
+                            // fontWeight: 'bold'
+                        }
+                    }
+                ],
                 series: [
                     {
                         name: 'hazards Interaction',
                         type: 'graph', //设置图形类别 关系图
                         layout: 'circular',
                         center: ['50%', '50%'],
-                        zoom:0.7,
+                        zoom: 0.7,
                         circular: {
                             // radius:'0%',
                             // 设置环形布局是否旋转标签
                             rotateLabel: true,
-                            
+
                         },
 
                         data: hazards,
@@ -235,8 +249,27 @@ const RelativeMap: React.FC<RelativeMapProps> = ({ selectedCross, selectedHour, 
             if (option) {
                 mychart.setOption(option, true);
             }
+            mychart.on('click',(params)=>{
+                if (params.dataType === "node") {
+                    const nodeName = params.name;
+                    if(nodeName=="下路出"){
+                        setTurnName("下")
+                    }
+                    else if(nodeName=="上路出"){
+                        setTurnName("上")
+                    }
+                    else if(nodeName=="左路出"){
+                        setTurnName("左")
+                    }
+                    else if(nodeName=="右路出"){
+                        setTurnName("右")
+                    }
+                    console.log(nodeName);
+
+                }
+            })
         }
-    }, [turnUse])
+    }, [turnUse,setTurnName])
     return (
         <div ref={chartRef} style={{ width: "100%", height: "100%" }}></div>
     )

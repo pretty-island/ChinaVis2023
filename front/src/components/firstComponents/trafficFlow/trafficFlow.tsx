@@ -295,6 +295,9 @@ const TrafficFlow: React.FC<FlowProps> = ({ selectedRoad }) => {
                 return x
             };
             const option: EChartOption = {
+                color:[
+                    '#1b4a58',
+                ],
                 tooltip: {
                     trigger: "axis",
                 },
@@ -469,7 +472,9 @@ const TrafficFlow: React.FC<FlowProps> = ({ selectedRoad }) => {
                         type: "bar",
                         itemStyle: {
                             normal: {
-                                color: '#092d46',
+                                // color: '#092d46',
+                                color: '#3c5a7d',
+
                             },
                         },
                         data: allcount,
@@ -485,11 +490,12 @@ const TrafficFlow: React.FC<FlowProps> = ({ selectedRoad }) => {
                         //     }
                         // },
                         type: "line",
-                        smooth: true,
+                        smooth: false,
                         // stack: "总额",
                         symbol: "none",
                         itemStyle: {
                             normal: {
+                                // color: '#267b89',
                                 color: '#4BFFFC',
 
                                 areaStyle: {
@@ -507,7 +513,7 @@ const TrafficFlow: React.FC<FlowProps> = ({ selectedRoad }) => {
                         name: "卡车",
                         // type: "bar",
                         // stack: "总额",
-                        smooth: true,
+                        smooth: false,
                         // barWidth: 25,
                         // itemStyle: {
                         //     normal: {
@@ -534,7 +540,7 @@ const TrafficFlow: React.FC<FlowProps> = ({ selectedRoad }) => {
                         name: "客车",
                         // type: "bar",
                         // stack: "总额",
-                        smooth: true,
+                        smooth: false,
                         // barWidth: 25,
                         // itemStyle: {
                         //     normal: {
@@ -561,7 +567,7 @@ const TrafficFlow: React.FC<FlowProps> = ({ selectedRoad }) => {
                         name: "行人",
                         // type: "bar",
                         // stack: "总额",
-                        smooth: true,
+                        smooth: false,
                         // barWidth: 25,
                         // itemStyle: {
                         //     normal: {
@@ -589,7 +595,7 @@ const TrafficFlow: React.FC<FlowProps> = ({ selectedRoad }) => {
                         name: "非机动车",
                         // type: "bar",
                         // stack: "总额",
-                        smooth: true,
+                        smooth: false,
                         // barWidth: 25,
                         // itemStyle: {
                         //     normal: {
@@ -616,7 +622,7 @@ const TrafficFlow: React.FC<FlowProps> = ({ selectedRoad }) => {
                         name: "手推车、三轮车",
                         // type: "bar",
                         // stack: "总额",
-                        smooth: true,
+                        smooth: false,
                         // barWidth: 25,
                         // itemStyle: {
                         //     normal: {
@@ -639,196 +645,7 @@ const TrafficFlow: React.FC<FlowProps> = ({ selectedRoad }) => {
                         },
                         data: flow10,
                     },
-                    // {
-                    //     name: "总平均速度",
-                    //     type: "bar",
-                    //     itemStyle: {
-                    //         normal: {
-                    //             color: '#092d46',
-                    //         },
-                    //     },
-                    //     data: allspeed,
-                    //     xAxisIndex: 1,
-                    //     yAxisIndex: 1
-                    // },
-                    // {
-                    //     name: "小型车辆平均速度",
-                    //     // type: "bar",
-                    //     // stack: "总额",
-                    //     // barWidth: 25,
-                    //     // itemStyle: {
-                    //     //     normal: {
-                    //     //         color:'#127DD1',
-                    //     //     }
-                    //     // },
-                    //     type: "line",
-                    //     smooth: true,
-                    //     // stack: "总额",
-                    //     symbol: "none",
-                    //     itemStyle: {
-                    //         normal: {
-                    //             color: '#4BFFFC',
-
-                    //             areaStyle: {
-                    //                 color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [
-                    //                     { offset: 0, color: "rgb(0, 255, 255,0.01)" },
-                    //                     { offset: 0.5, color: "rgb(0, 255, 255,0.2)" },
-                    //                     { offset: 1, color: "rgb(0, 255, 255)" },
-                    //                 ]),
-                    //             },
-                    //         },
-                    //     },
-                    //     data: speed1,
-                    //     xAxisIndex: 1,
-                    //     yAxisIndex: 1
-                    // },
-                    // {
-                    //     name: "卡车平均速度",
-                    //     // type: "bar",
-                    //     // stack: "总额",
-                    //     smooth: true,
-                    //     // barWidth: 25,
-                    //     // itemStyle: {
-                    //     //     normal: {
-                    //     //         color:'rgb(129, 103, 151)',
-                    //     //     }
-                    //     // },
-                    //     type: "line",
-                    //     symbol: "none",
-                    //     itemStyle: {
-                    //         normal: {
-                    //             color: '#FFC0CB',
-                    //             areaStyle: {
-                    //                 color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [
-                    //                     { offset: 0, color: "rgb(255, 192, 203,0.01)" },
-                    //                     { offset: 0.5, color: "rgb(255, 192, 203,0.2)" },
-                    //                     { offset: 1, color: "rgb(255, 192, 203)" },
-                    //                 ]),
-                    //             },
-                    //         },
-                    //     },
-                    //     data: speed4,
-                    //     xAxisIndex: 1,
-                    //     yAxisIndex: 1
-                    // },
-                    // {
-                    //     name: "客车平均速度",
-                    //     // type: "bar",
-                    //     // stack: "总额",
-                    //     smooth: true,
-                    //     // barWidth: 25,
-                    //     // itemStyle: {
-                    //     //     normal: {
-                    //     //         color:'#C37A4D',
-                    //     //     }
-                    //     // },
-                    //     type: "line",
-                    //     symbol: "none",
-                    //     itemStyle: {
-                    //         normal: {
-                    //             color: 'rgb(115, 72, 255)',
-                    //             areaStyle: {
-                    //                 color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [
-                    //                     { offset: 0, color: "rgb(115, 72, 255,0.01)" },
-                    //                     { offset: 0.5, color: "rgb(115, 72, 255,0.2)" },
-                    //                     { offset: 1, color: "rgb(115, 72, 255)" },
-                    //                 ]),
-                    //             },
-                    //         },
-                    //     },
-                    //     data: speed6,
-                    //     xAxisIndex: 1,
-                    //     yAxisIndex: 1
-                    // },
-                    // {
-                    //     name: "行人平均速度",
-                    //     // type: "bar",
-                    //     // stack: "总额",
-                    //     smooth: true,
-                    //     // barWidth: 25,
-                    //     // itemStyle: {
-                    //     //     normal: {
-                    //     //         color:'#FC9C04',
-                    //     //     }
-                    //     // },
-                    //     type: "line",
-                    //     symbol: "none",
-                    //     itemStyle: {
-                    //         normal: {
-
-                    //             color: '#FFA500',
-                    //             areaStyle: {
-                    //                 color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [
-                    //                     { offset: 0, color: "rgb(255,165,0,0.01)" },
-                    //                     { offset: 0.5, color: "rgb(255,165,0,0.2)" },
-                    //                     { offset: 1, color: "rgb(255,165,0)" },
-                    //                 ]),
-                    //             },
-                    //         },
-                    //     },
-                    //     data: speed2,
-                    //     xAxisIndex: 1,
-                    //     yAxisIndex: 1
-                    // },
-                    // {
-                    //     name: "非机动车平均速度",
-                    //     // type: "bar",
-                    //     // stack: "总额",
-                    //     smooth: true,
-                    //     // barWidth: 25,
-                    //     // itemStyle: {
-                    //     //     normal: {
-                    //     //         color:'rgb(13,219,168)',
-                    //     //     }
-                    //     // },
-                    //     type: "line",
-                    //     symbol: "none",
-                    //     itemStyle: {
-                    //         normal: {
-                    //             color: '#49bdff',
-                    //             areaStyle: {
-                    //                 color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [
-                    //                     { offset: 0, color: "rgb(73,189,255,0.01)" },
-                    //                     { offset: 0.5, color: "rgb(73,189,255,0.2)" },
-                    //                     { offset: 1, color: "rgb(73,189,255)" },
-                    //                 ]),
-                    //             },
-                    //         },
-                    //     },
-                    //     data: speed3,
-                    //     xAxisIndex: 1,
-                    //     yAxisIndex: 1
-                    // },
-                    // {
-                    //     name: "手推车、三轮车平均速度",
-                    //     // type: "bar",
-                    //     // stack: "总额",
-                    //     smooth: true,
-                    //     // barWidth: 25,
-                    //     // itemStyle: {
-                    //     //     normal: {
-                    //     //         color:'#7B7F8E',
-                    //     //     }
-                    //     // },
-                    //     type: "line",
-                    //     symbol: "none",
-                    //     itemStyle: {
-                    //         normal: {
-                    //             color: '#7B7F8E',
-                    //             areaStyle: {
-                    //                 color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [
-                    //                     { offset: 0, color: "rgb(73,189,255,0.01)" },
-                    //                     { offset: 0.5, color: "rgb(73,189,255,0.2)" },
-                    //                     { offset: 1, color: "rgb(73,189,255)" },
-                    //                 ]),
-                    //             },
-                    //         },
-                    //     },
-                    //     data: speed10,
-                    //     xAxisIndex: 1,
-                    //     yAxisIndex: 1
-
-                    // },
+                    
                 ],
             };
 

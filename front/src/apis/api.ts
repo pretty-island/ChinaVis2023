@@ -62,7 +62,10 @@ export const getTurnFlow = (path: string) => {
 export const getQueCar = (path: string) => {
   return api.get(path)
 }
-
+// 排队车辆统计数据接口
+export const getTurnQueCar = (path: string) => {
+  return api.get(path)
+}
 // 断面车流统计数据接口
 export const getFlow = (path: string) => {
   return api.get(path)
@@ -81,7 +84,9 @@ export const getHeat = (path: string) => {
 export const getEvent = (path: string) => {
   return api.get(path)
 }
-
+export const getEventRoad = (path: string) => {
+  return api.get(path)
+}
 export const getEventTable = (path: string, hour: string, event_name: string) => {
   return api.get(`${path}?hour=${hour}&event_name=${event_name}`)
 }

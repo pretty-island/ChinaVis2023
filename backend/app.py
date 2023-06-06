@@ -116,7 +116,17 @@ def getTurnFlow():
 # 获取排队车辆统计数据
 @app.route("/getQueCar")
 def getQueCar():
-    directory = "./dataProcess/carProcess/data/9.05count.json"  # json文件所在路径
+    directory = "./dataProcess/data/line_up/cross.json"  # json文件所在路径
+    with open(directory, "r", encoding="utf-8") as f:
+        data = json.load(f)  # 读取到的数据
+    f.close()
+    return json.dumps(data)  # 将结果转换为JSON格式并返回
+
+
+# 获取排队车辆统计数据:转向
+@app.route("/getTurnQueCar")
+def getTurnQueCar():
+    directory = "./dataProcess/data/line_up/crossturn.json"  # json文件所在路径
     with open(directory, "r", encoding="utf-8") as f:
         data = json.load(f)  # 读取到的数据
     f.close()
@@ -150,21 +160,29 @@ def getHeat():
     return json.dumps(data)  # 将结果转换为JSON格式并返回
 
 
-@app.route("/getEventTable",methods=["GET"])
+@app.route("/getEventTable", methods=["GET"])
 def getEventTable():
-    hour=request.args.get("hour")
-    event_name=request.args.get("event_name")
+    hour = request.args.get("hour")
+    event_name = request.args.get("event_name")
 
     file_path = f"./dataProcess/data/abnormal/{hour}h/{event_name}.csv"
     # file_path = f"./dataProcess/data/abnormal/{hour}/time_true_cross.csv"
     data = pd.read_csv(file_path)
-    data = data[["id", "time", "road","event_name"]]
+    data = data[["id", "time", "road", "event_name"]]
     data = data.to_json(orient="records")
     return data
+
 
 @app.route("/getEvent")
 def getEvent():
     directory = "./dataProcess/data/abnormal/event.json"  # json文件所在路径
+    with open(directory, "r", encoding="utf-8") as f:
+        data = json.load(f)  # 读取到的数据
+    return json.dumps(data)  # 将结果转换为JSON格式并返回
+
+@app.route("/getEventRoad")
+def getEventRoad():
+    directory = "./dataProcess/data/abnormal/eventroad.json"  # json文件所在路径
     with open(directory, "r", encoding="utf-8") as f:
         data = json.load(f)  # 读取到的数据
     return json.dumps(data)  # 将结果转换为JSON格式并返回

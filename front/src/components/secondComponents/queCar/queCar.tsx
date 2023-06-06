@@ -1,61 +1,71 @@
 import * as echarts from 'echarts';
 import { EChartOption } from 'echarts';
 import React, { useEffect, useRef, useState } from "react";
-import { getQueCar } from '../../../apis/api';
-
-const QueCar: React.FC = () => {
+import { getQueCar, getTurnQueCar } from '../../../apis/api';
+interface QueProps {
+    selectedCross: string;
+    selectedHour: string;
+    selectedMin: string;
+    turnName: string;
+}
+const QueCar: React.FC<QueProps> = ({ turnName, selectedCross, selectedHour, selectedMin }) => {
     const chartRef = useRef<HTMLDivElement>(null);
 
     interface QueData {
         time: string;
-        all_count: number;
-        stop_count: number;
+        all_car: number;
+        line_up_car: number;
     }
+    const [queCar, setQueCar] = useState();
+    const [queCarTurn, setQueCarTurn] = useState();
     const [queData, setQueData] = useState<QueData[]>([]);
     // 获取数据
     useEffect(() => {
         getQueCar("/getQueCar").then((res) => {
-            const data = res.data;
-            setQueData(data);
-
+            setQueCar(res.data);
         });
+        getTurnQueCar("/getTurnQueCar").then((res) => {
+            setQueCarTurn(res.data);
+        });
+        // const time = selectedHour.replace("点", "") + ":" + selectedMin.split("-")[0];
+        //         const data = queCar?.["路口" + selectedCross][time];
+        // console.log("queCar1212");
+        //         console.log(data);
     }, []);
-
+    // 设置数据
+    useEffect(() => {
+        if (queCar && queCarTurn && selectedCross && selectedHour && selectedMin && turnName) {
+            if (turnName == "全部方向") {
+                const time = selectedHour.replace("点", "") + ":" + selectedMin.split("-")[0];
+                const data = queCar["路口" + selectedCross][time];
+                setQueData(data);
+                // console.log("queCar");
+                // console.log(queCar);                
+            }
+            else {
+                const time = selectedHour.replace("点", "") + ":" + selectedMin.split("-")[0];
+                const data = queCarTurn["路口" + selectedCross][time][turnName];
+                setQueData(data);
+            }
+        }
+    }, [queCar, queCarTurn, turnName, selectedCross, selectedHour, selectedMin])
     useEffect(() => {
         if (chartRef.current !== null) {
             let mychart = echarts.getInstanceByDom(chartRef.current);
             if (mychart == null) {
                 mychart = echarts.init(chartRef.current);
             }
-
-            var category = [];
-            var dottedBase = [];
-            var lineData = [
-                18092, 20728, 24045, 28348, 32808, 36097, 39867, 44715, 48444, 50415, 56061,
-                62677, 69521, 77560, 85038, 92477, 102268,
-            ];
-            var barData = [
-                4600, 5000, 5500, 6500, 7500, 8500, 9900, 12500, 14000, 21500, 23200, 24450,
-                25250, 33300, 35800, 45400, 59810,
-            ];
-            var rateData = [];
-
-            for (var i = 0; i < 17; i++) {
-                var date = i + 2001;
-                category.push(date);
-                var rate = barData[i] / lineData[i];
-                rateData[i] = rate.toFixed(2);
-            }
-
-            const dateList = queData.map(function (item) {
+            console.log(queData);
+            const dateList = queData?.map(function (item) {
                 return item.time;
             });
-            const stopList = queData.map(function (item) {
-                return item.stop_count;
+            const stopList = queData?.map(function (item) {
+                return item.line_up_car;
             });
-            const allList = queData.map(function (item) {
-                return item.all_count;
+            const allList = queData?.map(function (item) {
+                return item.all_car;
             });
+            const time = selectedHour.replace("点", "") + ":" + selectedMin.split("-")[0]+"-"+selectedHour.replace("点", "") + ":" + selectedMin.split("-")[1];
             const option: EChartOption = {
                 tooltip: {
                     trigger: 'axis',
@@ -80,10 +90,23 @@ const QueCar: React.FC = () => {
                     color: "#fff",
                 },
                 grid: {
-                    x: "5%",
-                    width: "89%",
-                    y: "10%",
+                    x: "4.5%",
+                    width: "90%",
+                    y: "14%",
                 },
+                graphic: [
+                    {
+                        type: 'text',
+                        left: '14',
+                        top: '10',
+                        style: {
+                            text: '时间：'+time + "     " + "路口"+selectedCross+ "     " +'方向：'+turnName,
+                            fill: '#fFF',
+                            fontSize: 13,
+                            // fontWeight: 'bold'
+                        }
+                    }
+                ],
                 xAxis: [
                     {
                         type: "category",
@@ -102,7 +125,7 @@ const QueCar: React.FC = () => {
                     {
                         splitLine: { show: false },
                         axisLine: {
-                            show:true,
+                            show: true,
                             lineStyle: {
                                 color: "#B4B4B4",
                             },
@@ -112,7 +135,7 @@ const QueCar: React.FC = () => {
                         },
                         axisTick: {
                             show: true,
-                          },
+                        },
                         name: '车辆数量（辆）',
                         // min: 90
                     },
@@ -122,18 +145,18 @@ const QueCar: React.FC = () => {
                     {
                         name: '排队车辆',
                         type: "bar",
-                        barWidth: 10,
+                        // barWidth: 1,
                         itemStyle: {
                             normal: {
-                              barBorderRadius: 3,
-                              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                                { offset: 0, color: "#65a9f3" },
-                                { offset: 1, color: "#15325b" },
-                                // { offset: 0, color: "#956FD4" },
-                                // { offset: 1, color: "#3EACE5" },
-                              ]),
+                                barBorderRadius: 3,
+                                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                    { offset: 0, color: "#65a9f3" },
+                                    { offset: 1, color: "#15325b" },
+                                    // { offset: 0, color: "#956FD4" },
+                                    // { offset: 1, color: "#3EACE5" },
+                                ]),
                             },
-                          },
+                        },
                         showSymbol: false,
                         data: stopList
                     },
@@ -142,16 +165,16 @@ const QueCar: React.FC = () => {
                         type: "bar",
                         barGap: "-100%",
                         showSymbol: false,
-                        barWidth: 10,
+                        // barWidth: 1,
                         itemStyle: {
-                          normal: {
-                            barBorderRadius: 3,
-                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                              { offset: 0, color: "rgba(22, 104, 220,0.5)" },
-                              { offset: 0.2, color: "rgba(22, 104, 220,0.3)" },
-                              { offset: 1, color: "rgba(22, 104, 220,0)" },
-                            ]),
-                          },
+                            normal: {
+                                barBorderRadius: 3,
+                                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                    { offset: 0, color: "rgba(22, 104, 220,0.5)" },
+                                    { offset: 0.2, color: "rgba(22, 104, 220,0.3)" },
+                                    { offset: 1, color: "rgba(22, 104, 220,0)" },
+                                ]),
+                            },
                         },
                         z: -12,
                         data: allList
@@ -162,9 +185,9 @@ const QueCar: React.FC = () => {
                 mychart.setOption(option, true);
             }
         }
-    })
+    }, [queData,turnName,selectedHour,selectedMin])
     return (
-        <div ref={chartRef} style={{ width: "90%", height: "95%" }}></div>
+        <div ref={chartRef} style={{ width: "100%", height: "100%" }}></div>
     )
 }
 export default QueCar;

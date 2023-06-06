@@ -26,8 +26,8 @@
     flex-basis: 25%;
     display: flex;
     align-items: center;
-    /* margin-left: 60px; */
-    margin-left: 1.5%;
+    margin-left: 60px;
+    /* margin-left: 2.1%; */
     justify-content: left;
 }
 
@@ -170,7 +170,8 @@
     /* padding: 10px; */
     /* box-sizing: border-box; */
 }
-.s-top{
+
+.s-top {
     display: flex;
 }
 
@@ -185,16 +186,19 @@
 .s-t-left .border-box-content {
     padding: 20px;
 }
-.s-t-right{
+
+.s-t-right {
     padding: 10px;
     padding-left: 5px;
     display: flex;
     /* box-sizing: border-box; */
 }
+
 .s-console {
     padding-bottom: 10px;
     display: flex;
 }
+
 .s-console .border-box-content {
     padding: 20px;
 }
@@ -218,6 +222,7 @@
     display: flex;
     align-items: center;
 }
+
 /* .rt-right .border-box-content{
     width: 35%;
 } */
@@ -231,5 +236,40 @@
 }
 
 .s-bottom .border-box-content {
+    padding: 20px;
+}
+
+/* 第三屏样式 */
+.t-container{
+    height: calc(100% - 6.6%);
+    padding: 10px;
+    padding-left: 5px;
+    display: flex;
+    box-sizing: border-box;
+}
+.t-left{
+    display: flex;
+    flex-direction: column;
+}
+.t-l-top .border-box-content {
+    justify-content: center;
+    display: flex;
+    align-items: center;
+}
+.t-l-bottom .border-box-content {
+    padding: 20px;
+}
+.t-right{
+    display: flex;
+    flex-direction: column;
+}
+.t-r-top .border-box-content {
+    padding: 20px;
+}
+.t-r-bottom{
+    display: flex;
+}
+
+.t-r-bottom .border-box-content {
     padding: 20px;
 }

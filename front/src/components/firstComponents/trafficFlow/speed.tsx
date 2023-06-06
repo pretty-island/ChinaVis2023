@@ -373,7 +373,7 @@ const Speed: React.FC<SpeedProps> = ({ selectedRoad }) => {
                         name: "小型车辆",
 
                         type: "line",
-                        smooth: true,
+                        smooth: false,
                         symbol: "none",
                         itemStyle: {
                             normal: {
@@ -394,7 +394,7 @@ const Speed: React.FC<SpeedProps> = ({ selectedRoad }) => {
                         name: "卡车",
                         // type: "bar",
                         // stack: "总额",
-                        smooth: true,
+                        smooth: false,
                         // barWidth: 25,
                         // itemStyle: {
                         //     normal: {
@@ -421,7 +421,7 @@ const Speed: React.FC<SpeedProps> = ({ selectedRoad }) => {
                         name: "客车",
                         // type: "bar",
                         // stack: "总额",
-                        smooth: true,
+                        smooth: false,
                         // barWidth: 25,
                         // itemStyle: {
                         //     normal: {
@@ -449,7 +449,7 @@ const Speed: React.FC<SpeedProps> = ({ selectedRoad }) => {
                         name: "行人",
                         // type: "bar",
                         // stack: "总额",
-                        smooth: true,
+                        smooth: false,
                         // barWidth: 25,
                         // itemStyle: {
                         //     normal: {
@@ -477,7 +477,7 @@ const Speed: React.FC<SpeedProps> = ({ selectedRoad }) => {
                         name: "非机动车",
                         // type: "bar",
                         // stack: "总额",
-                        smooth: true,
+                        smooth: false,
                         // barWidth: 25,
                         // itemStyle: {
                         //     normal: {
@@ -504,7 +504,7 @@ const Speed: React.FC<SpeedProps> = ({ selectedRoad }) => {
                         name: "手推车、三轮车",
                         // type: "bar",
                         // stack: "总额",
-                        smooth: true,
+                        smooth: false,
                         // barWidth: 25,
                         // itemStyle: {
                         //     normal: {

@@ -478,6 +478,9 @@ input_directory = "D:/VIScode/chinavis-2023/backend/dataProcess/data/abnormal/"
 output_directory = (
     "D:/VIScode/chinavis-2023/backend/dataProcess/data/abnormal/event.json"
 )
+outputroad_directory = (
+    "D:/VIScode/chinavis-2023/backend/dataProcess/data/abnormal/eventroad.json"
+)
 # # 遍历每个小时文件夹，增加一列道路
 # for hour in range(7, 16):
 #     hour_folder = input_directory + f"{hour}h"
@@ -507,54 +510,66 @@ output_directory = (
 #         data["road"]=road_column
 #         print(data)
 #         data.to_csv(file_path,index=False)
-# 遍历每个小时文件夹，增加一列事件名
-eventmap = {
-    "time_nixing": "逆行",
-    "time_true_cross": "行人横穿马路",
-    "time_true_error_way": "机动车占用非机动车道",
-    "time_true_overspeed": "机动车超速",
-}
-for hour in range(7, 16):
-    hour_folder = input_directory + f"{hour}h"
-    event_files = os.listdir(hour_folder)
-    # 遍历事件文件
-    for event_file in event_files:
-        file_path = os.path.join(hour_folder, event_file)
-        # 获取事件名称
-        event_name = os.path.splitext(event_file)[0]
-        # 读取车辆数据文件
-        data = pd.read_csv(file_path)
-        # 添加一列road
-        road_column = []
-        for i in range(len(data)):
-            road_column.append(eventmap[event_name])
-        data["event_name"] = road_column
-        print(data)
-        data.to_csv(file_path, index=False)
-# event_statistics = {}
-# # 遍历每个小时文件夹，计算事件数量
+# # 遍历每个小时文件夹，增加一列事件名
+# eventmap = {
+#     "time_nixing": "逆行",
+#     "time_true_cross": "行人横穿马路",
+#     "time_true_error_way": "机动车占用非机动车道",
+#     "time_true_overspeed": "机动车超速",
+# }
 # for hour in range(7, 16):
 #     hour_folder = input_directory + f"{hour}h"
 #     event_files = os.listdir(hour_folder)
-#     time = f"{hour}h"
 #     # 遍历事件文件
 #     for event_file in event_files:
 #         file_path = os.path.join(hour_folder, event_file)
 #         # 获取事件名称
 #         event_name = os.path.splitext(event_file)[0]
-#         # 读取事件文件
+#         # 读取车辆数据文件
 #         data = pd.read_csv(file_path)
+#         # 添加一列road
+#         road_column = []
 #         for i in range(len(data)):
-#             road_name = data.loc[i, "road"]
-#             if event_name not in event_statistics:
-#                 event_statistics[event_name] = {}
-#             if time not in event_statistics[event_name]:
-#                 event_statistics[event_name][time] = {}
-#             if road_name not in event_statistics[event_name][time]:
-#                 event_statistics[event_name][time][road_name] = 1
-#             else:
-#                 event_statistics[event_name][time][road_name] += 1
-#         # event_count=len(data)
-# # print(event_statistics)
-# with open(output_directory, "w", encoding="utf-8") as f:
+#             road_column.append(eventmap[event_name])
+#         data["event_name"] = road_column
+#         print(data)
+#         data.to_csv(file_path, index=False)
+
+from collections import defaultdict
+
+event_statistics = defaultdict(lambda: defaultdict(int))
+# 遍历每个小时文件夹，计算事件数量
+for hour in range(7, 16):
+    hour_folder = os.path.join(input_directory, f"{hour}h")
+    # 遍历事件文件
+    for entry in os.scandir(hour_folder):
+        file_path = entry.path
+        # 获取事件名称
+        event_name = os.path.splitext(entry.name)[0]
+        # 读取事件文件
+        data = pd.read_csv(file_path)
+        for i in range(len(data)):
+            # road_name = data.loc[i, "road"]
+            event_statistics[event_name][f"{hour}h"]+= 1
+        # event_count=len(data)
+# print(event_statistics)
+with open(output_directory, "w", encoding="utf-8") as f:
+    json.dump(event_statistics, f,ensure_ascii=False, indent=4)
+
+# from collections import defaultdict
+
+# event_statistics = defaultdict(lambda: defaultdict(lambda: defaultdict(int)))
+
+# # 遍历每个小时文件夹，计算事件数量
+# for hour in range(7, 16):
+#     hour_folder = os.path.join(input_directory, f"{hour}h")
+#     for entry in os.scandir(hour_folder):
+#         if entry.is_file():
+#             file_path = entry.path
+#             event_name = os.path.splitext(entry.name)[0]
+#             data = pd.read_csv(file_path)
+#             for i in range(len(data)):
+#                 road_name = data.loc[i, "road"]
+#                 event_statistics[road_name][event_name][f"{hour}h"] += 1
+# with open(outputroad_directory, "w", encoding="utf-8") as f:
 #     json.dump(event_statistics, f,ensure_ascii=False, indent=4)
