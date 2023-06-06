@@ -48,6 +48,10 @@ export const getMinRoad = (path: string) => {
   return api.get(path)
 }
 
+// 路口车流流向
+export const getTurnFlow = (path: string) => {
+  return api.get(path)
+}
 
 // // 所有道路的不同类型的车流量和速度
 // export const getAllFlow = (path: string) => {
@@ -78,6 +82,6 @@ export const getEvent = (path: string) => {
   return api.get(path)
 }
 
-export const getEventTable = (path: string,hour: string,event_name: string) => {
+export const getEventTable = (path: string, hour: string, event_name: string) => {
   return api.get(`${path}?hour=${hour}&event_name=${event_name}`)
 }

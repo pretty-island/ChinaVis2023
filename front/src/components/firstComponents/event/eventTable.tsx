@@ -42,8 +42,8 @@ const EventTable: React.FC<EventTableProps> = ({ eventName, setEventName }) => {
             // console.log(data);           
         }
         else if (!eventName?.includes("全天交通事件")) {
-            const hour = eventName.split("点")[0]
-            const event = eventName.split("点")[1]
+            const hour = eventName?.split("点")[0]
+            const event = eventName?.split("点")[1]
             getEventTable("/getEventTable", hour, eventmap[event]).then((res) => {
                 const data = res.data;
                 setOverSpeedData(data);
@@ -53,14 +53,14 @@ const EventTable: React.FC<EventTableProps> = ({ eventName, setEventName }) => {
         }
         else {
             const hour = ["7", "8", "9", "10", "11", "12", "13", "14", "15"]
-            const event = eventName.split("全")[0]
+            const event = eventName?.split("全")[0]
             const data = []
             for (const i of hour) {
                 getEventTable("/getEventTable", i, eventmap[event]).then((res) => {
                     data.push(...res.data);
                     setOverSpeedData(data);
                     // console.log("data");
-                    console.log(data);
+                    // console.log(data);
                 });
             }
             // else if(eventName.includes("全天交通事件")){

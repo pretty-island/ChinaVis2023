@@ -10,15 +10,14 @@ interface EventProps {
 }
 const EventChart: React.FC <EventProps>= ({setEventName}) => {
     const chartRef = useRef<HTMLDivElement>(null);
-
-
     const [eventData, setEventData] = useState();
     const [useData, setUseData] = useState();
-
     // 获取数据
     useEffect(() => {
         getEvent("/getEvent").then((res) => {
             setEventData(res.data);
+            console.log(eventData);
+            
         });
     }, []);
     // 设置数据
@@ -96,6 +95,8 @@ const EventChart: React.FC <EventProps>= ({setEventName}) => {
             const handleClick = (eventIndex) => {
                     setEventName(eventIndex)
             }
+            console.log(useData);
+            
             const option: EChartOption = {
                 angleAxis: {
                     type: 'category',
@@ -295,8 +296,8 @@ const EventChart: React.FC <EventProps>= ({setEventName}) => {
             mychart.on('click', 'series', (params) => {
                 const eventIndex = params.name+params.seriesName;
                 handleClick(eventIndex);
-                console.log("1111111111111111");
-                console.log(params.name+params.seriesName);
+                // console.log("1111111111111111");
+                // console.log(params.name+params.seriesName);
             })
         }
 

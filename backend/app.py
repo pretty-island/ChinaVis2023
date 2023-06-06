@@ -104,6 +104,15 @@ def getMinRoad():
 #     return json.dumps(data)  # 将结果转换为JSON格式并返回
 
 
+# 获取路口车流流向图数据
+@app.route("/getTurnFlow")
+def getTurnFlow():
+    directory = "./dataProcess/data/interSection/flow.json"  # json文件所在路径
+    with open(directory, "r", encoding="utf-8") as f:
+        data = json.load(f)  # 读取到的数据
+    return json.dumps(data)  # 将结果转换为JSON格式并返回
+
+
 # 获取排队车辆统计数据
 @app.route("/getQueCar")
 def getQueCar():

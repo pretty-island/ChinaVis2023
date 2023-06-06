@@ -1,25 +1,40 @@
 import * as echarts from 'echarts';
 import { EChartOption } from 'echarts';
 import React, { useEffect, useRef, useState } from "react";
-import { getQueCar } from '../../../apis/api';
-
-const RelativeMap: React.FC = () => {
+import { getTurnFlow } from '../../../apis/api';
+interface RelativeMapProps {
+    selectedCross: string;
+    selectedHour: string;
+    selectedMin: string;
+}
+const RelativeMap: React.FC<RelativeMapProps> = ({ selectedCross, selectedHour, selectedMin }) => {
     const chartRef = useRef<HTMLDivElement>(null);
-
-    interface QueData {
-        time: string;
-        all_count: number;
-        stop_count: number;
-    }
-    const [queData, setQueData] = useState<QueData[]>([]);
+    const [turnData, setTurnData] = useState();
+    const [turnUse, setTurnUse] = useState();
     // 获取数据
     useEffect(() => {
-        getQueCar("/getQueCar").then((res) => {
-            const data = res.data;
-            setQueData(data);
-
+        getTurnFlow("/getTurnFlow").then((res) => {
+            setTurnData(res.data);
+            // console.log(turnData);            
         });
-    }, []);
+    },[]);
+    // 设置数据
+    useEffect(() => {
+        if (selectedCross && selectedHour && selectedMin && turnData) {
+            let data=[]
+            if (["7点", "8点", "9点"].includes(selectedHour)) {
+                const time = "0" + selectedHour.replace("点", "") + ":" + selectedMin.split("-")[0];                
+                data=turnData[time]["路口"+selectedCross];               
+            }
+            else {                
+                const time = selectedHour.replace("点", "") + ":" + selectedMin.split("-")[0];
+                data=turnData[time]["路口"+selectedCross];
+            }
+            setTurnUse(data);
+        }
+        // console.log(turnUse);
+    }, [turnData, selectedCross, selectedHour, selectedMin]);
+
 
     useEffect(() => {
         if (chartRef.current !== null) {
@@ -27,56 +42,103 @@ const RelativeMap: React.FC = () => {
             if (mychart == null) {
                 mychart = echarts.init(chartRef.current);
             }
-            var hazards = [
-                {name:'东2',value:2939,symbolSize:0,label:{},color:''},
-                {name:'',value:0},
-                {name:'    ',value:0},
-                {name:'南2',value:2025},
-                {name:'南1',value:1626},
-                {name:' ',value:0},
-                {name:'     ',value:0},
-                {name:'西2',value:530},
-                {name:'西1',value:365},
-                {name:'  ',value:0},
-                {name:'      ',value:0},
-                {name:'北1',value:268},
-                {name:'北2',value:230},
-                {name:'   ',value:0},
-                {name:'       ',value:0},
-                {name:'东1',value:63},
-                // {name:'Epidemic',value:39},
-                //{name:'Volcanic',value:32},
-                // {name:'Insect infestation',value:3},
+            const down1 = (turnUse?.["下道路"]?.["掉头"]) ? (turnUse?.["下道路"]?.["掉头"]) : 0;
+            const down2 = (turnUse?.["下道路"]?.["左转"]) ? (turnUse?.["下道路"]?.["左转"]) : 0;
+            const down3 = (turnUse?.["下道路"]?.["直行"]) ? (turnUse?.["下道路"]?.["直行"]) : 0;
+            const down4 = (turnUse?.["下道路"]?.["右转"]) ? (turnUse?.["下道路"]?.["右转"]) : 0;
+            const left1 = (turnUse?.["左道路"]?.["右转"]) ? (turnUse?.["左道路"]?.["右转"]) : 0;
+            const left2 = (turnUse?.["左道路"]?.["掉头"]) ? (turnUse?.["左道路"]?.["掉头"]) : 0;
+            const left3 = (turnUse?.["左道路"]?.["左转"]) ? (turnUse?.["左道路"]?.["左转"]) : 0;
+            const left4 = (turnUse?.["左道路"]?.["直行"]) ? (turnUse?.["左道路"]?.["直行"]) : 0;
+            const up1 = (turnUse?.["上道路"]?.["直行"]) ? (turnUse?.["上道路"]?.["直行"]) : 0;
+            const up2 = (turnUse?.["上道路"]?.["右转"]) ? (turnUse?.["上道路"]?.["右转"]) : 0;
+            const up3 = (turnUse?.["上道路"]?.["掉头"]) ? (turnUse?.["上道路"]?.["掉头"]) : 0;
+            const up4 = (turnUse?.["上道路"]?.["左转"]) ? (turnUse?.["上道路"]?.["左转"]) : 0;
+            const right1 = (turnUse?.["右道路"]?.["左转"]) ? (turnUse?.["右道路"]?.["左转"]) : 0;
+            const right2 = (turnUse?.["右道路"]?.["直行"]) ? (turnUse?.["右道路"]?.["直行"]) : 0;
+            const right3 = (turnUse?.["右道路"]?.["右转"]) ? (turnUse?.["右道路"]?.["右转"]) : 0;
+            const right4 = (turnUse?.["右道路"]?.["掉头"]) ? (turnUse?.["右道路"]?.["掉头"]) : 0;
+            // console.log(turnUse);
+
+            const hazards = [
+                { name: '右路入', value: down4 + left4 + up4 + right4 },
+                { name: '下路出', value: down1 + down2 + down3 + down4 },
+                { name: '下路入', value: down1 + left1 + up1 + right1 },
+                { name: '左路出', value: left1 + left2 + left3 + left4 },
+                { name: '左路入', value: down2 + left2 + up2 + right2 },
+                { name: '上路出', value: up1 + up2 + up3 + up4 },
+                { name: '上路入', value: down3 + left3 + up3 + right3 },
+                { name: '右路出', value: right1 + right2 + right3 + right4 },
             ];
-            var chains = [
-                
-                {source:'南2',target:'南1',value:20,lineStyle:{}},
-                {source:'南2',target:'西1',value:25},
-                {source:'南2',target:'北2',value:15},
-                {source:'南2',target:'东2',value:16},
-                {source:'西2',target:'南1',value:20,lineStyle:{}},
-                {source:'西2',target:'西1',value:25},
-                {source:'西2',target:'北2',value:15},
-                {source:'西2',target:'东2',value:16},
-                {source:'北1',target:'南1',value:20,lineStyle:{}},
-                {source:'北1',target:'西1',value:25},
-                {source:'北1',target:'北2',value:15},
-                {source:'北1',target:'东2',value:16},
-                {source:'东1',target:'南1',value:20,lineStyle:{}},
-                {source:'东1',target:'西1',value:25},
-                {source:'东1',target:'北2',value:15},
-                {source:'东1',target:'东2',value:16},
-                // {source:'5',target:'6',value:11},
-                // {source:'6',target:'7',value:11},
-                // {source:'7',target:'8',value:15},
+            // const hazards = [
+            //     {name:'右路入',value:2939,symbolSize:0,label:{},color:''},
+            //     {name:'',value:0},
+            //     {name:'    ',value:0},
+            //     {name:'南2',value:2025},
+            //     {name:'南1',value:1626},
+            //     {name:' ',value:0},
+            //     {name:'     ',value:0},
+            //     {name:'西2',value:530},
+            //     {name:'西1',value:365},
+            //     {name:'  ',value:0},
+            //     {name:'      ',value:0},
+            //     {name:'北1',value:268},
+            //     {name:'北2',value:230},
+            //     {name:'   ',value:0},
+            //     {name:'       ',value:0},
+            //     {name:'东1',value:63},
+            //     // {name:'Epidemic',value:39},
+            //     //{name:'Volcanic',value:32},
+            //     // {name:'Insect infestation',value:3},
+            // ];
+            const chains = [
+
+                { source: '下路出', target: '下路入', value: down1 },
+                { source: '下路出', target: '左路入', value: down2 },
+                { source: '下路出', target: '上路入', value: down3 },
+                { source: '下路出', target: '右路入', value: down4 },
+                { source: '左路出', target: '下路入', value: left1 },
+                { source: '左路出', target: '左路入', value: left2 },
+                { source: '左路出', target: '上路入', value: left3 },
+                { source: '左路出', target: '右路入', value: left4 },
+                { source: '上路出', target: '下路入', value: up1 },
+                { source: '上路出', target: '左路入', value: up2 },
+                { source: '上路出', target: '上路入', value: up3 },
+                { source: '上路出', target: '右路入', value: up4 },
+                { source: '右路出', target: '下路入', value: right1 },
+                { source: '右路出', target: '左路入', value: right2 },
+                { source: '右路出', target: '上路入', value: right3 },
+                { source: '右路出', target: '右路入', value: right4 },
             ];
+            // const chains = [
+
+            //     {source:'南2',target:'南1',value:20,lineStyle:{}},
+            //     {source:'南2',target:'西1',value:25},
+            //     {source:'南2',target:'北2',value:15},
+            //     {source:'南2',target:'东2',value:16},
+            //     {source:'西2',target:'南1',value:20,lineStyle:{}},
+            //     {source:'西2',target:'西1',value:25},
+            //     {source:'西2',target:'北2',value:15},
+            //     {source:'西2',target:'东2',value:16},
+            //     {source:'北1',target:'南1',value:20,lineStyle:{}},
+            //     {source:'北1',target:'西1',value:25},
+            //     {source:'北1',target:'北2',value:15},
+            //     {source:'北1',target:'东2',value:16},
+            //     {source:'东1',target:'南1',value:20,lineStyle:{}},
+            //     {source:'东1',target:'西1',value:25},
+            //     {source:'东1',target:'北2',value:15},
+            //     {source:'东1',target:'东2',value:16},
+            //     // {source:'5',target:'6',value:11},
+            //     // {source:'6',target:'7',value:11},
+            //     // {source:'7',target:'8',value:15},
+            // ];
             // 设置图中每个节点的大小及其他属性
             hazards.forEach(function (node) {
-                node.symbolSize = node.value / 60;
+                node.symbolSize = node.value / 2.4;
                 node.label = {
                     normal: {
                         show: node.name,
-                        color:'white'
+                        color: 'white'
                     },
                 };
             });
@@ -89,30 +151,40 @@ const RelativeMap: React.FC = () => {
                     },
                 };
             });
-            var option = {
-                
+
+
+            const option: EChartOption = {
                 // animationDurationUpdate: 1500,
                 // animationEasingUpdate: 'quinticInOut',
-                tooltip:{
-                    formatter:function(params:any){
-                        var sourceName=params.data.source;
-                        var targetName=params.data.target;
-                        var value=params.data.value;
-                        var tooltipText="车流量<br>"+sourceName+"->"+targetName+': '+value;
-                        return tooltipText;
+                tooltip: {
+                    formatter: function (params: any) {
+                        if (params.dataType === 'node') {
+                            return params.data.name + "车流量：" + params.data.value;
+                        }
+                        else if (params.dataType === 'edge') {
+                            const sourceName = params.data.source;
+                            const targetName = params.data.target;
+                            const value = params.data.value;
+                            const tooltipText = "车流量<br>" + sourceName + "->" + targetName + ': ' + value;
+                            return tooltipText;
+                        }
                     },
-                    triggerOn:'click'
+                    triggerOn: 'click'
                 },
                 series: [
                     {
                         name: 'hazards Interaction',
                         type: 'graph', //设置图形类别 关系图
                         layout: 'circular',
-                        center:['50%','50%'],
+                        center: ['50%', '50%'],
+                        zoom:0.7,
                         circular: {
+                            // radius:'0%',
                             // 设置环形布局是否旋转标签
                             rotateLabel: true,
+                            
                         },
+
                         data: hazards,
                         links: chains,
                         // edgeSymbol: ['none', 'arrow'],
@@ -122,15 +194,16 @@ const RelativeMap: React.FC = () => {
                                 fontSize: 20,
                                 position: 'top',
                                 formatter: '{b}',
-                                rotate:-20,
-                                distance:5
+                                rotate: -20,
+                                distance: 5
                             },
                         },
                         itemStyle: { //配置节点的颜色
                             normal: {
-                                color: function(param:any) {
-                                    let colorList = ['#FFA500', '', '', '#9acd32', '#9acd32', ' ', '', '#F5F5DC', '#F5F5DC', ' ', '', '#00ffff', '#00ffff', ' ', '', '#FFA500'];
-                                    return colorList[param.dataIndex]
+                                color: function (param: any) {
+                                    // let colorList = ['#FFA500', '', '', '#9acd32', '#9acd32', ' ', '', '#F5F5DC', '#F5F5DC', ' ', '', '#00ffff', '#00ffff', ' ', '', '#FFA500'];
+                                    let colorList = ['#FFA500', '#9acd32', '#9acd32', '#F5F5DC', '#F5F5DC', '#00ffff', '#00ffff', '#FFA500'];
+                                    return colorList[param?.dataIndex]
                                 },
                                 label: {
                                     show: true,
@@ -140,7 +213,7 @@ const RelativeMap: React.FC = () => {
                                 opacity: 0.9, //设置透明度，为0时不绘制
                             }
                         },
-            
+
                         lineStyle: {
                             normal: {
                                 show: true,
@@ -152,18 +225,18 @@ const RelativeMap: React.FC = () => {
                         emphasis: {
                             focus: 'adjacency',
                             lineStyle: {
-                              width: 10
+                                width: 10
                             }
-                          }
+                        }
                     },
                 ],
             };
-            
+
             if (option) {
                 mychart.setOption(option, true);
             }
         }
-    })
+    }, [turnUse])
     return (
         <div ref={chartRef} style={{ width: "100%", height: "100%" }}></div>
     )

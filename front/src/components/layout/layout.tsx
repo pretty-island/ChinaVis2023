@@ -5,12 +5,12 @@ import { useEffect, useState } from "react";
 // import { testUrl, postParams } from "../../apis/api";
 import ChartHeader from "../chartHeader/chartHeader";
 import FirstConsole from "../firstComponents/firstConsole/firstConsole";
-import QueCar from "../firstComponents/queCar/queCar";
+import QueCar from "../secondComponents/queCar/queCar";
 import TrafficFlow from "../firstComponents/trafficFlow/trafficFlow";
 import CarHeat from "../firstComponents/carHeat/carHeat";
 import MainVisualizationView from "../MainVisualizationView";
 import RoadMap from "../secondComponents/roadMap/roadMap";
-import RelativeMap from "../secondComponents/relativeMap/relativemap";
+import RelativeMap from "../secondComponents/relativeMap/relativeMap";
 import CarScatter from "../secondComponents/carScatter/carScatter";
 import SecurityParallel from "../secondComponents/securityParallel/securityParallel";
 
@@ -22,6 +22,7 @@ import TotalHeat from "../firstComponents/carHeat/totalHeat";
 import Flow from "../firstComponents/carHeat/flow";
 import EventTable from "../firstComponents/event/eventTable";
 import Radar from "../firstComponents/firstConsole/radar";
+import SecondConsole from "../secondComponents/secondConsole/secondConsole";
 const Layout = () => {
   // 当前用户在第几屏，默认第一屏
   const [nowPageIndex, setNowPageIndex] = useState<string>("firstButton");
@@ -35,6 +36,14 @@ const Layout = () => {
 
   // 用户切换速度和流量视图
   const [nowView, setNowView] = useState<string>("流量");
+
+  // 第二屏：用户选择的路口
+  const [selectedCross, setSelectedCross] = useState<string>("1")
+  // 第二屏：用户选择的时间
+  const [selectedHour, setSelectedHour] = useState<string>("7点")
+  const [selectedMin, setSelectedMin] = useState<string>("00-05")
+
+  const [heatMap, setHeatMap] = useState<boolean>(false)
 
   interface ChangePageProps {
     id: string;
@@ -182,32 +191,43 @@ const Layout = () => {
         }
         {
           nowPageIndex === "secondButton" &&
-          <div className="container">
-            <div className="left">
-              <BorderBox13 className="console">
-                <ChartHeader chartName={"控制台"} />
-              </BorderBox13>
-              <BorderBox1 className="relative">
-                <ChartHeader chartName={"排队车辆统计"} />
-                <RelativeMap />
-              </BorderBox1>
-            </div>
-            <div className="right">
-              <div className="r-top">
-                <BorderBox1 className="rt-left" style={{ height: "100%", width: "65%" }}>
-                  <RoadMap />
-                </BorderBox1>
-                <BorderBox1 className="rt-right" style={{ height: "100%", width: "35%" }}>
-                  <ChartHeader chartName={"拥堵分析"} />
-                  <SecurityParallel />
+          <div className="s-container">
+            <div className="s-top" style={{ height: "61%" }}>
+              <div className="s-t-left" style={{ width: "22%" }}>
+                <BorderBox13 className="s-console" style={{ height: "27.87%" }}>
+                  <ChartHeader chartName={"控制台"} />
+                  <SecondConsole setHeatMap={setHeatMap}
+                    setSelectedCross={setSelectedCross}
+                    selectedCross={selectedCross}
+                    setSelectedMin={setSelectedMin}
+                    selectedMin={selectedMin}
+                    setSelectedHour={setSelectedHour}
+                    selectedHour={selectedHour} />
+                </BorderBox13>
+                <BorderBox1 className="s-relative" style={{ height: "72.13%" }}>
+                  <ChartHeader chartName={"路口车流流向"} />
+                  <RelativeMap selectedMin={selectedMin} selectedHour={selectedHour}
+                    selectedCross={selectedCross} />
                 </BorderBox1>
               </div>
-              <BorderBox1 className="r-bottom" style={{ height: "35%" }}>
-                <ChartHeader chartName={"断面车流统计"} />
-                <CarScatter />
+              <div className="s-t-right" style={{ width: "78%" }}>
+                <BorderBox1 className="s-tr-left" style={{ height: "100%", width: "53%" }}>
+                  <MainVisualizationView />
+                </BorderBox1>
+                <BorderBox1 className="s-tr-right" style={{ height: "100%", width: "47%" }}>
+                  <RoadMap heatMap={heatMap} />
+                </BorderBox1>
+              </div>
+            </div>
+            <div className="s-bottom" style={{ height: "39%" }}>
+              <BorderBox1 className="s-b-left" style={{ width: "50%" }}>
+                <ChartHeader chartName={"排队车辆统计"} />
+                <QueCar />
               </BorderBox1>
-
-
+              <BorderBox1 className="s-b-right" style={{ width: "50%" }}>
+                <ChartHeader chartName={"拥堵分析"} />
+                <SecurityParallel />
+              </BorderBox1>
             </div>
           </div>
         }
@@ -250,11 +270,11 @@ const Layout = () => {
                 <ChartHeader chartName={"交通事件"} />
 
                 <div className="t" style={{ width: "100%", height: "50%" }}>
-                  <EventChart />
+                  <EventChart setEventName={setEventName} />
                   {/* <CarHeat /> */}
                 </div>
                 <div className="b" style={{ width: "100%", height: "50%" }}>
-                  <EventTable />
+                  <EventTable eventName={eventName} setEventName={setEventName} />
                 </div>
               </BorderBox1>
             </div>
