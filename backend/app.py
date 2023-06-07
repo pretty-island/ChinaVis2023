@@ -180,9 +180,18 @@ def getEvent():
         data = json.load(f)  # 读取到的数据
     return json.dumps(data)  # 将结果转换为JSON格式并返回
 
+
 @app.route("/getEventRoad")
 def getEventRoad():
     directory = "./dataProcess/data/abnormal/eventroad.json"  # json文件所在路径
+    with open(directory, "r", encoding="utf-8") as f:
+        data = json.load(f)  # 读取到的数据
+    return json.dumps(data)  # 将结果转换为JSON格式并返回
+
+
+@app.route("/getHealth")
+def getHealth():
+    directory = "./dataProcess/data/health.json"  # json文件所在路径
     with open(directory, "r", encoding="utf-8") as f:
         data = json.load(f)  # 读取到的数据
     return json.dumps(data)  # 将结果转换为JSON格式并返回

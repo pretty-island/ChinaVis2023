@@ -187,12 +187,12 @@ const CongestionParallel: React.FC = () => {
                 { dim: 5, name: schema[5].text },
                 { dim: 6, name: schema[6].text },
                 { dim: 7, name: schema[7].text },
-                {
-                  dim: 8,
-                  name: schema[8].text,
-                  type: 'category',
-                  data: ['优', '良', '轻度污染', '中度污染', '重度污染', '严重污染']
-                }
+                // {
+                //   dim: 8,
+                //   name: schema[8].text,
+                //   type: 'category',
+                //   // data: ['优', '良', '轻度污染', '中度污染', '重度污染', '严重污染']
+                // }
               ],
               // visualMap: {
               //   show: true,
@@ -255,13 +255,13 @@ const CongestionParallel: React.FC = () => {
             // ],
               series: [
                 {
-                  name: 'Beijing',
+                  // name: 'Beijing',
                   type: 'parallel',
                   lineStyle: lineStyle,
                   data: dataBJ
                 },
                 {
-                  name: 'Shanghai',
+                  // name: 'Shanghai',
                   type: 'parallel',
                   lineStyle: lineStyle,
                   data: dataSH

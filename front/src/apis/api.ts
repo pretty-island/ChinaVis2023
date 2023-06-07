@@ -84,9 +84,15 @@ export const getHeat = (path: string) => {
 export const getEvent = (path: string) => {
   return api.get(path)
 }
+
 export const getEventRoad = (path: string) => {
   return api.get(path)
 }
+
 export const getEventTable = (path: string, hour: string, event_name: string) => {
   return api.get(`${path}?hour=${hour}&event_name=${event_name}`)
+}
+
+export const getHealth = (path: string) => {
+  return api.get(path)
 }
