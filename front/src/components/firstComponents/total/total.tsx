@@ -170,12 +170,14 @@ const Total: React.FC<TotalProps> = ({ selectedRoad, typeName,setTypeName}) => {
                 },
             ];
             const colorLine = [
+                // '#225A8F',
                 "#33C0CD",
                 "#73ACFF",
                 "#9E87FF",
                 "#FE6969",
-                "#FDB36A",
-                "#FECE43",
+                "#FFB95E",
+                "#FFFB7A",
+                // '#7B7F8E'
             ];
 
             function getRich(): { [key: string]: any } {

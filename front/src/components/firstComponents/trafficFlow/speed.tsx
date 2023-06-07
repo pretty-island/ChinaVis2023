@@ -110,8 +110,8 @@ const Speed: React.FC<SpeedProps> = ({ selectedRoad }) => {
                     }
                 }
                 if (matchingData) {
-                    flow1.push(matchingData);
-                }else {
+                    flow1.push(Number(matchingData.toFixed(3)));
+                } else {
                     flow1.push(0)
                 }
             }
@@ -134,8 +134,8 @@ const Speed: React.FC<SpeedProps> = ({ selectedRoad }) => {
                 }
                 // 如果找到匹配的数据项，则将其 count 添加到 flow2 数组中
                 if (matchingData) {
-                    flow2.push(matchingData);
-                }else {
+                    flow2.push(Number(matchingData.toFixed(3)));
+                } else {
                     flow2.push(0)
                 }
             }
@@ -156,8 +156,8 @@ const Speed: React.FC<SpeedProps> = ({ selectedRoad }) => {
                 }
                 // 如果找到匹配的数据项，则将其 count 添加到 flow3 数组中
                 if (matchingData) {
-                    flow3.push(matchingData);
-                }else {
+                    flow3.push(Number(matchingData.toFixed(3)));
+                } else {
                     flow3.push(0)
                 }
             }
@@ -179,7 +179,7 @@ const Speed: React.FC<SpeedProps> = ({ selectedRoad }) => {
                 }
                 // 如果找到匹配的数据项，则将其 count 添加到 flow3 数组中
                 if (matchingData) {
-                    flow4.push(matchingData);
+                    flow4.push(Number(matchingData.toFixed(3)));
                 }
                 else {
                     flow4.push(0)
@@ -205,7 +205,7 @@ const Speed: React.FC<SpeedProps> = ({ selectedRoad }) => {
                 }
                 // 如果找到匹配的数据项，则将其 count 添加到 flow6 数组中
                 if (matchingData) {
-                    flow6.push(matchingData);
+                    flow6.push(Number(matchingData.toFixed(3)));
                 }
                 else {
                     flow6.push(0)
@@ -229,7 +229,7 @@ const Speed: React.FC<SpeedProps> = ({ selectedRoad }) => {
                 }
                 // 如果找到匹配的数据项，则将其 count 添加到 flow10 数组中
                 if (matchingData) {
-                    flow10.push(matchingData);
+                    flow10.push(Number(matchingData.toFixed(3)));
                 }
                 else {
                     flow10.push(0)
@@ -237,20 +237,28 @@ const Speed: React.FC<SpeedProps> = ({ selectedRoad }) => {
             }
             const allcount = []
             for (let i = 0; i < 546; i++) {
-                allcount.push((flow1[i] + flow10[i] + flow2[i] + flow3[i] + flow4[i] + flow6[i]) / 6)
+                allcount.push(((flow1[i] + flow10[i] + flow2[i] + flow3[i] + flow4[i] + flow6[i]) / 6).toFixed(3))
             }
-            const roadMapping = function(num:string){
-                let x="";
-                switch(num){
+            const roadMapping = function (num: string) {
+                let x = "";
+                switch (num) {
                     case "all":
-                        x= "所有道路"
+                        x = "所有道路"
                         break;
                     default:
-                        x="道路"+num
+                        x = "道路" + num
                 }
                 return x
             };
             const option: EChartOption = {
+                // color: [
+                //     '#3c5a7d',
+                //     "#33C0CD",
+                //     "#73ACFF",
+                //     "#9E87FF",
+                //     "#FE6969",
+                //     "#FFB95E",
+                //     "#FFFB7A",],
                 tooltip: {
                     trigger: "axis",
                 },
@@ -275,17 +283,17 @@ const Speed: React.FC<SpeedProps> = ({ selectedRoad }) => {
                 },
                 graphic: [
                     {
-                      type: 'text',
-                      left: '15',
-                      top: '8',
-                      style: {
-                        text: roadMapping(selectedRoad),
-                        fill: '#fFF',
-                        fontSize: 13,
-                        // fontWeight: 'bold'
-                      }
+                        type: 'text',
+                        left: '15',
+                        top: '8',
+                        style: {
+                            text: roadMapping(selectedRoad),
+                            fill: '#fFF',
+                            fontSize: 13,
+                            // fontWeight: 'bold'
+                        }
                     }
-                  ],
+                ],
                 // calculable: true,
                 xAxis: [
                     {
@@ -363,7 +371,8 @@ const Speed: React.FC<SpeedProps> = ({ selectedRoad }) => {
                         type: "bar",
                         itemStyle: {
                             normal: {
-                                color: '#092d46',
+                                color: '#225A8F',
+                                // color: '#092d46',
                             },
                         },
                         data: allcount,
@@ -377,7 +386,11 @@ const Speed: React.FC<SpeedProps> = ({ selectedRoad }) => {
                         symbol: "none",
                         itemStyle: {
                             normal: {
-                                color: '#4BFFFC',
+                                color: '#13c2c2',
+                                // color: '#73ACFF',
+                                // color: '#9E87FF',
+                                // color: '#0075DB',
+                                // color: '#4BFFFC',
 
                                 // areaStyle: {
                                 //     color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [
@@ -405,7 +418,11 @@ const Speed: React.FC<SpeedProps> = ({ selectedRoad }) => {
                         symbol: "none",
                         itemStyle: {
                             normal: {
-                                color: '#FFC0CB',
+                                // color: '#9E87FF',
+                                // color: '#FFB95E',
+                                // color: '#FDB36A',
+                                // color: '#75BD9B',
+                                color: '#852D30',
                                 // areaStyle: {
                                 //     color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [
                                 //         { offset: 0, color: "rgb(255, 192, 203,0.01)" },
@@ -432,7 +449,12 @@ const Speed: React.FC<SpeedProps> = ({ selectedRoad }) => {
                         symbol: "none",
                         itemStyle: {
                             normal: {
-                                color: 'rgb(115, 72, 255)',
+                                // color: '#33C0CD',
+                                // color: '#FFFB7A',
+                                // color: '#FECE4391',
+                                // color: '#FECE43',
+                                color: '#01b1fe',
+                                // color: 'rgb(115, 72, 255)',
                                 // areaStyle: {
                                 //     color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [
                                 //         { offset: 0, color: "rgb(115, 72, 255,0.01)" },
@@ -461,6 +483,9 @@ const Speed: React.FC<SpeedProps> = ({ selectedRoad }) => {
                         itemStyle: {
                             normal: {
 
+                                // color: '#FFFB7A',
+                                // color: '#73ACFF',
+                                // color: '#A13803',
                                 color: '#FFA500',
                                 // areaStyle: {
                                 //     color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [
@@ -488,7 +513,10 @@ const Speed: React.FC<SpeedProps> = ({ selectedRoad }) => {
                         symbol: "none",
                         itemStyle: {
                             normal: {
-                                color: '#49bdff',
+                                color: '#9682C2',
+                                // color: '#9E87FF',
+                                // color: '#B89A12',
+                                // color: '#49bdff',
                                 // areaStyle: {
                                 //     color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [
                                 //         { offset: 0, color: "rgb(73,189,255,0.01)" },
@@ -515,6 +543,7 @@ const Speed: React.FC<SpeedProps> = ({ selectedRoad }) => {
                         symbol: "none",
                         itemStyle: {
                             normal: {
+                                // color: '#FE6969',
                                 color: '#7B7F8E',
                                 // areaStyle: {
                                 //     color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [

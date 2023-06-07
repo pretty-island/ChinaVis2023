@@ -217,8 +217,12 @@ const TotalHeat: React.FC<TotalHeatProps> = ({ typeName, setTypeName }) => {
             }
 
             const counts = heatData?.map((item) => item[2]).filter(Number.isFinite);
-            const minCount = Math.min(...counts);
-            const maxCount = Math.max(...counts);
+            let minCount=129;
+            let maxCount=18693;
+            if(counts){
+                minCount = Math.min(...counts);
+                maxCount = Math.max(...counts);
+            }
             // console.log(maxCount);
 
             const option: EChartOption = {

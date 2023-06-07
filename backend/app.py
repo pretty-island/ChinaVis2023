@@ -114,22 +114,46 @@ def getTurnFlow():
 
 
 # 获取排队车辆统计数据
-@app.route("/getQueCar")
+# @app.route("/getQueCar")
+# def getQueCar():
+#     directory = "./dataProcess/data/line_up/cross.json"  # json文件所在路径
+#     with open(directory, "r", encoding="utf-8") as f:
+#         data = json.load(f)  # 读取到的数据
+    
+#     return json.dumps(data)  # 将结果转换为JSON格式并返回
+
+# 根据时间和路口获取排队车辆统计数据
+@app.route("/getQueCar", methods=["GET"])
 def getQueCar():
+    time = request.args.get("time")
+    cross_name = request.args.get("cross_name")
+    # time ="10:00"
+    # cross_name = "路口1"
     directory = "./dataProcess/data/line_up/cross.json"  # json文件所在路径
     with open(directory, "r", encoding="utf-8") as f:
         data = json.load(f)  # 读取到的数据
-    f.close()
+    data=data[cross_name][time]
     return json.dumps(data)  # 将结果转换为JSON格式并返回
 
-
+# # 获取排队车辆统计数据:转向
+# @app.route("/getTurnQueCar")
+# def getTurnQueCar():
+#     directory = "./dataProcess/data/line_up/crossturn.json"  # json文件所在路径
+#     with open(directory, "r", encoding="utf-8") as f:
+#         data = json.load(f)  # 读取到的数据
+    
+#     return json.dumps(data)  # 将结果转换为JSON格式并返回
 # 获取排队车辆统计数据:转向
 @app.route("/getTurnQueCar")
 def getTurnQueCar():
+    time = request.args.get("time")
+    cross_name = request.args.get("cross_name")
+    # time ="10:00"
+    # cross_name = "路口1"
     directory = "./dataProcess/data/line_up/crossturn.json"  # json文件所在路径
     with open(directory, "r", encoding="utf-8") as f:
         data = json.load(f)  # 读取到的数据
-    f.close()
+    data=data[cross_name][time]
     return json.dumps(data)  # 将结果转换为JSON格式并返回
 
 

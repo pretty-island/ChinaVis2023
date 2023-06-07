@@ -71,7 +71,7 @@ const TrafficFlow: React.FC<FlowProps> = ({ selectedRoad }) => {
                 const road_data = minRoad.flatMap(item => {
                     const { type, roads } = item;
                     return roads.map(({ road, mins }) => ({ type, road, mins }));
-                });                
+                });
                 const use_data = road_data.filter(item => item.road.replace("道路", "") === selectedRoad);
                 setFlowData(use_data);
             }
@@ -85,7 +85,7 @@ const TrafficFlow: React.FC<FlowProps> = ({ selectedRoad }) => {
                 mychart = echarts.init(chartRef.current, undefined);
             }
             // console.log(flowData);
-            
+
             const type_data = flowData?.map(item => {
                 const { type, mins } = item;
                 return mins?.map(({ time, count, avg_speed }) => ({ type, time, count, avg_speed }));
@@ -158,7 +158,7 @@ const TrafficFlow: React.FC<FlowProps> = ({ selectedRoad }) => {
                     flow2.push(0)
                 }
             }
-            
+
             // 类型3流量
             const flow3 = []
             for (let i = 0; i < 540; i++) {
@@ -181,7 +181,7 @@ const TrafficFlow: React.FC<FlowProps> = ({ selectedRoad }) => {
                     flow3.push(0)
                 }
             }
-            
+
             // 类型4流量
             const flow4 = []
             for (let i = 0; i < 540; i++) {
@@ -277,27 +277,32 @@ const TrafficFlow: React.FC<FlowProps> = ({ selectedRoad }) => {
                     flow10.push(0)
                 }
             }
-            
+
             const allcount = []
             for (let i = 0; i < 540; i++) {
                 allcount.push(flow1[i] + flow10[i] + flow2[i] + flow3[i] + flow4[i] + flow6[i])
             }
 
-            const roadMapping = function(num:string){
-                let x="";
-                switch(num){
+            const roadMapping = function (num: string) {
+                let x = "";
+                switch (num) {
                     case "all":
-                        x= "所有道路"
+                        x = "所有道路"
                         break;
                     default:
-                        x="道路"+num
+                        x = "道路" + num
                 }
                 return x
             };
             const option: EChartOption = {
-                color:[
-                    '#1b4a58',
-                ],
+                // color: [
+                //     '#3c5a7d',
+                //     "#33C0CD",
+                //     "#73ACFF",
+                //     "#9E87FF",
+                //     "#FE6969",
+                //     "#FFB95E",
+                //     "#FFFB7A",],
                 tooltip: {
                     trigger: "axis",
                 },
@@ -306,17 +311,17 @@ const TrafficFlow: React.FC<FlowProps> = ({ selectedRoad }) => {
                 },
                 graphic: [
                     {
-                      type: 'text',
-                      left: '15',
-                      top: '8',
-                      style: {
-                        text: roadMapping(selectedRoad),
-                        fill: '#fFF',
-                        fontSize: 13,
-                        // fontWeight: 'bold'
-                      }
+                        type: 'text',
+                        left: '15',
+                        top: '8',
+                        style: {
+                            text: roadMapping(selectedRoad),
+                            fill: '#fFF',
+                            fontSize: 13,
+                            // fontWeight: 'bold'
+                        }
                     }
-                  ],
+                ],
                 // title: [
                 //     {
                 //       left: 'center',
@@ -472,8 +477,12 @@ const TrafficFlow: React.FC<FlowProps> = ({ selectedRoad }) => {
                         type: "bar",
                         itemStyle: {
                             normal: {
+                                color: '#225A8F',
                                 // color: '#092d46',
-                                color: '#3c5a7d',
+                                // color: '#92b9dd',
+                                // color: '#3c5a7d',
+                                // color: '#32D9AF',
+                                // color: '#00539C',
 
                             },
                         },
@@ -495,14 +504,17 @@ const TrafficFlow: React.FC<FlowProps> = ({ selectedRoad }) => {
                         symbol: "none",
                         itemStyle: {
                             normal: {
+                                color: '#13c2c2',
+                                // color: '#01b1fe',
                                 // color: '#267b89',
-                                color: '#4BFFFC',
+                                // color: '#4BFFFC',
+                                // color: '#0075DB',
 
                                 areaStyle: {
                                     color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [
-                                        { offset: 0, color: "rgb(0, 255, 255,0.01)" },
-                                        { offset: 0.5, color: "rgb(0, 255, 255,0.2)" },
-                                        { offset: 1, color: "rgb(0, 255, 255)" },
+                                        { offset: 0, color: "rgb(0, 117, 219,0.01)" },
+                                        { offset: 0.5, color: "rgb(0, 117, 219,0.2)" },
+                                        { offset: 1, color: "rgb(0, 117, 219)" },
                                     ]),
                                 },
                             },
@@ -524,7 +536,8 @@ const TrafficFlow: React.FC<FlowProps> = ({ selectedRoad }) => {
                         symbol: "none",
                         itemStyle: {
                             normal: {
-                                color: '#FFC0CB',
+                                color: '#852D30',
+                                // color: '#FFC0CB',
                                 areaStyle: {
                                     color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [
                                         { offset: 0, color: "rgb(255, 192, 203,0.01)" },
@@ -551,7 +564,10 @@ const TrafficFlow: React.FC<FlowProps> = ({ selectedRoad }) => {
                         symbol: "none",
                         itemStyle: {
                             normal: {
-                                color: 'rgb(115, 72, 255)',
+                                // color: 'rgb(115, 72, 255)',
+                                // color: '#5B45C4',
+                                // color: '#5252A0',
+                                color: '#01b1fe',
                                 areaStyle: {
                                     color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [
                                         { offset: 0, color: "rgb(115, 72, 255,0.01)" },
@@ -578,8 +594,8 @@ const TrafficFlow: React.FC<FlowProps> = ({ selectedRoad }) => {
                         symbol: "none",
                         itemStyle: {
                             normal: {
-
                                 color: '#FFA500',
+                                // color: '#B07C04',
                                 areaStyle: {
                                     color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [
                                         { offset: 0, color: "rgb(255,165,0,0.01)" },
@@ -606,7 +622,8 @@ const TrafficFlow: React.FC<FlowProps> = ({ selectedRoad }) => {
                         symbol: "none",
                         itemStyle: {
                             normal: {
-                                color: '#49bdff',
+                                color: '#9682C2',
+                                // color: '#49bdff',
                                 areaStyle: {
                                     color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [
                                         { offset: 0, color: "rgb(73,189,255,0.01)" },
@@ -633,6 +650,7 @@ const TrafficFlow: React.FC<FlowProps> = ({ selectedRoad }) => {
                         symbol: "none",
                         itemStyle: {
                             normal: {
+                                // color: '#7B7F8E',
                                 color: '#7B7F8E',
                                 areaStyle: {
                                     color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [
@@ -645,7 +663,7 @@ const TrafficFlow: React.FC<FlowProps> = ({ selectedRoad }) => {
                         },
                         data: flow10,
                     },
-                    
+
                 ],
             };
 
@@ -654,7 +672,7 @@ const TrafficFlow: React.FC<FlowProps> = ({ selectedRoad }) => {
             }
         }
 
-    },[flowData,selectedRoad])
+    }, [flowData, selectedRoad])
     return (
         <div ref={chartRef} style={{ width: "100%", height: "100%" }}></div>
     )

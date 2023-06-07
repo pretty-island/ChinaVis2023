@@ -59,12 +59,12 @@ export const getTurnFlow = (path: string) => {
 // }
 
 // 排队车辆统计数据接口
-export const getQueCar = (path: string) => {
-  return api.get(path)
+export const getQueCar = (path: string, time: string, cross_name: string) => {
+  return api.get(`${path}?time=${time}&cross_name=${cross_name}`)
 }
 // 排队车辆统计数据接口
-export const getTurnQueCar = (path: string) => {
-  return api.get(path)
+export const getTurnQueCar = (path: string, time: string, cross_name: string) => {
+  return api.get(`${path}?time=${time}&cross_name=${cross_name}`)
 }
 // 断面车流统计数据接口
 export const getFlow = (path: string) => {

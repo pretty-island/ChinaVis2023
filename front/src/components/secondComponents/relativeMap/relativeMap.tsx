@@ -148,7 +148,8 @@ const RelativeMap: React.FC<RelativeMapProps> = ({ setTurnName,selectedCross, se
                 chains.lineStyle = {
                     normal: {
                         width: chains.value,
-                        opacity: 0.5,
+                        opacity: 0.4,
+                        type:'solid'
                     },
                 };
             });
@@ -198,7 +199,16 @@ const RelativeMap: React.FC<RelativeMapProps> = ({ setTurnName,selectedCross, se
                             rotateLabel: true,
 
                         },
-
+                        edgeSymbol:['circle', 'arrow'],
+                        // edgeSymbolSize: function (value, params) {
+                        //     // 自定义回调函数根据连接线的粗细计算箭头的大小
+                        //     let lineWidth = params.data.lineStyle.normal.width;
+                        //     // 可根据需要调整箭头大小与连接线粗细的比例关系
+                        //     let arrowSize = lineWidth;
+                        //     return [0, 100];
+                        //   },
+                        edgeSymbolSize:0,
+                        // borderCap:'square',
                         data: hazards,
                         links: chains,
                         // edgeSymbol: ['none', 'arrow'],
@@ -213,10 +223,12 @@ const RelativeMap: React.FC<RelativeMapProps> = ({ setTurnName,selectedCross, se
                             },
                         },
                         itemStyle: { //配置节点的颜色
+                            borderCap:'round',
                             normal: {
                                 color: function (param: any) {
                                     // let colorList = ['#FFA500', '', '', '#9acd32', '#9acd32', ' ', '', '#F5F5DC', '#F5F5DC', ' ', '', '#00ffff', '#00ffff', ' ', '', '#FFA500'];
-                                    let colorList = ['#FFA500', '#9acd32', '#9acd32', '#F5F5DC', '#F5F5DC', '#00ffff', '#00ffff', '#FFA500'];
+                                    // let colorList = ['#beddfc', '#252525', '#3d72a1', '#ffe380', '#ffe380', '#5fc8dd', '#5fc8dd', '#beddfc'];
+                                    let colorList = ['#437db1',  '#A1794C', '#A1794C', '#8CA5D1', '#8CA5D1','#B5A462', '#B5A462', '#437db1'];
                                     return colorList[param?.dataIndex]
                                 },
                                 label: {
@@ -224,7 +236,7 @@ const RelativeMap: React.FC<RelativeMapProps> = ({ setTurnName,selectedCross, se
                                     position: 'top',
                                     formatter: '{b}\n{c}'
                                 },
-                                opacity: 0.9, //设置透明度，为0时不绘制
+                                opacity: 1, //设置透明度，为0时不绘制
                             }
                         },
 
@@ -232,8 +244,8 @@ const RelativeMap: React.FC<RelativeMapProps> = ({ setTurnName,selectedCross, se
                             normal: {
                                 show: true,
                                 color: 'source',
-                                curveness: 0.3,
-                                opacity: 0.2,
+                                curveness: 0.2,
+                                opacity: 1,
                             },
                         },
                         emphasis: {

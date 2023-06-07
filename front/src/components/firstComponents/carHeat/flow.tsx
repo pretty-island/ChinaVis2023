@@ -1,7 +1,7 @@
 import * as echarts from 'echarts';
 import { EChartOption } from 'echarts';
 import React, { useEffect, useRef, useState } from "react";
-import { getQueCar, getRoad } from '../../../apis/api';
+import { getRoad } from '../../../apis/api';
 
 const Flow: React.FC = ({ typeName }) => {
     const chartRef = useRef<HTMLDivElement>(null);
@@ -175,37 +175,6 @@ const Flow: React.FC = ({ typeName }) => {
             if (mychart == null) {
                 mychart = echarts.init(chartRef.current);
             }
-
-            // const data = [];
-            // // const roadArray = [];
-
-
-            // roadData.map((dataItem) => {
-            //     const { type, roads } = dataItem;
-
-            //     roads.forEach((road) => {
-            //         const { road: r, count, avg_speed } = road;
-            //         // roadArray.push(r);
-
-            //         const existingIndex = data.findIndex((item) => item.name === r);
-            //         if (existingIndex !== -1) {
-            //             // 如果已存在道路的数据项，则累加车流量
-            //             data[existingIndex].value += count;
-            //             data[existingIndex].avg_speed = (avg_speed + data[existingIndex].avg_speed)
-
-            //         } else {
-            //             // 如果不存在道路的数据项，则创建新的数据项
-            //             data.push({ "name": r, "value": count, "avg_speed": avg_speed });
-            //         }
-            //     });
-            // });
-            // data.sort(function (a, b) {
-            //     return b.value - a.value;
-            // });
-            // console.log("data");
-            // console.log(data);
-
-            // const roadsdata = [...new Set(roadArray)];
             const roadList = flowspeed.map(function (item) {
                 return item.name;
             })
@@ -229,7 +198,8 @@ const Flow: React.FC = ({ typeName }) => {
                 //     }
                 // ],
                 color: [
-                    // "#003A6C",
+                    '#00539C',
+                    "#003A6C",
                     "#668fb3",
                     "#d2e9ff",
                     "#9E87FF",
@@ -314,7 +284,7 @@ const Flow: React.FC = ({ typeName }) => {
                         type: 'value',
                         axisLabel: {
                             formatter: function (value) {
-                                return value 
+                                return value
                             },
                         },
                         // boundaryGap: [0, 0.01]
@@ -323,7 +293,7 @@ const Flow: React.FC = ({ typeName }) => {
                         splitLine: { show: false },
                         axisLine: {
                             lineStyle: {
-                                color: "#B4B4B4",
+                                color: "#00539C",
                             },
                         },
                         axisLabel: {
@@ -355,13 +325,13 @@ const Flow: React.FC = ({ typeName }) => {
                         data: dataList,
                         itemStyle: {
                             normal: {
-                              barBorderRadius: 1,
-                              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                                { offset: 0, color: "#40709a" },
-                                { offset: 1, color: "#86aaca" },
-                              ]),
+                                barBorderRadius: 1,
+                                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                    { offset: 0, color: "#40709a" },
+                                    { offset: 1, color: "#86aaca" },
+                                ]),
                             },
-                          },
+                        },
                     },
                     {
                         name: '道路平均速度',
@@ -370,7 +340,7 @@ const Flow: React.FC = ({ typeName }) => {
                         yAxisIndex: 1,
                         itemStyle: {
                             normal: {
-                                  color: "#c8e0f8",
+                                color: "#c8e0f8",
                             },
                         },
                         // barWidth:20,
