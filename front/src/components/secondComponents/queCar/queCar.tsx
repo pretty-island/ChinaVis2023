@@ -32,7 +32,7 @@ const QueCar: React.FC<QueProps> = ({ turnName, selectedCross, selectedHour, sel
                 setQueCarTurn(res.data);
             });
         }
-    }, [selectedCross, selectedMin, selectedHour, queCar]);
+    }, [selectedCross, selectedMin, selectedHour]);
     // 设置数据
     useEffect(() => {
         if (queCar && queCarTurn && selectedCross && selectedHour && selectedMin && turnName) {
@@ -41,8 +41,8 @@ const QueCar: React.FC<QueProps> = ({ turnName, selectedCross, selectedHour, sel
                 const data = queCar;
                 // const data = queCar["路口" + selectedCross][time];
                 setQueData(data);
-                console.log("queCar");
-                console.log(queCar);
+                // console.log("queCar");
+                // console.log(queCar);
             }
             else {
                 // const time = selectedHour.replace("点", "") + ":" + selectedMin.split("-")[0];
@@ -58,7 +58,7 @@ const QueCar: React.FC<QueProps> = ({ turnName, selectedCross, selectedHour, sel
             if (mychart == null) {
                 mychart = echarts.init(chartRef.current);
             }
-            console.log(queData);
+            // console.log(queData);
             const dateList = queData?.map(function (item) {
                 return item.time;
             });
@@ -155,6 +155,7 @@ const QueCar: React.FC<QueProps> = ({ turnName, selectedCross, selectedHour, sel
                                 color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
 
                                     { offset: 0, color: "#cfe7fd" },
+                                    // { offset: 1, color: "#cfe7fd" },
                                     { offset: 1, color: "#65a9f3" },
                                     // { offset: 0, color: "#65a9f3" },
                                     // { offset: 1, color: "#15325b" },
@@ -201,7 +202,7 @@ const QueCar: React.FC<QueProps> = ({ turnName, selectedCross, selectedHour, sel
                 mychart.setOption(option, true);
             }
         }
-    }, [queData, turnName, selectedHour, selectedMin])
+    }, [queData,turnName, selectedHour, selectedMin,selectedCross])
     return (
         <div ref={chartRef} style={{ width: "100%", height: "100%" }}></div>
     )

@@ -25,6 +25,8 @@ import EventTable from "../firstComponents/event/eventTable";
 import SecondConsole from "../secondComponents/secondConsole/secondConsole";
 import HealthParallel from "../firstComponents/health/healthParallel";
 import CongestionParallel from "../secondComponents/congestion/congestion";
+import CrossCongestionParallel from "../secondComponents/congestion/crosscongestion";
+import CrossAvgCongestion from "../secondComponents/congestion/crossAvg";
 // import ThirdConsole from "../thirdComponents/thirdConsole/thirdConsole";
 const Layout = () => {
   // 当前用户在第几屏，默认第一屏
@@ -39,6 +41,8 @@ const Layout = () => {
 
   // 用户切换速度和流量视图
   const [nowView, setNowView] = useState<string>("流量");
+  // 用户切换路口和道路视图
+  const [nowViewRoad, setNowViewRoad] = useState<string>("路口分方向");
 
   // 第二屏：用户选择的路口
   const [selectedCross, setSelectedCross] = useState<string>("1")
@@ -70,7 +74,7 @@ const Layout = () => {
           setNowPageIndex(id)
         }}
         // style={{ cursor: 'pointer' }}>
-        style={{ cursor: 'pointer', width: '30%', height: '83%' ,margin:"10px"}}>
+        style={{ cursor: 'pointer', width: '30%', height: '83%', margin: "10px" }}>
         {/* style={{ cursor: 'pointer', width: '150px', height: '60px' }}> */}
         <Decoration11
           id={id}
@@ -97,6 +101,39 @@ const Layout = () => {
       </div>
     )
   }
+  // 切换道路路口视图的组件
+  const ChangeViewRoad: React.FC = () => {
+    // 切换视图的函数
+    const change = (): void => {
+      if(nowViewRoad === '路口'){
+        setNowViewRoad('路口分方向')
+      }
+      else if(nowViewRoad === '路口分方向'){
+        setNowViewRoad('道路')
+      }
+      else{
+        setNowViewRoad("路口")
+      }
+    };
+    let btnText: string;
+    if(nowViewRoad === '路口'){
+      btnText='切换到路口各方向视图'
+    }
+    else if(nowViewRoad === '路口分方向'){
+      btnText='切换到道路视图'
+    }
+    else{
+      btnText='切换到路口视图'
+    }
+   
+
+    return (
+      <div>
+        <button onClick={change} style={{ color: "black", fontSize: '12px' }}>{btnText}</button>
+      </div>
+    )
+  }
+
   return (
     <div id="layout">
       <FullScreenContainer>
@@ -110,7 +147,7 @@ const Layout = () => {
             <Decoration8 style={{ width: '50%', height: '70%' }} />
             <div className="head-title">
               <span>交通态势感知与可视分析系统</span>
-              <Decoration6 style={{ width: '75%', height: '13%' }}></Decoration6>
+              <Decoration6 style={{ width: '80%', height: '13%' }}></Decoration6>
             </div>
             <Decoration8 reverse={true} style={{ width: '50%', height: '70%' }} />
           </div>
@@ -186,7 +223,6 @@ const Layout = () => {
                 </BorderBox1>
                 <BorderBox1 className="f-queue" style={{ height: "60%" }}>
                   <ChartHeader chartName={"交通事件"} />
-
                   <div className="t" style={{ width: "100%", height: "50%" }}>
                     <EventChart selectedRoad={selectedRoad} setEventName={setEventName} />
                     {/* <CarHeat /> */}
@@ -194,10 +230,7 @@ const Layout = () => {
                   <div className="b" style={{ width: "100%", height: "50%" }}>
                     <EventTable setViewId={setViewId} setViewTime={setViewTime} selectedRoad={selectedRoad} eventName={eventName} setEventName={setEventName} />
                   </div>
-
                 </BorderBox1>
-
-
               </div>
             </div>
           </div>
@@ -228,7 +261,7 @@ const Layout = () => {
                   <MainVisualizationView />
                 </BorderBox1>
                 <BorderBox1 className="s-tr-right" style={{ height: "100%", width: "47%" }}>
-                  <RoadMap heatMap={heatMap} />
+                  <RoadMap selectedHour={selectedHour} selectedMin={selectedMin} />
                 </BorderBox1>
               </div>
             </div>
@@ -239,8 +272,22 @@ const Layout = () => {
                   selectedCross={selectedCross} />
               </BorderBox1>
               <BorderBox1 className="s-b-right" style={{ width: "50%" }}>
-                <ChartHeader chartName={"拥堵情况变化凹凸图"} />
-                <CongestionParallel />
+
+                <div className="changeViewRoad">
+                  <ChartHeader chartName={"拥堵情况变化气泡图"} />
+                  <ChangeViewRoad />
+                </div>
+
+                {nowViewRoad === "道路" &&
+                  <CongestionParallel setSelectedMin={setSelectedMin} selectedHour={selectedHour} />
+                }
+                {nowViewRoad === "路口分方向" &&
+                  <CrossCongestionParallel setTurnName={setTurnName} setSelectedCross={setSelectedCross} setSelectedMin={setSelectedMin} selectedHour={selectedHour} />
+                }
+                {nowViewRoad === "路口" &&
+                  <CrossAvgCongestion setSelectedCross={setSelectedCross} setSelectedMin={setSelectedMin} selectedHour={selectedHour} />
+                }
+
               </BorderBox1>
             </div>
           </div>

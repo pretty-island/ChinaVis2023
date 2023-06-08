@@ -510,11 +510,14 @@ outputroad_directory = (
 #         data["road"]=road_column
 #         print(data)
 #         data.to_csv(file_path,index=False)
+
+
 # # 遍历每个小时文件夹，增加一列事件名
 # eventmap = {
 #     "time_nixing": "逆行",
 #     "time_true_cross": "行人横穿马路",
-#     "time_true_error_way": "机动车占用非机动车道",
+#     "bicycle_way": "机动车占用非机动车道",
+#     "bus_way": "机动车占用公交车道",
 #     "time_true_overspeed": "机动车超速",
 # }
 # for hour in range(7, 16):
@@ -538,7 +541,7 @@ outputroad_directory = (
 from collections import defaultdict
 
 event_statistics = defaultdict(lambda: defaultdict(int))
-# 遍历每个小时文件夹，计算事件数量
+# 遍历每个小时文件夹，计算各小时所有道路事件数量
 for hour in range(7, 16):
     hour_folder = os.path.join(input_directory, f"{hour}h")
     # 遍历事件文件
@@ -560,7 +563,7 @@ with open(output_directory, "w", encoding="utf-8") as f:
 
 # event_statistics = defaultdict(lambda: defaultdict(lambda: defaultdict(int)))
 
-# # 遍历每个小时文件夹，计算事件数量
+# # 遍历每个小时文件夹，计算各个道路各小时事件数量
 # for hour in range(7, 16):
 #     hour_folder = os.path.join(input_directory, f"{hour}h")
 #     for entry in os.scandir(hour_folder):

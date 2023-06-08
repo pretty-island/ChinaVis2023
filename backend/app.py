@@ -119,8 +119,9 @@ def getTurnFlow():
 #     directory = "./dataProcess/data/line_up/cross.json"  # json文件所在路径
 #     with open(directory, "r", encoding="utf-8") as f:
 #         data = json.load(f)  # 读取到的数据
-    
+
 #     return json.dumps(data)  # 将结果转换为JSON格式并返回
+
 
 # 根据时间和路口获取排队车辆统计数据
 @app.route("/getQueCar", methods=["GET"])
@@ -132,8 +133,9 @@ def getQueCar():
     directory = "./dataProcess/data/line_up/cross.json"  # json文件所在路径
     with open(directory, "r", encoding="utf-8") as f:
         data = json.load(f)  # 读取到的数据
-    data=data[cross_name][time]
+    data = data[cross_name][time]
     return json.dumps(data)  # 将结果转换为JSON格式并返回
+
 
 # # 获取排队车辆统计数据:转向
 # @app.route("/getTurnQueCar")
@@ -141,7 +143,8 @@ def getQueCar():
 #     directory = "./dataProcess/data/line_up/crossturn.json"  # json文件所在路径
 #     with open(directory, "r", encoding="utf-8") as f:
 #         data = json.load(f)  # 读取到的数据
-    
+
+
 #     return json.dumps(data)  # 将结果转换为JSON格式并返回
 # 获取排队车辆统计数据:转向
 @app.route("/getTurnQueCar")
@@ -153,7 +156,7 @@ def getTurnQueCar():
     directory = "./dataProcess/data/line_up/crossturn.json"  # json文件所在路径
     with open(directory, "r", encoding="utf-8") as f:
         data = json.load(f)  # 读取到的数据
-    data=data[cross_name][time]
+    data = data[cross_name][time]
     return json.dumps(data)  # 将结果转换为JSON格式并返回
 
 
@@ -216,6 +219,46 @@ def getEventRoad():
 @app.route("/getHealth")
 def getHealth():
     directory = "./dataProcess/data/health.json"  # json文件所在路径
+    with open(directory, "r", encoding="utf-8") as f:
+        data = json.load(f)  # 读取到的数据
+    return json.dumps(data)  # 将结果转换为JSON格式并返回
+
+
+@app.route("/getRoadCongestion")
+def getRoadCongestion():
+    directory = "./dataProcess/data/roadcongestion.json"  # json文件所在路径
+    with open(directory, "r", encoding="utf-8") as f:
+        data = json.load(f)  # 读取到的数据
+    return json.dumps(data)  # 将结果转换为JSON格式并返回
+
+
+@app.route("/getMapRoadCongestion")
+def getMapRoadCongestion():
+    directory = "./dataProcess/data/MapRoadCongestion.json"  # json文件所在路径
+    with open(directory, "r", encoding="utf-8") as f:
+        data = json.load(f)  # 读取到的数据
+    return json.dumps(data)  # 将结果转换为JSON格式并返回
+
+
+@app.route("/getCrossCongestion")
+def getCrossCongestion():
+    directory = "./dataProcess/data/crosscongestion.json"  # json文件所在路径
+    with open(directory, "r", encoding="utf-8") as f:
+        data = json.load(f)  # 读取到的数据
+    return json.dumps(data)  # 将结果转换为JSON格式并返回
+
+
+@app.route("/getAvgCrossCongestion")
+def getAvgCrossCongestion():
+    directory = "./dataProcess/data/avgcrosscongestion.json"  # json文件所在路径
+    with open(directory, "r", encoding="utf-8") as f:
+        data = json.load(f)  # 读取到的数据
+    return json.dumps(data)  # 将结果转换为JSON格式并返回
+
+
+@app.route("/getMapCrossCongestion")
+def getMapCrossCongestion():
+    directory = "./dataProcess/data/MapCrossCongestion.json"  # json文件所在路径
     with open(directory, "r", encoding="utf-8") as f:
         data = json.load(f)  # 读取到的数据
     return json.dumps(data)  # 将结果转换为JSON格式并返回

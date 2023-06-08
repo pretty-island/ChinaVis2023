@@ -83,13 +83,13 @@ const HealthParallel: React.FC<HealthParallelProps> = ({ selectedRoad }) => {
       const schema = [
         { name: 'road', index: 0, text: '道路' },
         { name: 'date', index: 1, text: '时间' },
-        { name: 'cong', index: 2, text: '道路占有率' },
+        { name: 'cong', index: 2, text: '道路占有\n率' },
         { name: 'road', index: 3, text: '平均延迟' },
         { name: 'flow', index: 4, text: '超速事件' },
         { name: 'nixing', index: 5, text: ' 逆行事件' },
-        { name: 'overspeed', index: 6, text: '占用公交车道' },
-        { name: 'stop', index: 7, text: '占用机动车道' },
-        { name: 'health', index: 8, text: '道路健康度' },
+        { name: 'overspeed', index: 6, text: '占用公交\n车道' },
+        { name: 'stop', index: 7, text: '占用非机\n动车道' },
+        { name: 'health', index: 8, text: '道路健康\n度' },
         { name: '等级', index: 9, text: '等级' }
       ];
       const lineStyle = {
@@ -101,7 +101,7 @@ const HealthParallel: React.FC<HealthParallelProps> = ({ selectedRoad }) => {
         let x = "";
         switch (num) {
           case "all":
-            x = "全部道路"
+            x = "所有道路"
             break;
           default:
             x = "道路" + num
@@ -129,7 +129,13 @@ const HealthParallel: React.FC<HealthParallelProps> = ({ selectedRoad }) => {
           formatter: function (params) {
             var data = params.data;
             var tooltipContent = '道路: ' + data[0] + '<br>';
-            tooltipContent += '时间: ' + data[1] + '时'+'<br>';
+            tooltipContent += '时间: ' + data[1] + '点' + '<br>';
+            tooltipContent += '道路占有率: ' + data[2] + '<br>';
+            tooltipContent += '平均延迟: ' + data[3] + '<br>';
+            tooltipContent += '超速事件: ' + data[4] + '<br>';
+            tooltipContent += '逆行事件: ' + data[5] + '<br>';
+            tooltipContent += '占用公交车道: ' + data[6] + '<br>';
+            tooltipContent += '占用非机动车道: ' + data[7] + '<br>';
             tooltipContent += '道路健康度: ' + data[data.length - 2] + '<br>';
             tooltipContent += '健康度等级: ' + data[data.length - 1];
             return tooltipContent;
@@ -140,8 +146,10 @@ const HealthParallel: React.FC<HealthParallelProps> = ({ selectedRoad }) => {
             dim: 0,
             name: schema[0].text,
             type: 'category',
-            axisLabel:{
-              show:false
+            axisLabel: {
+              show: false
+            }, nameTextStyle: {
+              padding: [0, 0, 5, 0]
             }
           },
           {
@@ -151,11 +159,28 @@ const HealthParallel: React.FC<HealthParallelProps> = ({ selectedRoad }) => {
             max: 15,
             min: 7,
             // nameLocation: 'start'
+            nameTextStyle: {
+              padding: [0, 0, 5, 0]
+            }
           },
-          { dim: 2, name: schema[2].text },
-          { dim: 3, name: schema[3].text },
-          { dim: 4, name: schema[4].text },
-          { dim: 5, name: schema[5].text },
+          {
+            dim: 2, name: schema[2].text,
+          },
+          {
+            dim: 3, name: schema[3].text, nameTextStyle: {
+              padding: [0, 0, 5, 0]
+            }
+          },
+          {
+            dim: 4, name: schema[4].text, nameTextStyle: {
+              padding: [0, 0, 5, 0]
+            }
+          },
+          {
+            dim: 5, name: schema[5].text, nameTextStyle: {
+              padding: [0, 0, 5, 0]
+            }
+          },
           { dim: 6, name: schema[6].text },
           { dim: 7, name: schema[7].text },
           { dim: 8, name: schema[8].text },
@@ -165,18 +190,25 @@ const HealthParallel: React.FC<HealthParallelProps> = ({ selectedRoad }) => {
             type: 'category',
             inverse: true,
             nameLocation: 'start',
-            data: ['非常健康', '健康', '亚健康', '不健康']
+            data: ['非常健康', '健康', '亚健康', '不健康'], nameTextStyle: {
+              padding: [0, 0, 5, 0]
+            }
           }
         ],
         visualMap: {
+          right: 'center',
+          bottom: 'bottom',
+          orient: 'horizontal',
+          inverse: true,
+          // diverse:true,
           show: true,
           // type:'piecewise',
           min: 0,
           max: 100,
-          right: 0,
+          // right: 0,
           // top:200,
           // inverse: true,
-          dimension:8,
+          dimension: 8,
           // pieces:[
           //   {value:'非常健康',color:'green'},
           //   {value:'健康',color:'blue'},
@@ -184,15 +216,25 @@ const HealthParallel: React.FC<HealthParallelProps> = ({ selectedRoad }) => {
           //   {value:'不健康',color:'red'},
 
           // ]
-          
-          inRange: {
-            color: ['#003f76','#52CC6C','#FFA500','#9C3538','#852D30','#852D30'].reverse()
-            // colorAlpha: [0, 1]
+          type: 'piecewise',
+          pieces: [
+
+            { min: 80, max: 90, color: '#52CC6C', label: '健康（80~90）', },
+            { min: 60, max: 80, color: '#d5c173', label: '亚健康（60~80）', },
+            { min: 0, max: 60, color: '#852D30', label: '不健康（<60）', },
+            { min: 90, max: 100, color: '#61B5FF', label: '非常健康（90~100）', },],
+          textStyle: {
+            color: '#fff'
           }
+          // inRange: {
+          //   color: ['#003f76', '#003f76', '#003f76', '#52CC6C', '#52CC6C', '#d5c173', '#d5c173', '#d5c173', '#d5c173', '#852D30', '#852D30', '#852D30', '#852D30', '#852D30', '#852D30', '#852D30', '#852D30', '#852D30', '#852D30', '#852D30', '#852D30', '#852D30'].reverse()
+          //   // color: ['#003f76','#52CC6C','#FFA500','#9C3538','#852D30','#852D30'].reverse()
+          //   // colorAlpha: [0, 1]
+          // }
         },
         parallel: {
           left: '4.5%',
-          right: '12.5%',
+          right: '9.5%',
           top: "17%",
           bottom: '10%',
           // layout: 'vertical',
@@ -219,7 +261,8 @@ const HealthParallel: React.FC<HealthParallelProps> = ({ selectedRoad }) => {
               show: false
             },
             axisLabel: {
-              color: '#fff'
+              color: '#fff',
+
             }
           }
         },

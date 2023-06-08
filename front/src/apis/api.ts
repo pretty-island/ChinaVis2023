@@ -96,3 +96,23 @@ export const getEventTable = (path: string, hour: string, event_name: string) =>
 export const getHealth = (path: string) => {
   return api.get(path)
 }
+
+export const getRoadCongestion = (path: string) => {
+  return api.get(path)
+}
+
+export const getMapRoadCongestion = (path: string) => {
+  return api.get(path)
+}
+
+export const getMapCrossCongestion = (path: string) => {
+  return api.get(path)
+}
+
+export const getCrossCongestion = (path: string) => {
+  return api.get(path)
+}
+
+export const getAvgCrossCongestion = (path: string) => {
+  return api.get(path)
+}

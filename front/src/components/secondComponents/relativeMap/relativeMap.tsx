@@ -199,7 +199,7 @@ const RelativeMap: React.FC<RelativeMapProps> = ({ setTurnName,selectedCross, se
                             rotateLabel: true,
 
                         },
-                        edgeSymbol:['circle', 'arrow'],
+                        // edgeSymbol:['none', 'arrow'],
                         // edgeSymbolSize: function (value, params) {
                         //     // 自定义回调函数根据连接线的粗细计算箭头的大小
                         //     let lineWidth = params.data.lineStyle.normal.width;
@@ -207,7 +207,7 @@ const RelativeMap: React.FC<RelativeMapProps> = ({ setTurnName,selectedCross, se
                         //     let arrowSize = lineWidth;
                         //     return [0, 100];
                         //   },
-                        edgeSymbolSize:0,
+                        // edgeSymbolSize:[0,30],
                         // borderCap:'square',
                         data: hazards,
                         links: chains,
@@ -228,7 +228,7 @@ const RelativeMap: React.FC<RelativeMapProps> = ({ setTurnName,selectedCross, se
                                 color: function (param: any) {
                                     // let colorList = ['#FFA500', '', '', '#9acd32', '#9acd32', ' ', '', '#F5F5DC', '#F5F5DC', ' ', '', '#00ffff', '#00ffff', ' ', '', '#FFA500'];
                                     // let colorList = ['#beddfc', '#252525', '#3d72a1', '#ffe380', '#ffe380', '#5fc8dd', '#5fc8dd', '#beddfc'];
-                                    let colorList = ['#437db1',  '#A1794C', '#A1794C', '#8CA5D1', '#8CA5D1','#B5A462', '#B5A462', '#437db1'];
+                                    let colorList = ['#61B5FF',  '#f79d06', '#f79d06', '#cfe7fd', '#cfe7fd','#F7CD06', '#F7CD06', '#61B5FF'];
                                     return colorList[param?.dataIndex]
                                 },
                                 label: {
@@ -281,7 +281,7 @@ const RelativeMap: React.FC<RelativeMapProps> = ({ setTurnName,selectedCross, se
                 }
             })
         }
-    }, [turnUse,setTurnName])
+    }, [turnUse,setTurnName,selectedHour,selectedMin,selectedCross])
     return (
         <div ref={chartRef} style={{ width: "100%", height: "100%" }}></div>
     )
