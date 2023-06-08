@@ -17,7 +17,7 @@ export default class BabylonManager {
     private readonly scene: Scene;
     private cars: Car[] | undefined;
     private timestampText: TextBlock | undefined;
-    private timeScaleText: TextBlock | undefined;
+    // private timeScaleText: TextBlock | undefined;
     private renderTimestamp: number;
     private _beginTimestamp: number | undefined;
     private _endTimestamp: number | undefined;
@@ -139,7 +139,7 @@ export default class BabylonManager {
 
         const advancedTexture = AdvancedDynamicTexture.CreateFullscreenUI("UI");
         this.timestampText = this.creatTimestampText(advancedTexture);
-        this.timeScaleText = this.creatTimeScaleText(advancedTexture);
+        // this.timeScaleText = this.creatTimeScaleText(advancedTexture);
 
         SceneLoader.ImportMeshAsync("", "model/scene.glb", undefined,
             this.scene).then(r => {
@@ -179,12 +179,12 @@ export default class BabylonManager {
         this.currTimestamp += (Number.isNaN(timeInterval) ? 0 : timeInterval) * this.timeScale;
 
         if (this.timestampText !== undefined) {
-            this.timestampText.text = this.getCurrTime()
+            this.timestampText.text = this.getCurrTime() + "\n" + "时间速率: " + this.timeScale * 100 + "x";
         }
 
-        if (this.timeScaleText !== undefined) {
-            this.timeScaleText.text = "时间速率: " + this.timeScale * 100 + "x";
-        }
+        // if (this.timeScaleText !== undefined) {
+        //     this.timeScaleText.text =
+        // }
 
         this.cars?.forEach(car => {
             car.updatePosition(this.currTimestamp);
@@ -211,22 +211,22 @@ export default class BabylonManager {
         return text;
     }
 
-    private creatTimeScaleText(advancedTexture: AdvancedDynamicTexture) {
-        const text = new TextBlock();
-        text.color = "white";
-        text.fontSize = 24;
-        text.fontFamily = "Arial";
-        text.textHorizontalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT;
-        text.textVerticalAlignment = Control.VERTICAL_ALIGNMENT_TOP;
-        text.outlineWidth = 2;
-        text.outlineColor = "black";
-        text.paddingLeft = 12;
-        text.paddingTop = 12;
-
-        advancedTexture.addControl(text);
-
-        return text;
-    }
+    // private creatTimeScaleText(advancedTexture: AdvancedDynamicTexture) {
+    //     const text = new TextBlock();
+    //     text.color = "white";
+    //     text.fontSize = 24;
+    //     text.fontFamily = "Arial";
+    //     text.textHorizontalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT;
+    //     text.textVerticalAlignment = Control.VERTICAL_ALIGNMENT_TOP;
+    //     text.outlineWidth = 2;
+    //     text.outlineColor = "black";
+    //     text.paddingLeft = 12;
+    //     text.paddingTop = 12;
+    //
+    //     advancedTexture.addControl(text);
+    //
+    //     return text;
+    // }
 
     public onKeyDown(event: React.KeyboardEvent<HTMLCanvasElement>) {
         if (["Digit0", "Digit1", "Digit2", "Digit3", "Digit4", "Digit5", "Digit6", "Digit7", "Digit8", "Digit9"].indexOf(event.code) !== -1) {
