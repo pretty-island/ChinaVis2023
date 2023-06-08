@@ -8,7 +8,7 @@ import FirstConsole from "../firstComponents/firstConsole/firstConsole";
 import QueCar from "../secondComponents/queCar/queCar";
 import TrafficFlow from "../firstComponents/trafficFlow/trafficFlow";
 // import CarHeat from "../firstComponents/carHeat/carHeat";
-import MainVisualizationView from "../MainVisualizationView";
+import MainVisualizationView, {babylonManager} from "../MainVisualizationView";
 import RoadMap from "../secondComponents/roadMap/roadMap";
 import RelativeMap from "../secondComponents/relativeMap/relativeMap";
 // import CarScatter from "../secondComponents/carScatter/carScatter";
@@ -133,6 +133,25 @@ const Layout = () => {
       </div>
     )
   }
+
+
+  useEffect(() => {
+    const index = Number(selectedRoad);
+    if (isNaN(index)) {
+      babylonManager?.setCameraToCrossroad(0);
+    } else {
+      babylonManager?.setCameraToRoad(Math.max(index - 1, 0));
+    }
+  }, [selectedRoad])
+
+  useEffect(() => {
+    const index = Number(selectedCross);
+    if (isNaN(index)) {
+      babylonManager?.setCameraToCrossroad(0);
+    } else {
+      babylonManager?.setCameraToCrossroad(Math.max(index - 1, 0));
+    }
+  }, [selectedCross])
 
   return (
     <div id="layout">
