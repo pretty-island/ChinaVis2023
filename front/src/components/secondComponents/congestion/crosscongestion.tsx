@@ -209,8 +209,8 @@ const CrossCongestionParallel: React.FC<CongestionProps> = ({ setTurnName, setSe
             type: 'piecewise',
             pieces: [
               { min: 0, max: 55, color: '#61B5FF', label: '畅通（0~55）', },
-              { min: 55, max: 100, color: '#f79d06', label: '轻度拥堵（55~100）', },
-              { min: 100, max: 145, color: '#C83717', label: '中度拥堵（100~145）', },
+              { min: 55, max: 100, color: '#FFDC05', label: '轻度拥堵（55~100）', },
+              { min: 100, max: 145, color: '#F78606', label: '中度拥堵（100~145）', },
               { min: 145, max: 300, color: '#8f0021', label: '严重拥堵（>145）', },],
             textStyle: {
               color: '#fff'

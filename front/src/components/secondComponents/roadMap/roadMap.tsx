@@ -391,11 +391,11 @@ const RoadMap: React.FC<RoadMapProps> = ({ selectedHour, selectedMin }) => {
           roadLevel = '严重拥堵';
         }
         else if (conges >= 2) {
-          color = '#C83717';
+          color = '#F78606';
           roadLevel = '拥堵';
         }
         else if (conges >= 1.5) {
-          color = '#f79d06';
+          color = '#FFDC05';
           roadLevel = '缓行';
         }
 
@@ -790,11 +790,11 @@ const RoadMap: React.FC<RoadMapProps> = ({ selectedHour, selectedMin }) => {
           crossLevel = '严重拥堵';
         }
         else if (crossConges >= 100) {
-          colorcross = '#C83717';
+          colorcross = '#F78606';
           crossLevel = '中度拥堵';
         }
         else if (crossConges >= 55) {
-          colorcross = '#f79d06';
+          colorcross = '#FFDC05';
           crossLevel = '轻度拥堵';
         }
         const marker = L.circleMarker([lat, lng], {

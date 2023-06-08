@@ -212,8 +212,8 @@ const CongestionParallel: React.FC<CongestionProps> = ({ selectedHour, setSelect
             type: 'piecewise',
             pieces: [
               { min: 0, max: 1.5, color: '#61B5FF', label: '畅通（0~1.5）', },
-              { min: 1.5, max: 2.0, color: '#f79d06', label: '缓行（1.5~2.0', },
-              { min: 2.0, max: 4.0, color: '#C83717', label: '拥堵（2.0~4.0）', },
+              { min: 1.5, max: 2.0, color: '#FFDC05', label: '缓行（1.5~2.0', },
+              { min: 2.0, max: 4.0, color: '#F78606', label: '拥堵（2.0~4.0）', },
               { min: 4.0, max: 9, color: '#8f0021', label: '严重拥堵（>4.0）', },],
             textStyle: {
               color: '#fff'

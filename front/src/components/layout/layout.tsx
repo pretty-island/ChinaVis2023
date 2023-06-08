@@ -293,7 +293,7 @@ const Layout = () => {
               <BorderBox1 className="s-b-right" style={{ width: "50%" }}>
 
                 <div className="changeViewRoad">
-                  <ChartHeader chartName={"拥堵情况变化气泡图"} />
+                  <ChartHeader chartName={"拥堵情况"} />
                   <ChangeViewRoad />
                 </div>
 
