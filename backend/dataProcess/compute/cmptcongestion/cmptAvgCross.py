@@ -29,7 +29,7 @@ input_directory = "D:/VIScode/chinavis-2023/backend/dataProcess/data/crossdelay/
 #         data.to_csv(file_path,index=False)
 
 
-# 保存统计文件：每个路口的平均拥堵
+# 保存统计文件：每个路口的最大拥堵
 output_directory = (
     "D:/VIScode/chinavis-2023/backend/dataProcess/data/avgcrosscongestion.json"
 )
@@ -46,8 +46,8 @@ for cross in range(1,9):
         for i in range(len(data)):
             time_id=data.loc[i, "time_id"]
             croid=data.loc[i, "croid"]
-            avg_delay = round(float(data.loc[i, "avg_delay"]), 3)
-            values=[int(time_id)]+[int(croid)]+[avg_delay]
+            max_delay = round(float(data.loc[i, "max_delay"]), 3)
+            values=[int(time_id)]+[int(croid)]+[max_delay]
             if values not in crossconges_statistics[hour]:
                 crossconges_statistics[hour].append(values)
 with open(output_directory, "w", encoding="utf-8") as f:

@@ -7,7 +7,6 @@ from datetime import datetime, timedelta
 
 # 读取数据
 input_directory = "D:/VIScode/chinavis-2023/backend/dataProcess/data/crossdelay/"
-# avg_directory = "D:/VIScode/chinavis-2023/backend/dataProcess/data/crossdelay/"
 
 # # 遍历每个路口文件夹,增加一列计算平均值
 # for cross in range(1,9):
@@ -20,6 +19,19 @@ input_directory = "D:/VIScode/chinavis-2023/backend/dataProcess/data/crossdelay/
 #         data = pd.read_csv(file_path)
 #         # 计算平均值并添加到新列
 #         data['avg_delay'] = data.groupby(['time_id'])['4'].transform('mean')
+#         # 将数据写回原始文件
+#         data.to_csv(file_path, index=False)
+# # 遍历每个路口文件夹,增加一列计算最大值
+# for cross in range(1,9):
+#     cross_folder = input_directory + f"路口{cross}"
+#     hour_files = os.listdir(cross_folder)
+#     # 遍历时间文件
+#     for hour_file in hour_files:
+#         file_path = os.path.join(cross_folder, hour_file)
+#         # 读取数据
+#         data = pd.read_csv(file_path)
+#         # 计算最大值并添加到新列
+#         data['max_delay'] = data.groupby(['time_id'])['4'].transform('max')
 #         # 将数据写回原始文件
 #         data.to_csv(file_path, index=False)
 
@@ -49,6 +61,8 @@ input_directory = "D:/VIScode/chinavis-2023/backend/dataProcess/data/crossdelay/
 #         data["time_min"] = cross_column
 #         print(data)
 #         data.to_csv(file_path,index=False)
+
+
 output_directory=    "D:/VIScode/chinavis-2023/backend/dataProcess/data/MapCrossCongestion.json"
 
 crossconges_statistics = defaultdict(lambda: defaultdict(float))
@@ -65,7 +79,7 @@ for cross in range(1,9):
         for i in range(len(data)):
             time = data.loc[i, "time_min"]
             road_name = data.loc[i, "5"]
-            avg_delay = round(float(data.loc[i, "avg_delay"]), 3)
-            crossconges_statistics[time][road_name] = avg_delay
+            max_delay = round(float(data.loc[i, "max_delay"]), 3)
+            crossconges_statistics[time][road_name] = max_delay
 with open(output_directory, "w", encoding="utf-8") as f:
     json.dump(crossconges_statistics, f, ensure_ascii=False, indent=4)
