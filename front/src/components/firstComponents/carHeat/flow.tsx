@@ -217,6 +217,11 @@ const Flow: React.FC = ({ typeName }) => {
                     color: "#fff",
                 },
                 tooltip: {
+                    backgroundColor:'rgba(0,0,0,0.2)',
+                    textStyle:{
+                        color:'#fff',
+                        fontWeight:'bold'
+                    },
                     trigger: 'axis'
                 },
                 grid: [{

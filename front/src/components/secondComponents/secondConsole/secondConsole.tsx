@@ -41,8 +41,9 @@ interface SecondConsoleProps {
     setSelectedMin: React.Dispatch<React.SetStateAction<string>>;
     selectedMin: string;
     setHeatMap: React.Dispatch<React.SetStateAction<string>>;
+    setHeatCrossMap: React.Dispatch<React.SetStateAction<string>>;
     selectedHour: string;
-    setSelectedHour:React.Dispatch<React.SetStateAction<string>>;
+    setSelectedHour: React.Dispatch<React.SetStateAction<string>>;
 }
 
 
@@ -62,17 +63,17 @@ const cityData = {
 
 type CityName = keyof typeof cityData;
 
-const SecondConsole: React.FC<SecondConsoleProps> = ({ setHeatMap, setSelectedCross, selectedCross, setSelectedMin, selectedMin,setSelectedHour,selectedHour }) => {
+const SecondConsole: React.FC<SecondConsoleProps> = ({ setHeatCrossMap, setHeatMap, setSelectedCross, selectedCross, setSelectedMin, selectedMin, setSelectedHour, selectedHour }) => {
     const handleIntersectionChange = (value: string) => {
         setSelectedCross(value);
     }
     // const handleTimeChange = (value: string) => {
     //     setSelectedMin(value);
     // }
-    // const onChange = (checked: boolean) => {
-    //     console.log(`switch to ${checked}`);
-    //     setHeatMap(checked)
-    // };
+    const onChange = (checked: boolean) => {
+        console.log(`switch to ${checked}`);
+        setHeatMap(checked)
+    };
 
     const [cities, setCities] = useState(cityData[provinceData[0] as CityName]);
 
@@ -85,7 +86,7 @@ const SecondConsole: React.FC<SecondConsoleProps> = ({ setHeatMap, setSelectedCr
     const onSecondCityChange = (value: CityName) => {
         setSelectedMin(value);
     };
-console.log(selectedHour+selectedMin);
+    console.log(selectedHour + selectedMin);
 
     return (
         <div style={{ height: "100%", width: "100%" }}>
@@ -122,12 +123,17 @@ console.log(selectedHour+selectedMin);
                     })}
                 </Select>
             </div>
-            {/* <div style={{ padding: "10px" }}>
-                <span>拥堵热力图：</span>
+            <div style={{ padding: "10px" }}>
+                <span>道路拥堵热力图：</span>
                 <Switch
-                    //  defaultChecked
+                    defaultChecked
                     onChange={onChange} />
-            </div> */}
+                <span style={{ padding: "50px" }}>路口拥堵热力图：</span>
+                <Switch defaultChecked
+                    onChange={(checked: boolean) => {
+                        setHeatCrossMap(checked)
+                    }} />
+            </div>
 
         </div >
     )

@@ -71,6 +71,11 @@ const QueCar: React.FC<QueProps> = ({ turnName, selectedCross, selectedHour, sel
             const time = selectedHour.replace("点", "") + ":" + selectedMin.split("-")[0] + "-" + selectedHour.replace("点", "") + ":" + selectedMin.split("-")[1];
             const option: EChartOption = {
                 tooltip: {
+                    backgroundColor:'rgba(0,0,0,0.2)',
+                    textStyle:{
+                        color:'#fff',
+                        fontWeight:'bold'
+                    },
                     trigger: 'axis',
                     // backgroundColor: "rgba(255,255,255,0.1)",
                     axisPointer: {

@@ -276,6 +276,11 @@ const Total: React.FC<TotalProps> = ({ selectedRoad, typeName,setTypeName}) => {
             }
             const option: EChartOption = {
                 tooltip: {
+                    backgroundColor:'rgba(0,0,0,0.2)',
+                    textStyle:{
+                        color:'#fff',
+                        fontWeight:'bold'
+                    },
                     trigger: 'item',
                     // padding: 10,
                     // borderWidth: 1,

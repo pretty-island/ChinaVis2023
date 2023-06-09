@@ -236,6 +236,11 @@ const TotalHeat: React.FC<TotalHeatProps> = ({ typeName, setTypeName }) => {
                     "#FECE43",
                 ],
                 tooltip: {
+                    backgroundColor:'rgba(0,0,0,0.2)',
+                    textStyle:{
+                        color:'#fff',
+                        fontWeight:'bold'
+                    },
                     position: 'top',
                 },
                 textStyle: {

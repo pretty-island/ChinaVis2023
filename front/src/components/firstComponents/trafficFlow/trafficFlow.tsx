@@ -304,6 +304,11 @@ const TrafficFlow: React.FC<FlowProps> = ({ selectedRoad }) => {
                 //     "#FFB95E",
                 //     "#FFFB7A",],
                 tooltip: {
+                    backgroundColor:'rgba(0,0,0,0.2)',
+                    textStyle:{
+                        color:'#fff',
+                        fontWeight:'bold'
+                    },
                     trigger: "axis",
                 },
                 textStyle: {

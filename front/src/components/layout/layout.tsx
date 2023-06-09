@@ -42,7 +42,7 @@ const Layout = () => {
   // 用户切换速度和流量视图
   const [nowView, setNowView] = useState<string>("流量");
   // 用户切换路口和道路视图
-  const [nowViewRoad, setNowViewRoad] = useState<string>("路口分方向");
+  const [nowViewRoad, setNowViewRoad] = useState<string>("道路");
 
   // 第二屏：用户选择的路口
   const [selectedCross, setSelectedCross] = useState<string>("1")
@@ -51,7 +51,8 @@ const Layout = () => {
   const [selectedMin, setSelectedMin] = useState<string>("00-05")
   const [turnName, setTurnName] = useState<string>("全部方向")
 
-  const [heatMap, setHeatMap] = useState<boolean>(false)
+  const [heatMap, setHeatMap] = useState<boolean>(true)
+  const [heatCrossMap, setHeatCrossMap] = useState<boolean>(true)
 
   // 点击表格选择的ID
   const [viewId, setViewId] = useState()
@@ -241,7 +242,7 @@ const Layout = () => {
                   <HealthParallel selectedRoad={selectedRoad} />
                 </BorderBox1>
                 <BorderBox1 className="f-queue" style={{ height: "60%" }}>
-                  <ChartHeader chartName={"交通事件"} />
+                  <ChartHeader chartName={"交通违规事件"} />
                   <div className="t" style={{ width: "100%", height: "50%" }}>
                     <EventChart selectedRoad={selectedRoad} setEventName={setEventName} />
                     {/* <CarHeat /> */}
@@ -262,6 +263,7 @@ const Layout = () => {
                 <BorderBox13 className="s-console" style={{ height: "27.87%" }}>
                   <ChartHeader chartName={"控制台"} />
                   <SecondConsole setHeatMap={setHeatMap}
+                  setHeatCrossMap={setHeatCrossMap}
                     setSelectedCross={setSelectedCross}
                     selectedCross={selectedCross}
                     setSelectedMin={setSelectedMin}
@@ -280,7 +282,7 @@ const Layout = () => {
                   <MainVisualizationView />
                 </BorderBox1>
                 <BorderBox1 className="s-tr-right" style={{ height: "100%", width: "47%" }}>
-                  <RoadMap selectedHour={selectedHour} selectedMin={selectedMin} />
+                  <RoadMap heatCrossMap={heatCrossMap} heatMap={heatMap} selectedHour={selectedHour} selectedMin={selectedMin} />
                 </BorderBox1>
               </div>
             </div>
@@ -293,7 +295,7 @@ const Layout = () => {
               <BorderBox1 className="s-b-right" style={{ width: "50%" }}>
 
                 <div className="changeViewRoad">
-                  <ChartHeader chartName={"拥堵情况"} />
+                  <ChartHeader chartName={"拥堵情况分布珠串图"} />
                   <ChangeViewRoad />
                 </div>
 

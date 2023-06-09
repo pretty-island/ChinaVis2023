@@ -6,14 +6,15 @@ import { getMapCrossCongestion, getMapRoadCongestion } from '../../../apis/api';
 import { time } from 'echarts';
 // import 'leaflet.heat.js'
 interface RoadMapProps {
-  // heatMap: string;
+  heatMap: string;
+  heatCrossMap: string;
   selectedHour: string;
   selectedMin: string;
   // setEventName: React.Dispatch<React.SetStateAction<string>>;
   // typeName: string;
 }
 
-const RoadMap: React.FC<RoadMapProps> = ({ selectedHour, selectedMin }) => {
+const RoadMap: React.FC<RoadMapProps> = ({ heatCrossMap, heatMap,selectedHour, selectedMin }) => {
   const [mapRoad, setMapRoad] = useState();
   const [mapCross, setMapCross] = useState();
   // 获取数据
@@ -377,7 +378,7 @@ const RoadMap: React.FC<RoadMapProps> = ({ selectedHour, selectedMin }) => {
           road_name: '道路8_向左'
         },
       ]
-
+      if(heatMap){
       // 创建四边形图层
       const polygons = L.layerGroup().addTo(mymap);
        // 循环遍历数据，创建并添加道路热力图
@@ -406,7 +407,8 @@ const RoadMap: React.FC<RoadMapProps> = ({ selectedHour, selectedMin }) => {
         }).bindPopup(roadname + "<br/>" + "拥堵指数（平均延迟）：" + conges + "<br/>" + "拥堵等级：" + roadLevel+"<br/>时间："+timetotal); // 设置标记的弹出框内容
         polygons.addLayer(polygon);
       });
-
+    }
+    if(heatCrossMap){
       // //弹窗显示点击处的坐标
       // var polygon5_right_1 = L.polygon([
       //   [-0.002612, -0.00303],
@@ -835,6 +837,7 @@ const RoadMap: React.FC<RoadMapProps> = ({ selectedHour, selectedMin }) => {
           marker.setRadius(getAdjustedRadius(currentZoom));
         });
       });
+    }
       // var popup = L.popup();
       // function onMapClick(e) {
       //   popup
@@ -845,7 +848,7 @@ const RoadMap: React.FC<RoadMapProps> = ({ selectedHour, selectedMin }) => {
       // mymap.on('click', onMapClick);
     }
 
-  }, [mapRoad, mapCross, selectedMin, selectedHour])
+  }, [mapRoad, mapCross, selectedMin, selectedHour,heatMap,heatCrossMap])
 
   return <div ref={mapRef} style={{ width: '94%', height: '94%' }}></div>;
 }

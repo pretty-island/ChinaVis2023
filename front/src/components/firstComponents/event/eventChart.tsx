@@ -133,12 +133,12 @@ const EventChart: React.FC<EventProps> = ({ selectedRoad, setEventName }) => {
                     data: ['7点', '8点', '9点', '10点', '11点', '12点', '13点', '14点', '15点'],
                     // z: 10,
                 },
-                color: [
-                    "#247683",
-                    "#7C6CA1", 
-                    "#9E3F2C",
-                    "#3D72A1",
-                    "#C78100",
+                // color: [
+                //     "#247683",
+                //     "#7C6CA1", 
+                //     "#9E3F2C",
+                //     "#3D72A1",
+                //     "#C78100",
                     // "#993437",              
                     // "#2F8CA1",
                     // "#C2B069",
@@ -153,7 +153,7 @@ const EventChart: React.FC<EventProps> = ({ selectedRoad, setEventName }) => {
                     // "rgba(20,75,75,0.57)",
                     // "#FDB36ac2",
 
-                ],
+                // ],
                 textStyle: {
                     color: "#fff",
                 },
@@ -173,6 +173,11 @@ const EventChart: React.FC<EventProps> = ({ selectedRoad, setEventName }) => {
                     radius: ["25%", "60%"],
                 },
                 tooltip: {
+                    backgroundColor:'rgba(0,0,0,0.2)',
+                    textStyle:{
+                        color:'#fff',
+                        fontWeight:'bold'
+                    },
                     trigger: "item",
                     padding: 10,
                     borderWidth: 1,
@@ -232,6 +237,7 @@ const EventChart: React.FC<EventProps> = ({ selectedRoad, setEventName }) => {
                         avoidLabelOverlap: false,
                         label: {
                             normal: {
+                                
                                 show: false,
                                 position: "inside",
                                 formatter: "{b} : {c} ({d}%)",
@@ -247,6 +253,26 @@ const EventChart: React.FC<EventProps> = ({ selectedRoad, setEventName }) => {
                                 trigger: "item",
                                 padding: 10,
                             },
+                            // textStyle:{
+                                // color:"#3D72A1"
+                                // function(params){
+                                //     if(params.name==='机动车占用非机动车道'){
+                                //         return '#247683';
+                                //     }
+                                //     else if(params.name==='逆行'){
+                                //         return "#7C6CA1";
+                                //     }
+                                //     else if(params.name==='行人横穿马路'){
+                                //         return "#9E3F2C";
+                                //     }
+                                //     else if(params.name==='机动车超速'){
+                                //         return "#3D72A1";
+                                //     }
+                                //     else if(params.name==='机动车占用公交车道'){
+                                //         return "#C78100";
+                                //     }
+                                // }
+                            // }
                         },
                         labelLine: {
                             normal: {
@@ -256,7 +282,25 @@ const EventChart: React.FC<EventProps> = ({ selectedRoad, setEventName }) => {
                         itemStyle: {
                             normal: {
                                 borderWidth: 0,
+                                // color:"#3D72A1",
                                 borderColor: "#ffffff",
+                                color:function(params){
+                                    if(params.name==='机动车占用非机动车道'){
+                                        return '#247683';
+                                    }
+                                    else if(params.name==='逆行'){
+                                        return "#9E3F2C";
+                                    }
+                                    else if(params.name==='行人横穿马路'){
+                                        return "#3D72A1";
+                                    }
+                                    else if(params.name==='机动车超速'){
+                                        return "#C78100";
+                                    }
+                                    else if(params.name==='机动车占用公交车道'){
+                                        return "#7C6CA1";
+                                    }
+                                }
                             },
                             emphasis: {
                                 show: true,
@@ -278,6 +322,7 @@ const EventChart: React.FC<EventProps> = ({ selectedRoad, setEventName }) => {
                         itemStyle: {
                             normal: {
                                 borderWidth: 0,
+                                color:"#7C6CA1", 
                             },
                             emphasis: {
                                 borderWidth: 2,
@@ -299,6 +344,7 @@ const EventChart: React.FC<EventProps> = ({ selectedRoad, setEventName }) => {
                             normal: {
                                 borderWidth: 0,
                                 //   borderColor: "#ffffff",
+                                color:"#9E3F2C",
                             },
                             emphasis: {
                                 borderWidth: 2,
@@ -319,6 +365,7 @@ const EventChart: React.FC<EventProps> = ({ selectedRoad, setEventName }) => {
                         itemStyle: {
                             normal: {
                                 borderWidth: 0,
+                                color:"#3D72A1",
                             },
                             emphasis: {
                                 borderWidth: 2,
@@ -338,6 +385,7 @@ const EventChart: React.FC<EventProps> = ({ selectedRoad, setEventName }) => {
                         itemStyle: {
                             normal: {
                                 borderWidth: 0,
+                                color:"#C78100",
                             },
                             emphasis: {
                                 borderWidth: 2,
@@ -356,6 +404,7 @@ const EventChart: React.FC<EventProps> = ({ selectedRoad, setEventName }) => {
                         itemStyle: {
                             normal: {
                                 borderWidth: 0,
+                                color:"#247683",
                             },
                             emphasis: {
                                 borderWidth: 2,

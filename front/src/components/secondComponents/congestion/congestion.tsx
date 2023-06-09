@@ -68,6 +68,11 @@ const CongestionParallel: React.FC<CongestionProps> = ({ selectedHour, setSelect
           color: "#fff",
         },
         tooltip: {
+          backgroundColor: 'rgba(0,0,0,0.2)',
+          textStyle: {
+            color: '#fff',
+            fontWeight: 'bold'
+          },
           // padding: 10,
           // backgroundColor: '#222',
           // borderColor: '#777',

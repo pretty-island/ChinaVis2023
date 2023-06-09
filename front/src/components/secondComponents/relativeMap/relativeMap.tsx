@@ -159,6 +159,11 @@ const RelativeMap: React.FC<RelativeMapProps> = ({ setTurnName,selectedCross, se
                 // animationDurationUpdate: 1500,
                 // animationEasingUpdate: 'quinticInOut',
                 tooltip: {
+                    backgroundColor:'rgba(0,0,0,0.2)',
+                    textStyle:{
+                        color:'#fff',
+                        fontWeight:'bold'
+                    },
                     formatter: function (params: any) {
                         if (params.dataType === 'node') {
                             return params.data.name + "车流量：" + params.data.value;
@@ -171,7 +176,7 @@ const RelativeMap: React.FC<RelativeMapProps> = ({ setTurnName,selectedCross, se
                             return tooltipText;
                         }
                     },
-                    triggerOn: 'click'
+                    // triggerOn: 'click'
                 },
                 graphic: [
                     {
