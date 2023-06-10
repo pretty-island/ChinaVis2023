@@ -25,12 +25,13 @@ const EventTable: React.FC<EventTableProps> = ({ setViewId,setViewTime,selectedR
         const eventmap = {
             "逆行": "time_nixing",
             "行人横穿马路": "time_true_cross",
-            "机动车占用非机动车道": "time_true_error_way",
+            "机动车占用非机动车道": "bicycle_way",
+            "机动车占用公交车道": "bus_way",
             "机动车超速": "time_true_overspeed"
         }
         if (eventName == "全天交通事件") {
             const hour = ["7", "8", "9", "10", "11", "12", "13", "14", "15"]
-            const event = ["逆行", "行人横穿马路", "机动车占用非机动车道", "机动车超速"]
+            const event = ["逆行", "行人横穿马路", "机动车占用非机动车道","机动车占用公交车道", "机动车超速"]
             const data = []
             for (const i of hour) {
                 for (const j of event) {
