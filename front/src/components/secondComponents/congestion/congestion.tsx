@@ -99,10 +99,10 @@ const CongestionParallel: React.FC<CongestionProps> = ({ selectedHour, setSelect
               roadLevel = '严重拥堵';
             }
             else if (params.data[2] >= 2) {
-              roadLevel = '拥堵';
+              roadLevel = '中度拥堵';
             }
             else if (params.data[2] >= 1.5) {
-              roadLevel = '缓行';
+              roadLevel = '轻度拥堵';
             }
 
             return params.seriesName + '<br>' + params.name + "：" + params.data[2] + "<br>拥堵等级：" + roadLevel + "<br>时间：" + time
@@ -217,8 +217,8 @@ const CongestionParallel: React.FC<CongestionProps> = ({ selectedHour, setSelect
             type: 'piecewise',
             pieces: [
               { min: 0, max: 1.5, color: '#61B5FF', label: '畅通（0~1.5）', },
-              { min: 1.5, max: 2.0, color: '#FFDC05', label: '缓行（1.5~2.0', },
-              { min: 2.0, max: 4.0, color: '#F78606', label: '拥堵（2.0~4.0）', },
+              { min: 1.5, max: 2.0, color: '#FFDC05', label: '轻度拥堵（1.5~2.0', },
+              { min: 2.0, max: 4.0, color: '#F78606', label: '中度拥堵（2.0~4.0）', },
               { min: 4.0, max: 9, color: '#8f0021', label: '严重拥堵（>4.0）', },],
             textStyle: {
               color: '#fff'

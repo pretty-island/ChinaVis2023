@@ -393,11 +393,11 @@ const RoadMap: React.FC<RoadMapProps> = ({ heatCrossMap, heatMap,selectedHour, s
         }
         else if (conges >= 2) {
           color = '#F78606';
-          roadLevel = '拥堵';
+          roadLevel = '中度拥堵';
         }
         else if (conges >= 1.5) {
           color = '#FFDC05';
-          roadLevel = '缓行';
+          roadLevel = '轻度拥堵';
         }
 
         const polygon = L.polygon(road.coordinates, {
@@ -793,11 +793,11 @@ const RoadMap: React.FC<RoadMapProps> = ({ heatCrossMap, heatMap,selectedHour, s
         }
         else if (crossConges >= 100) {
           colorcross = '#F78606';
-          crossLevel = '拥堵';
+          crossLevel = '中度拥堵';
         }
         else if (crossConges >= 55) {
           colorcross = '#FFDC05';
-          crossLevel = '缓行';
+          crossLevel = '轻度拥堵';
         }
         const marker = L.circleMarker([lat, lng], {
           radius: 5 * 8, // 设置标记的半径

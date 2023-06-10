@@ -12,9 +12,9 @@ const onSceneReady = (scene: Scene) => {
     babylonManager = new BabylonManager(scene);
     babylonManager.onSceneReady();
 
-    // Promise.all(["data/7_00hour/type_1.json","data/7_00hour/type_2.json","data/7_00hour/type_3.json","data/7_00hour/type_4.json","data/7_00hour/type_6.json","data/7_00hour/type_10.json"].map(url => fetch(url).then(res => res.json())))
+    Promise.all(["data/7_00hour/type_1.json","data/7_00hour/type_2.json","data/7_00hour/type_3.json","data/7_00hour/type_4.json","data/7_00hour/type_6.json","data/7_00hour/type_10.json"].map(url => fetch(url).then(res => res.json())))
     // Promise.all(["data/7_00hour/type_1.json"].map(url => fetch(url).then(res => res.json())))
-    Promise.all(["data/8_30hour.json"].map(url => fetch(url).then(res => res.json())))
+    // Promise.all(["data/8_30hour.json"].map(url => fetch(url).then(res => res.json())))
         .then(data => {
             babylonManager!.updateLogs(data
                 .reduce((prev, curr) => {

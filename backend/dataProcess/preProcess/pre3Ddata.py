@@ -41,36 +41,59 @@ id_files = defaultdict(list)
 #             for item in filtered_data:
 #                 f.write(json.dumps(item) + "\n")
         
-#         # 重置记录次数
-#         id_counts.clear()
-        
-from datetime import datetime
 
-half_directory="D:/VIScode/chinavis-2023/backend/data/situation/time/type_3D/"
-tenmin_dir="D:/VIScode/chinavis-2023/backend/data/situation/time/type_10min/"
+# 把JSON文件改成标准数组
+halfOut_directory="D:/VIScode/chinavis-2023/backend/data/situation/time/type_3D/"
 # 先打开类型车辆数据文件
-# 遍历每个半小时文件夹，划分为10分钟一个文件
+# 遍历每个半小时文件夹，删去记录次数少于10次和出现在不同类型文件中的数据
 for hour in range(0, 18):
-    hour_folder = half_directory + f"{int(hour/2+7)}_{0 if hour%2==0 else 3}0hour"
+    hour_folder = halfOut_directory + f"{int(hour/2+7)}_{0 if hour%2==0 else 3}0hour"
     type_files = os.listdir(hour_folder)
-    # hour_folder_out=tenmin_dir + f"{int(hour/2+7)}_{0 if hour%2==0 else 3}0hour"
+    # hour_folder_out=halfOut_directory + f"{int(hour/2+7)}_{0 if hour%2==0 else 3}0hour"
     # if not os.path.exists(hour_folder_out):
-    #     os.makedirs(hour_folder_out)
+        # os.makedirs(hour_folder_out)
     # 遍历类型文件
     for type_file in type_files:
         file_path = os.path.join(hour_folder, type_file)
         # 读取车辆数据文件
         with open(file_path, "r") as f:
-            for line in f.readlines():
-                data = json.loads(line)
-                # 获取当前数据的时间戳
-                timestamp = data["time_meas"]
-                # 将时间戳转换为datetime对象，获取小时数
-                dt = datetime.fromtimestamp(timestamp / 1000000)
-                hour = dt.hour
-                # 获取分钟数
-                minute=dt.minute
-                print(dt)
+            data = [json.loads(line) for line in f]
+        data_array=list(data)
+        # json_str= data.replace('},','},\n')
+        # json_array=json
+        with open(file_path, "w") as f:
+            # for item in filtered_data:
+            f.write(json.dumps(data_array))
+        
+        
+# from datetime import datetime
+
+# half_directory="D:/VIScode/chinavis-2023/backend/data/situation/time/type_3D/"
+# tenmin_dir="D:/VIScode/chinavis-2023/backend/data/situation/time/type_10min/"
+# # 先打开类型车辆数据文件
+# # 遍历每个半小时文件夹，划分为10分钟一个文件
+# for hour in range(0, 18):
+#     hour_folder = half_directory + f"{int(hour/2+7)}_{0 if hour%2==0 else 3}0hour"
+#     type_files = os.listdir(hour_folder)
+#     # hour_folder_out=tenmin_dir + f"{int(hour/2+7)}_{0 if hour%2==0 else 3}0hour"
+#     # if not os.path.exists(hour_folder_out):
+#     #     os.makedirs(hour_folder_out)
+#     # 遍历类型文件
+#     for type_file in type_files:
+#         file_path = os.path.join(hour_folder, type_file)
+#         # 读取车辆数据文件
+#         with open(file_path, "r") as f:
+#             for line in f.readlines():
+#                 data = json.loads(line)
+#                 # 获取当前数据的时间戳
+#                 timestamp = data["time_meas"]
+#                 # 将时间戳转换为datetime对象，获取小时数
+#                 dt = datetime.fromtimestamp(timestamp / 1000000)
+#                 hour = dt.hour
+#                 # 获取分钟数
+#                 minute=dt.minute
+#                 min=(dt.minute // 5) * 5
+#                 print(min)
             # data = [json.loads(line) for line in f]
         # for item in data:
             # id_counts[item['id']] += 1

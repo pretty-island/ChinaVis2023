@@ -96,10 +96,10 @@ const CrossAvgCongestion: React.FC<CongestionProps> = ({ setSelectedCross, setSe
                             crossLevel = '严重拥堵';
                         }
                         else if (params.data[2] >= 100) {
-                            crossLevel = '拥堵';
+                            crossLevel = '中度拥堵';
                         }
                         else if (params.data[2] >= 55) {
-                            crossLevel = '缓行';
+                            crossLevel = '轻度拥堵';
                         }
                         return params.seriesName + '<br>' + params.name + "：" + params.data[2] + '秒' + "<br>拥堵等级：" + crossLevel + "<br>时间：" + time
                     },
@@ -217,8 +217,8 @@ const CrossAvgCongestion: React.FC<CongestionProps> = ({ setSelectedCross, setSe
                         type: 'piecewise',
                         pieces: [
                             { min: 0, max: 55, color: '#61B5FF', label: '畅通（0~55）', },
-                            { min: 55, max: 100, color: '#FFDC05', label: '缓行（55~100）', },
-                            { min: 100, max: 145, color: '#F78606', label: '拥堵（100~145）', },
+                            { min: 55, max: 100, color: '#FFDC05', label: '轻度拥堵（55~100）', },
+                            { min: 100, max: 145, color: '#F78606', label: '中度拥堵（100~145）', },
                             { min: 145, max: 300, color: '#8f0021', label: '严重拥堵（>145）', },],
                         textStyle: {
                             color: '#fff'
