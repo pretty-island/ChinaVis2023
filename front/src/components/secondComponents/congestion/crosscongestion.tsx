@@ -103,7 +103,7 @@ const CrossCongestionParallel: React.FC<CongestionProps> = ({ setTurnName, setSe
               crossLevel = '轻度拥堵';
             }
 
-            return params.seriesName + '<br>' + params.name + "：" + params.data[2] + '秒' + "<br>拥堵等级：" + crossLevel + "<br>时间：" + time
+            return params.seriesName + '<br>' + params.name + "：" + params.data[2] + '秒' + "<br>拥堵程度：" + crossLevel + "<br>时间：" + time
           },
         },
         // legend: {

@@ -404,7 +404,7 @@ const RoadMap: React.FC<RoadMapProps> = ({ heatCrossMap, heatMap,selectedHour, s
           fillColor: color,
           fillOpacity: 0.7,
           stroke: false, // 隐藏边界颜色
-        }).bindPopup(roadname + "<br/>" + "拥堵指数（平均延迟）：" + conges + "<br/>" + "拥堵等级：" + roadLevel+"<br/>时间："+timetotal); // 设置标记的弹出框内容
+        }).bindPopup(roadname + "<br/>" + "拥堵指数（平均延迟）：" + conges + "<br/>" + "拥堵程度：" + roadLevel+"<br/>时间："+timetotal); // 设置标记的弹出框内容
         polygons.addLayer(polygon);
       });
     }
@@ -804,7 +804,7 @@ const RoadMap: React.FC<RoadMapProps> = ({ heatCrossMap, heatMap,selectedHour, s
           color: 'transparent', // 设置无边框
           fillColor: colorcross, // 设置填充颜色
           fillOpacity: 0.7, // 设置填充透明度
-        }).bindPopup(name + "<br/>" + "拥堵指数（最大车均延误）：" + crossConges + "秒<br/>" + "拥堵等级：" + crossLevel+"<br/>时间："+timetotal); // 设置标记的弹出框内容
+        }).bindPopup(name + "<br/>" + "拥堵指数（最大车均延误）：" + crossConges + "秒<br/>" + "拥堵程度：" + crossLevel+"<br/>时间："+timetotal); // 设置标记的弹出框内容
         markers.addLayer(marker);
       });
 

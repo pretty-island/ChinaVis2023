@@ -105,7 +105,7 @@ const CongestionParallel: React.FC<CongestionProps> = ({ selectedHour, setSelect
               roadLevel = '轻度拥堵';
             }
 
-            return params.seriesName + '<br>' + params.name + "：" + params.data[2] + "<br>拥堵等级：" + roadLevel + "<br>时间：" + time
+            return params.seriesName + '<br>' + params.name + "：" + params.data[2] + "<br>拥堵程度：" + roadLevel + "<br>时间：" + time
           },
         },
         // legend: {
