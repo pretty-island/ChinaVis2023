@@ -27,6 +27,7 @@ import HealthParallel from "../firstComponents/health/healthParallel";
 import CongestionParallel from "../secondComponents/congestion/congestion";
 import CrossCongestionParallel from "../secondComponents/congestion/crosscongestion";
 import CrossAvgCongestion from "../secondComponents/congestion/crossAvg";
+import {int} from "@babylonjs/core";
 // import ThirdConsole from "../thirdComponents/thirdConsole/thirdConsole";
 const Layout = () => {
   // 当前用户在第几屏，默认第一屏
@@ -55,9 +56,9 @@ const Layout = () => {
   const [heatCrossMap, setHeatCrossMap] = useState<boolean>(true)
 
   // 点击表格选择的ID
-  const [viewId, setViewId] = useState<string>("")
+  const [viewId, setViewId] = useState<number>()
   // 点击表格选择的时间
-  const [viewTime, setViewTime] = useState<string>("")
+  const [viewTime, setViewTime] = useState<number>()
 
 
 
@@ -153,6 +154,14 @@ const Layout = () => {
       babylonManager?.setCameraToCrossroad(Math.max(index - 1, 0));
     }
   }, [selectedCross])
+
+  useEffect(() => {
+    if (viewTime === undefined || babylonManager === undefined) {return}
+
+    babylonManager.currTimestamp = Number(viewTime);
+    babylonManager.focusOnCar(Number(viewId));
+
+  }, [viewId, viewTime])
 
   return (
     <div id="layout">

@@ -79,6 +79,7 @@ export default class BabylonManager {
             for (const value of values) {
                 const [type, r] = value;
                 r.meshes.forEach(mesh => mesh.isVisible = false);
+                r.meshes.forEach(mesh => mesh.material?.freeze());
 
                 for (const id of (idTypeMap[type] ?? [])) {
                     const {meshes, transformNode} = creatCarMeshInstance(r.meshes, type);
@@ -90,6 +91,7 @@ export default class BabylonManager {
 
             this.cars = cars;
             this.isCarMeshReady = true;
+
             onSuccess();
         })
 
@@ -118,13 +120,13 @@ export default class BabylonManager {
 
         this.followCameras = new FollowCamera("followCamera", this.crossroadCameras[0].position, this.scene);
         this.followCameras.attachControl(true);
-        this.followCameras.radius = 30;
-        this.followCameras.heightOffset = 15;
-        this.followCameras.cameraAcceleration = 0.005;
+        this.followCameras.radius = 15;
+        this.followCameras.heightOffset = 5;
+        this.followCameras.cameraAcceleration = 0.01;
         this.followCameras.maxCameraSpeed = 150;
         this.followCameras.lowerHeightOffsetLimit = 15;
-        this.followCameras.lowerRadiusLimit = 30;
-        this.followCameras.upperRadiusLimit = 60;
+        this.followCameras.lowerRadiusLimit = 10;
+        this.followCameras.upperRadiusLimit = 30;
 
         this.scene.activeCamera = this.crossroadCameras[0];
     }
@@ -148,7 +150,14 @@ export default class BabylonManager {
                     mesh.position = new Vector3(0, 2, 0);
                     mesh.rotation = Vector3.Zero()
                 }
+
+                mesh.freezeWorldMatrix();
+                mesh.isPickable = false;
             }
+
+            this.scene.autoClear = false;
+            this.scene.autoClearDepthAndStencil = false;
+            this.scene.blockMaterialDirtyMechanism = true;
 
             this.isSceneReady = true;
         })
@@ -164,8 +173,8 @@ export default class BabylonManager {
             }
         }
         return formattedDateNumber(date.getFullYear()) + "-" +
-            formattedDateNumber(date.getMonth()) + "-" +
-            formattedDateNumber(date.getDay()) + " " +
+            formattedDateNumber(date.getMonth() + 1) + "-" +
+            formattedDateNumber(date.getDate()) + " " +
             formattedDateNumber(date.getHours()) + ":" +
             formattedDateNumber(date.getMinutes()) + ":" +
             formattedDateNumber(date.getSeconds());

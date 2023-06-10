@@ -41,7 +41,13 @@ const onRender = (_: Scene) => {
 const MainVisualizationView: React.FC = () => {
     return (
         <div className={"MainView"} style={{width: "94%", height: "94%"}}>
-            <SceneComponent observeCanvasResize antialias onSceneReady={onSceneReady} onRender={onRender} onKeyDown={e => babylonManager?.onKeyDown(e)} id='my-canvas' />
+            <SceneComponent
+                observeCanvasResize antialias
+                onSceneReady={onSceneReady} onRender={onRender}
+                onKeyDown={e => babylonManager?.onKeyDown(e)}
+                id='my-canvas'
+                sceneOptions={{useGeometryUniqueIdsMap: true, useClonedMeshMap: true, useMaterialMeshMap: true}}
+            />
         </div>
     )
 }

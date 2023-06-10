@@ -90,7 +90,6 @@ export default class Car {
             }
             return;
         }
-
         this.carMeshes.forEach(e => e.isVisible = true);
 
         let lastIndex = this.movements.findIndex(m => m.ms_no > currTime);
