@@ -793,11 +793,11 @@ const RoadMap: React.FC<RoadMapProps> = ({ heatCrossMap, heatMap,selectedHour, s
         }
         else if (crossConges >= 100) {
           colorcross = '#F78606';
-          crossLevel = '中度拥堵';
+          crossLevel = '拥堵';
         }
         else if (crossConges >= 55) {
           colorcross = '#FFDC05';
-          crossLevel = '轻度拥堵';
+          crossLevel = '缓行';
         }
         const marker = L.circleMarker([lat, lng], {
           radius: 5 * 8, // 设置标记的半径

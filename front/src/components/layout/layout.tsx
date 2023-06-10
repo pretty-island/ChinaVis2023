@@ -55,9 +55,9 @@ const Layout = () => {
   const [heatCrossMap, setHeatCrossMap] = useState<boolean>(true)
 
   // 点击表格选择的ID
-  const [viewId, setViewId] = useState()
+  const [viewId, setViewId] = useState<string>("")
   // 点击表格选择的时间
-  const [viewTime, setViewTime] = useState()
+  const [viewTime, setViewTime] = useState<string>("")
 
 
 
@@ -278,10 +278,10 @@ const Layout = () => {
                 </BorderBox1>
               </div>
               <div className="s-t-right" style={{ width: "78%" }}>
-                <BorderBox1 className="s-tr-left" style={{ height: "100%", width: "53%" }}>
+                <BorderBox1 className="s-tr-left" style={{ height: "100%", width: "54%" }}>
                   <MainVisualizationView />
                 </BorderBox1>
-                <BorderBox1 className="s-tr-right" style={{ height: "100%", width: "47%" }}>
+                <BorderBox1 className="s-tr-right" style={{ height: "100%", width: "46%" }}>
                   <RoadMap heatCrossMap={heatCrossMap} heatMap={heatMap} selectedHour={selectedHour} selectedMin={selectedMin} />
                 </BorderBox1>
               </div>

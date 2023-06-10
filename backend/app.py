@@ -195,7 +195,7 @@ def getEventTable():
     file_path = f"./dataProcess/data/abnormal/{hour}h/{event_name}.csv"
     # file_path = f"./dataProcess/data/abnormal/{hour}/time_true_cross.csv"
     data = pd.read_csv(file_path)
-    data = data[["id", "time", "road", "event_name"]]
+    data = data[["id", "time", "road", "event_name","ms_no"]]
     data = data.to_json(orient="records")
     return data
 

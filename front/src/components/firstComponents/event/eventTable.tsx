@@ -130,9 +130,9 @@ const EventTable: React.FC<EventTableProps> = ({ setViewId,setViewTime,selectedR
         onRow={(record) => {
             return {
                 onClick: (event) => {
-                    // console.log(record.time);
+                    console.log(record.ms_no);
                     setViewId(record.id);
-                    setViewTime(record.time);                   
+                    setViewTime(record.ms_no);                   
                 },               
             };
         }}
