@@ -474,7 +474,7 @@ const TotalHeat: React.FC<TotalHeatProps> = ({ typeName, setTypeName }) => {
                 }],
                 series: [
                     {
-                        name: '车流量',
+                        name: '流量',
                         type: 'heatmap',
                         data: heatData,
                         label: {

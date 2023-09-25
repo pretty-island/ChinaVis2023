@@ -140,7 +140,7 @@ const Layout = () => {
   useEffect(() => {
     const index = Number(selectedRoad);
     if (isNaN(index)) {
-      babylonManager?.setCameraToCrossroad(0);
+      babylonManager?.setCameraToCrossroad(12);
     } else {
       babylonManager?.setCameraToRoad(Math.max(index - 1, 0));
     }

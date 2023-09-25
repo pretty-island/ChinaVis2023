@@ -152,7 +152,11 @@ const HealthParallel: React.FC<HealthParallelProps> = ({ selectedRoad }) => {
             name: schema[0].text,
             type: 'category',
             axisLabel: {
-              show: false
+              // show: false
+              // left:'0'
+              inside:true,
+              margin:-20,
+              color:'grey'
             }, nameTextStyle: {
               padding: [0, 0, 5, 0]
             }

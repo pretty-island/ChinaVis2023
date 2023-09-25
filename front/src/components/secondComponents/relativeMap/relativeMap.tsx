@@ -135,7 +135,7 @@ const RelativeMap: React.FC<RelativeMapProps> = ({ setTurnName,selectedCross, se
             // ];
             // 设置图中每个节点的大小及其他属性
             hazards.forEach(function (node) {
-                node.symbolSize = node.value / 2.4;
+                node.symbolSize = node.value / 1;
                 node.label = {
                     normal: {
                         show: node.name,
