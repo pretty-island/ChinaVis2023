@@ -1,4 +1,5 @@
-This is a software repository for chinavis 2023 data viualization challenge.
+# ChinaVis2023获奖作品-重庆大学-二等作品
+This is a software repository for chinavis 2023 data viualization challenge.[ChinaVis2023竞赛官网](https://chinavis.org/2023/challenge.html)
 
 ## front-end project —— front folder
 
