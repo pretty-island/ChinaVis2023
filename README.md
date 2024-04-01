@@ -1,6 +1,9 @@
 # ChinaVis2023获奖作品-重庆大学-二等作品
 This is a software repository for chinavis 2023 data viualization challenge.[ChinaVis2023竞赛官网](https://chinavis.org/2023/challenge.html)
 
+![重庆大学-张礼琼-代表性图片](https://github.com/pretty-island/ChinaVis2023/assets/59256624/384ca2d5-e077-4743-b34c-1b2bb30f5e37)
+
+
 ## front-end project —— front folder
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
